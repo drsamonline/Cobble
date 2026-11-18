@@ -31,6 +31,8 @@ Once the page has loaded, it works with the network off: a service worker keeps 
 
 The block appears in the city, and the day appears in the timeline. That is the whole loop.
 
+**Changing and removing.** Open a day in the timeline and each moment in the drawer has **Edit** and **Delete**. Edit reopens the form with everything already filled in; Delete leaves an Undo strip for twenty seconds, and `Ctrl`/`Cmd`+`Z` still works after that.
+
 **Repetition.** If you have noticed the same thing before, say so with the repetition field. A moment seen twice or more gets a wider block and more windows, and counts towards "returning themes" in Discoveries.
 
 ## Where your moments live
@@ -60,6 +62,8 @@ Two mechanisms, for two different jobs.
 
 **Download app package** (`↓ Download app package`, in the app's help panel) writes a zip of the five source files, so you can keep running the app even if the repository disappears. It deliberately does not include your moments: those are personal, and a "backup" that quietly bundles your diary into a zip is a bad default.
 
+**Export readable backup** (also in the share dialog) writes plain, unencrypted JSON — `cobble-backup-YYYY-MM-DD.json`. It is the copy you keep, not the one you send: anyone who opens it can read it. Use it before clearing a browser, moving machines, or handing a laptop to someone else.
+
 **Import** (`Open a city file` in the share dialog) reads a `.cobble` file, asks for its PIN, validates every field, skips moments whose ids already exist, and reports how many were added.
 
 ## The sample city
@@ -77,7 +81,10 @@ Open `/selftest.html`. It loads every file the service worker is supposed to kee
 | Action | How |
 |---|---|
 | Pan the city | Drag it, scroll horizontally, or focus the city and use ← / → |
-| Close any overlay | `Esc` |
+| Close any overlay | `Esc` (focus returns to whatever opened it) |
+| New moment | `N` |
+| Undo a delete | `Ctrl`/`Cmd`+`Z`, or the Undo strip |
+| Move through the tab order | `Tab` — focus stays inside an open dialog |
 | Hide every control | `Hide controls` in the city, or `Esc` to bring them back |
 | Open a day | Click a day in the timeline, or a building in the city |
 

@@ -111,6 +111,23 @@ Before a single moment is added, `importCity()` checks:
 
 Then `importance` is clamped to 1–3 and `repeatCount` to 1–5. If nothing survives, the app says so instead of pretending.
 
+## The plain backup file
+
+**Export readable backup** writes this, unencrypted:
+
+```json
+{
+  "app": "Cobble",
+  "format": "cobble-plain",
+  "version": 1,
+  "exportedAt": "2026-11-19T09:12:44.010Z",
+  "note": "This file is not encrypted. Anyone who opens it can read every moment in it.",
+  "entries": [ /* every moment, unchanged */ ]
+}
+```
+
+It is deliberately not importable by the app — a plain file that silently round-trips is a plain file people mistake for a private one. To restore, import a `.cobble` file, or write the entries back yourself; the schema above is the whole contract.
+
 ## Writing your own tool
 
 Two honest routes:

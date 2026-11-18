@@ -85,6 +85,29 @@
     return choices[Math.floor(Math.random() * choices.length)];
   };
 
+  const ATMOSPHERE_KEY = 'cobble-atmosphere-v1';
+
+  function saveAtmosphere() {
+    try {
+      localStorage.setItem(ATMOSPHERE_KEY, JSON.stringify(atmosphere));
+    } catch {
+      /* A full or blocked store just means the city opens in its default weather. */
+    }
+  }
+
+  function restoreAtmosphere() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(ATMOSPHERE_KEY) || 'null');
+      if (!stored) return;
+      if (themes.includes(stored.theme)) atmosphere.theme = stored.theme;
+      if (moods.includes(stored.mood)) atmosphere.mood = stored.mood;
+      if (weatherTypes.includes(stored.weather)) atmosphere.weather = stored.weather;
+      atmosphere.night = Boolean(stored.night);
+    } catch {
+      /* Ignore a damaged value rather than fail to start. */
+    }
+  }
+
   function applyAtmosphere() {
     const viewport = $('#city-viewport');
     viewport.dataset.theme = atmosphere.theme;
@@ -99,6 +122,7 @@
     $('#time-label').textContent = atmosphere.night ? 'Day' : 'Night';
     $('#time-control').setAttribute('aria-label', atmosphere.night ? 'Switch to day' : 'Switch to night');
     $('#city-mood').textContent = `${atmosphere.mood[0].toUpperCase()}${atmosphere.mood.slice(1)} ${atmosphere.night ? 'after dark' : 'in the city'}`;
+    if (!demoMode) saveAtmosphere();
   }
 
   function openDatabase() {
@@ -318,8 +342,13 @@
     const dayEntries = (groupDays()[date] || []).slice().sort((a, b) => (a.createdAt || '').localeCompare(b.createdAt || ''));
     $('#drawer-content').innerHTML = `<p class="eyebrow">A day in your city</p><h2 class="drawer-title">${escapeHTML(formatDate(date))}</h2><p class="drawer-lede">${dayEntries.length} little ${dayEntries.length === 1 ? 'piece' : 'pieces'} of your story.</p><div class="storyboard">${dayEntries.map((entry, index) => {
       const category = categories[entry.category] || categories.everyday;
-      return `<article class="story-card" style="--story-color:${category.color}"><div class="story-meta"><span class="story-icon">${category.icon}</span><span>${escapeHTML(category.label)}</span><span class="story-order">${String(index + 1).padStart(2, '0')}</span></div>${entry.photo ? `<img class="story-photo" src="${entry.photo}" alt="Photo saved with this moment">` : ''}<p>${escapeHTML(entry.text)}</p><div class="story-foot">${'★'.repeat(Math.max(1, Math.min(3, Number(entry.importance) || 1)))}<span>${entry.repeatCount > 1 ? ` · noticed ${entry.repeatCount} times` : ' · a moment kept'}</span></div></article>`;
+      return `<article class="story-card" style="--story-color:${category.color}"><div class="story-meta"><span class="story-icon">${category.icon}</span><span>${escapeHTML(category.label)}</span><span class="story-order">${String(index + 1).padStart(2, '0')}</span></div>${entry.photo ? `<img class="story-photo" src="${entry.photo}" alt="Photo saved with this moment">` : ''}<p>${escapeHTML(entry.text)}</p><div class="story-foot">${'★'.repeat(Math.max(1, Math.min(3, Number(entry.importance) || 1)))}<span>${entry.repeatCount > 1 ? ` · noticed ${entry.repeatCount} times` : ' · a moment kept'}</span><span class="story-actions"><button type="button" class="story-action" data-edit-entry="${escapeHTML(String(entry.id))}">Edit</button><button type="button" class="story-action story-action-quiet" data-delete-entry="${escapeHTML(String(entry.id))}">Delete</button></span></div></article>`;
     }).join('')}</div>`;
+    $$('[data-edit-entry]', $('#drawer-content')).forEach(button => button.addEventListener('click', () => {
+      const entry = entries.find(item => String(item.id) === button.dataset.editEntry);
+      if (entry) openEntry(entry);
+    }));
+    $$('[data-delete-entry]', $('#drawer-content')).forEach(button => button.addEventListener('click', () => deleteEntry(button.dataset.deleteEntry)));
     $('#day-backdrop').classList.remove('hidden');
   }
 
@@ -550,11 +579,75 @@
     renderInsights();
   }
 
-  function openEntry() {
+  let editingId = null;
+  let lastDeleted = null;
+
+  function openEntry(entry = null) {
     if (demoMode) exitDemo();
-    $('#entry-date').value = localDate();
+    editingId = entry ? String(entry.id) : null;
+    const form = $('#entry-form');
+    form.reset();
+    photoData = '';
+    $('#photo-preview').classList.add('hidden');
+    $('#photo-label').textContent = 'Add a photo, if you like';
+    if (entry) {
+      $('#entry-text').value = entry.text || '';
+      $('#entry-date').value = entry.date || localDate();
+      $('#entry-category').value = entry.category || 'everyday';
+      const weight = String(Math.max(1, Math.min(3, Number(entry.importance) || 1)));
+      const radio = form.querySelector(`input[name="importance"][value="${weight}"]`);
+      if (radio) radio.checked = true;
+      if (entry.photo) {
+        photoData = entry.photo;
+        $('#photo-preview').innerHTML = `<img src="${entry.photo}" alt="Photo preview">`;
+        $('#photo-preview').classList.remove('hidden');
+        $('#photo-label').textContent = 'Photo kept with this moment';
+      }
+      $('#modal-title').innerHTML = 'Change a <em>moment.</em>';
+      $('.save-button', form).innerHTML = 'Save changes <span>→</span>';
+    } else {
+      $('#entry-date').value = localDate();
+      $('#modal-title').innerHTML = 'Save a <em>moment.</em>';
+      $('.save-button', form).innerHTML = 'Save to my city <span>→</span>';
+    }
     $('#entry-modal').classList.remove('hidden');
     setTimeout(() => $('#entry-text').focus(), 50);
+  }
+
+  function deleteEntry(id) {
+    const index = entries.findIndex(entry => String(entry.id) === String(id));
+    if (index < 0) return;
+    lastDeleted = { entry: entries[index], index };
+    entries.splice(index, 1);
+    save();
+    render();
+    $('#day-backdrop').classList.add('hidden');
+    toast('Moment removed. Press Ctrl+Z, or the Undo button, to put it back.');
+    showUndo();
+  }
+
+  function undoDelete() {
+    if (!lastDeleted) return;
+    const { entry, index } = lastDeleted;
+    entries.splice(Math.min(index, entries.length), 0, entry);
+    lastDeleted = null;
+    save();
+    render();
+    hideUndo();
+    toast('Moment restored.');
+  }
+
+  function showUndo() {
+    const bar = $('#undo-bar');
+    if (!bar) return;
+    bar.classList.remove('hidden');
+    clearTimeout(showUndo.timer);
+    showUndo.timer = setTimeout(hideUndo, 20000);
+  }
+
+  function hideUndo() {
+    $('#undo-bar')?.classList.add('hidden');
+    clearTimeout(showUndo.timer);
   }
 
   function closeEntry() {
@@ -641,6 +734,27 @@
     }
     button.blur();
   }
+  function exportJSON() {
+    const payload = JSON.stringify({
+      app: 'Cobble',
+      format: 'cobble-plain',
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      note: 'This file is not encrypted. Anyone who opens it can read every moment in it.',
+      entries
+    }, null, 2);
+    const blob = new Blob([payload], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `cobble-backup-${localDate()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+    $('#share-status').textContent = `${entries.length} ${entries.length === 1 ? 'moment' : 'moments'} saved as a readable JSON file. It is not encrypted — keep it somewhere you trust.`;
+  }
+
   async function importCity(file) {
          try {
        if (!file) return;
@@ -775,6 +889,7 @@
        month: 'short',
        day: 'numeric'
      });
+     restoreAtmosphere();
      render();
      startCityMotion();
      await loadArchive();
@@ -822,6 +937,24 @@
       if (!text) return;
       const category = $('#entry-category').value;
       const duplicate = entries.filter(entry => entry.category === category).length;
+      const date = $('#entry-date').value || localDate();
+      const importance = $('input[name="importance"]:checked').value;
+      if (editingId) {
+        const existing = entries.find(entry => String(entry.id) === editingId);
+        if (existing) {
+          Object.assign(existing, { text, date, category, importance, photo: photoData });
+          editingId = null;
+          save();
+          render();
+          event.target.reset();
+          photoData = '';
+          $('#photo-preview').classList.add('hidden');
+          $('#photo-label').textContent = 'Add a photo, if you like';
+          closeEntry();
+          toast('Moment updated.');
+          return;
+        }
+      }
       entries.push({
         id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
         text,
@@ -890,6 +1023,53 @@
     $('#export-city').addEventListener('click', exportCity);
     $('#import-city').addEventListener('click', () => $('#import-file').click());
     $('#import-file').addEventListener('change', event => importCity(event.target.files[0]));
+    // ── focus management ──────────────────────────────────────────
+    const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const openDialog = () => $$('[role="dialog"]').find(dialog => !dialog.closest('.hidden'));
+    let openerElement = null;
+
+    document.addEventListener('keydown', event => {
+      const dialog = openDialog();
+      if (event.key !== 'Tab' || !dialog) return;
+      const focusable = $$(FOCUSABLE, dialog).filter(node => node.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    // Remember what opened a dialog, so closing it puts focus back there.
+    document.addEventListener('click', event => {
+      const trigger = event.target.closest('button, a');
+      if (trigger) openerElement = trigger;
+    }, true);
+
+    $('#undo-button')?.addEventListener('click', undoDelete);
+    $('#export-json')?.addEventListener('click', exportJSON);
+    $('#share-button')?.addEventListener('click', () => {
+      if (!entries.length) $('#share-status').textContent = 'Add a moment first — there is nothing to export yet.';
+    });
+
+    document.addEventListener('keydown', event => {
+      const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z' && !typing && lastDeleted) {
+        event.preventDefault();
+        undoDelete();
+        return;
+      }
+      if (typing || event.ctrlKey || event.metaKey || event.altKey) return;
+      if (event.key.toLowerCase() === 'n' && $('#entry-modal').classList.contains('hidden')) {
+        event.preventDefault();
+        openEntry();
+      }
+    });
+
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape') {
         closeEntry();
@@ -897,6 +1077,10 @@
         $('#help-modal').classList.add('hidden');
         $('#day-backdrop').classList.add('hidden');
         if (document.body.classList.contains('city-immersive')) toggleCityHud();
+        if (openerElement && document.contains(openerElement)) {
+          openerElement.focus();
+          openerElement = null;
+        }
       }
     });
   }

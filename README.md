@@ -8,10 +8,10 @@ Your life, taking shape. A private city built from the small things you notice. 
 
 [Live demo](https://drsamonline.github.io/Cobble/) · [Open the app](https://drsamonline.github.io/Cobble/app/) · [Wander a sample city](https://drsamonline.github.io/Cobble/app/?demo=1) · [Documentation](docs/) · [Report a bug](https://github.com/drsamonline/Cobble/issues)
 
-**Status: v1.2.0 — shipped, offline, and named.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
+**Status: v1.3.0 — shipped, offline, and editable.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.2.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.3.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -57,7 +57,7 @@ The name: *to cobble* is to make a thing from whatever is at hand, and a cobble 
 
 | A day, opened | Share city |
 |---|---|
-| ![The day drawer, showing one moment with its photo](screenshots/day-drawer.png) | ![The share dialog, asking for a PIN](screenshots/share.png) |
+| ![The day drawer, with a moment, its photo, and the Edit and Delete buttons](screenshots/day-drawer.png) | ![The share dialog, asking for a PIN](screenshots/share.png) |
 
 | Milestones | Landing page, after dark |
 |---|---|
@@ -88,6 +88,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 - **Repetition.** Say that you noticed the same thing again; the block widens and the windows multiply.
 - **One photo per moment**, resized on the device to a 76%-quality JPEG before it is ever stored. Nothing is uploaded.
 - **A day drawer** that opens any date as a short chapter, with its photos and its order in the day.
+- **Edit and delete.** Any moment in the drawer can be changed or removed; a delete leaves an Undo strip for twenty seconds, and `Ctrl`/`Cmd`+`Z` works after that.
 - **A full timeline** of every day you have saved, newest first, one click from the same drawer.
 - **Search-free by design.** The city is the index. Full-text search is the first item of the [archive section](ENHANCEMENTS.md) in the enhancement list.
 
@@ -102,6 +103,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 
 - **Encrypted city files.** Choose any subset of moments, set a 6–12 digit PIN, and Cobble writes a `.cobble` file: AES-256-GCM, key derived with PBKDF2-SHA-256 at 250,000 iterations, random 16-byte salt and 12-byte IV per export.
 - **Import with validation.** Every field of every imported moment is checked against a schema before it touches your archive; duplicates are skipped; a damaged file is refused with a reason.
+- **A readable backup too.** Beside the encrypted file there is "Export readable backup" — plain JSON, with a note inside saying it is not encrypted. Lose the PIN, keep the city.
 - **Download the whole app** as a zip, straight from the app, with a README inside.
 - **Honest storage reporting.** IndexedDB with a localStorage fallback, the size of your archive in KB, and how much room the browser will still give you.
 
@@ -114,7 +116,10 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 
 **Built to survive a boring browser**
 
-- Escape closes every overlay; every control is a real button with a label; the city's motion stops when the system asks for reduced motion, in the app and on the landing page.
+- Escape closes every overlay and returns focus to whatever opened it; focus is trapped inside dialogs; a skip link is first in the tab order; the toast is a live region, so saves and failures are spoken.
+- `N` opens a new moment, `Ctrl`/`Cmd`+`Z` undoes a delete.
+- The city's motion stops when the system asks for reduced motion, in the app and on the landing page.
+- Printing the timeline gives you the days on paper, without the chrome.
 - The illustrated city is CSS, so it renders even where WebGL, canvas or a CDN is missing.
 - No build step, no bundler, no framework, no `node_modules`. Five files, served as they are.
 

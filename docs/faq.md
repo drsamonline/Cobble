@@ -14,7 +14,7 @@ If you have a `.cobble` file, open the share dialog, choose **Open a city file**
 
 **Can I get my data out as plain text?**
 
-Not from the UI yet (it is the first item in the [archive section](../ENHANCEMENTS.md) of the enhancement list). You can today: open the app, open DevTools, and run
+Yes, since v1.3.0: **Share city → Export readable backup** writes `cobble-backup-YYYY-MM-DD.json` with every moment, unencrypted, and says so inside the file. If you want the old route — open the app, open DevTools, and run
 
 ```js
 copy(JSON.parse(localStorage.getItem('cobble-moments-v1') || '[]'))
@@ -37,6 +37,10 @@ Yes, since v1.1.0. The first visit caches the whole site — landing page, app, 
 **How many moments can it hold?**
 
 The practical limit is your browser's storage quota, usually a few hundred megabytes to a gigabyte for the origin, and photos are the expensive part. A moment with no photo is roughly 300 bytes; a moment with a photo is 80–250 KB. So: tens of thousands of text moments, or a few thousand with photos. The app shows your archive size and the browser's remaining estimate on the Discoveries view.
+
+**I deleted a moment by accident.**
+
+There is an Undo strip for twenty seconds, and `Ctrl`/`Cmd`+`Z` works while the tab is open. After that, the only copy is a backup — which is why the readable JSON export exists.
 
 **Why is the sample city read-only?**
 

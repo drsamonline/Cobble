@@ -127,6 +127,13 @@
     setTimeout(() => { copyButton.textContent = 'copy'; }, 1800);
   });
 
+  /* ── the offline cache ─────────────────────────────────── */
+  if ('serviceWorker' in navigator) {
+    addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+  }
+
   /* ── scroll reveal ─────────────────────────────────────── */
   const targets = document.querySelectorAll('.section-head, .rule-card, .district, .shot, .grow-demo, .privacy-card, .support');
   if ('IntersectionObserver' in window) {

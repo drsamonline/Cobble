@@ -15,8 +15,9 @@
 </head>
 
 <body class="city-view-active">
+  <a class="skip-link" href="#city-view">Skip to your city</a>
   <div class="app-shell">
-    <aside class="sidebar">
+    <aside class="sidebar" aria-label="Your world">
       <a class="brand" href="../" aria-label="Cobble home"><span class="brand-mark"><span></span><span></span><span></span></span><span>cobble<span class="brand-period">.</span></span></a>
       <div class="side-label">YOUR WORLD</div>
       <button class="nav-item active" data-view="city"><span class="nav-icon">⌂</span> My city <span class="nav-dot"></span></button>
@@ -213,25 +214,28 @@
       <div class="share-list-wrap"><div class="share-list-title">CHOOSE WHAT TO SHARE</div><div id="share-list"></div></div>
       <label class="field-label share-pin-label" for="share-pin">Create a 6–12 digit PIN</label>
       <input class="share-pin-input" id="share-pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="12" placeholder="Enter a private PIN">
-      <div class="share-actions"><button class="cancel-button" id="import-city">Open a city file</button><button class="add-button" id="export-city">Encrypt & download <span>↗</span></button></div>
+      <div class="share-actions"><button class="cancel-button" id="import-city">Open a city file</button><button class="cancel-button" id="export-json" title="A plain JSON copy of every moment, for your own backup">Export readable backup</button><button class="add-button" id="export-city">Encrypt & download <span>↗</span></button></div>
       <input id="import-file" type="file" accept=".cobble,.json,application/json" hidden>
       <p class="share-status" id="share-status" aria-live="polite"></p>
       <p class="share-footnote">For importing, choose the received city file and enter the PIN its owner gave you.</p>
     </section>
   </div>
-  <div class="toast" id="toast"></div>
-  <div class="day-drawer-backdrop hidden" id="day-backdrop">
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div class="undo-bar hidden" id="undo-bar"><span>A moment was removed.</span><button type="button" id="undo-button">Undo</button></div>
+  <div class="day-drawer-backdrop hidden" id="day-backdrop" role="dialog" aria-modal="true" aria-label="A day in your city">
     <aside class="day-drawer" id="day-drawer"><button class="drawer-close" id="drawer-close" aria-label="Close day">×</button>
       <div id="drawer-content"></div>
     </aside>
   </div>
-  <div class="help-backdrop hidden" id="help-modal">
+  <div class="help-backdrop hidden" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-title">
     <div class="help-card"><button class="modal-close" id="close-help">×</button>
       <div class="help-mark">✳</div>
       <p class="eyebrow">A place made by you</p>
-      <h2>Welcome to <em>Cobble.</em></h2>
+      <h2 id="help-title">Welcome to <em>Cobble.</em></h2>
       <p>Save the small things you want to remember. Your city gives them shape: meaningful moments become landmarks, repeating details become familiar streets, and new ideas add places that didn’t exist before.</p>
-      <p>Everything is stored on this device. The more you add, the more your city can notice about you.</p><button class="add-button" id="got-it">Let’s wander <span>→</span></button>
+      <p>Everything is stored on this device. The more you add, the more your city can notice about you.</p>
+      <p class="help-links"><a href="https://github.com/drsamonline/Cobble" target="_blank" rel="noopener">Source on GitHub</a><span>·</span><a href="https://github.com/drsamonline/Cobble/blob/main/LICENSE" target="_blank" rel="noopener">PolyForm Noncommercial 1.0.0</a><span>·</span><a href="https://drsamonline.github.io/Cobble/docs/" target="_blank" rel="noopener">Documentation</a></p>
+      <button class="add-button" id="got-it">Let’s wander <span>→</span></button>
     </div>
   </div>
   <script src="city3d.js"></script>

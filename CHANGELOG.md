@@ -2,6 +2,36 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.3.0 — 2026-11-19
+
+The top of the [enhancement list](ENHANCEMENTS.md) — the things a journalling app needs before anything else.
+
+### Added
+
+- **Edit a moment.** Every card in the day drawer now has an **Edit** button that reopens the entry form pre-filled — text, date, district, weight and photo. The dialog title becomes "Change a moment" and the button reads "Save changes". The id and creation time are preserved.
+- **Delete a moment**, with **Undo**: a strip appears for twenty seconds with an Undo button, and `Ctrl`/`Cmd`+`Z` works too.
+- **A readable backup.** "Export readable backup" writes every moment to `cobble-backup-YYYY-MM-DD.json` — plain, unencrypted, with a note in the file saying so. The encrypted `.cobble` export stays the default for sending a city to someone; this one is for keeping it.
+- **The atmosphere is remembered.** Theme, mood, weather and day/night are stored in `cobble-atmosphere-v1` and restored on the next visit.
+- **Keyboard.** `N` opens a new moment from anywhere outside a text field; `Ctrl`/`Cmd`+`Z` undoes a delete; `Esc` already closed overlays.
+- **A print stylesheet.** Printing the timeline now drops the sidebar, the controls and every overlay, and prints the days with their moments, page-break-safe.
+
+### Accessibility
+
+- **The toast announces itself** — `role="status"`, `aria-live="polite"`, `aria-atomic="true"`. Every save, every failure and every undo now reaches a screen reader.
+- **Focus is trapped in dialogs** and returned to whatever opened them on `Esc`.
+- **A skip link** ("Skip to your city") is the first thing in the tab order, and the sidebar has a name.
+- **All four overlays are labelled dialogs** (`role="dialog"`, `aria-modal`, `aria-labelledby`/`aria-label`). One nested duplicate was removed.
+- **The help panel links to the source, the licence and the docs.**
+
+### Fixed
+
+- **"Edit" opened the form behind the drawer.** All four backdrops shared `z-index: 20` and the drawer comes later in the DOM, so the entry modal painted underneath the panel it was opened from. The entry modal now sits at 30.
+
+### Changed
+
+- The landing page's service-worker registration moved out of an inline `<script>` into `assets/landing.js`. It was the last inline script on the site, so a `script-src 'self'` policy no longer needs an exception.
+- Service worker `CACHE_VERSION` v2, `ASSET_VERSION` 1.3.0.
+
 ## 1.2.0 — 2026-11-19
 
 Renamed, before the first release, from *Elsewhere* to **Cobble**. Nothing had shipped and nobody had an archive, which is the only cheap moment to change a name that is baked into storage keys, a file extension and a URL.

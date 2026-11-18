@@ -2567,3 +2567,127 @@ select:focus {
     line-height: 1;
   }
 }
+
+/* ── Skip link, story actions, undo bar ───────────────────────────
+   Added with the accessibility pass: a way past the sidebar, a way to fix
+   or remove a moment, and a visible way back from a delete. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: #293632;
+  color: #fffefa;
+  padding: 10px 16px;
+  border-radius: 0 0 12px 0;
+  font: 500 13px var(--font-body);
+  text-decoration: none;
+}
+.skip-link:focus {
+  left: 0;
+}
+
+.story-foot {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.story-actions {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 4px;
+  opacity: .55;
+  transition: opacity .18s ease;
+}
+.story-card:hover .story-actions,
+.story-card:focus-within .story-actions {
+  opacity: 1;
+}
+.story-action {
+  font: 500 11px var(--font-body);
+  letter-spacing: .02em;
+  color: #5f7168;
+  background: #f4f2e9;
+  border: 1px solid #e9e8e1;
+  border-radius: 99px;
+  padding: 4px 9px;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
+}
+.story-action:hover {
+  background: #e8efdf;
+  border-color: #cfdcc4;
+  color: #3f6b4c;
+}
+.story-action-quiet:hover {
+  background: #f7e3e0;
+  border-color: #e8c7c2;
+  color: #9c4034;
+}
+
+.undo-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px 10px 16px;
+  background: #293632;
+  color: #f6f4ef;
+  border-radius: 999px;
+  box-shadow: 0 12px 30px #29363240;
+  font: 500 13px var(--font-body);
+}
+.undo-bar button {
+  font: 600 12px var(--font-body);
+  letter-spacing: .02em;
+  color: #293632;
+  background: #e2a66f;
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 13px;
+  cursor: pointer;
+}
+.undo-bar button:hover { background: #f0c48a; }
+
+.help-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  font: 500 12px var(--font-mono);
+  color: #8d968f;
+}
+.help-links a { color: #477d70; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── Print: the timeline on paper ─────────────────────────────────
+   Sidebar, controls and overlays go; the days stay, one moment a row. */
+@media print {
+  body { background: #fff; color: #111; }
+  .sidebar, .topbar, .toast, .undo-bar, .city-control-deck, .hud-toggle,
+  .demo-note, .page-footer, .intro-add, .add-button, .skip-link,
+  .share-backdrop, .help-backdrop, .entry-backdrop, .day-drawer-backdrop,
+  .city-card, .insights-view, #insights-view, .empty-state { display: none !important; }
+  .app-shell { display: block; }
+  .main-area { padding: 0; margin: 0; max-width: none; }
+  .panel, .full-timeline-panel {
+    border: 0; box-shadow: none; padding: 0; margin: 0 0 12pt;
+  }
+  .full-day, .mini-day {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border-bottom: 1px solid #ddd;
+    padding: 6pt 0;
+  }
+  .entry-card-text { font-size: 10pt; }
+  .full-date, .mini-date { font-size: 9pt; color: #444; }
+  a[href]::after { content: ''; }
+  .story-actions { display: none !important; }
+}
+
+/* The entry modal opens from inside the day drawer, so it must sit above it.
+   All four backdrops share z-index 20 and the drawer comes later in the DOM,
+   which meant "Edit" opened a dialog behind the panel it came from. */
+.modal-backdrop { z-index: 30; }

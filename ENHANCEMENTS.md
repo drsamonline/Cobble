@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.1.0 — no CDN at runtime, works offline, installable, two CI checks.
+- **Baseline:** v1.3.0 — offline, installable, editable, undoable, keyboard-first, two CI checks.
 
 ---
 
@@ -37,22 +37,23 @@ These were the top of this list. They are done, verified and in the repository, 
 | 1.15 | **The checks ship with the repository.** A dependency-free link check that also guards the precache list and forbids CDN references, a size budget, and a workflow that runs both. | `tools/`, `.github/workflows/check.yml` |
 | 1.11 | **Icons, favicon, manifest colours.** A full icon set from the site's own mark, including a maskable one. | `icons/`, `favicon.svg` |
 | new | **`selftest.html`** — every precached file, cache or network, with a button. | `selftest.html` |
+| 1.5 | **Delete and edit a moment**, with a 20-second Undo strip and `Ctrl`/`Cmd`+`Z`. | `app/app.js`, `app/styles.css` |
+| 1.6 | **The toast announces itself** — `role="status"`, `aria-live="polite"`. | `app/index.html` |
+| 1.7 | **Focus is trapped in dialogs** and returned to the opener on `Esc`. | `app/app.js` |
+| 1.8 | **A skip link** and named landmarks in the app. | `app/index.html` |
+| 1.9 | **Plain JSON export** beside the encrypted one, with the warning inside the file. | `app/app.js`, `app/index.html` |
+| 1.10 | **The atmosphere is remembered** in its own localStorage key. | `app/app.js` |
+| 1.12 | **A print stylesheet** for the timeline. | `app/styles.css` |
+| 1.13 | **`N` for a new moment**, `Ctrl`/`Cmd`+`Z` to undo a delete. | `app/app.js` |
+| 1.16 | **Source, licence and docs links** in the help panel. | `app/index.html` |
+| 1.17 | **The landing page's worker registration moved out of the inline script.** | `assets/landing.js` |
 
-What is left from the original quick-win list — the things that still cost under an hour and still matter:
+What is left of the quick-win tier:
 
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
-| 1.5 | **Delete and edit a moment.** The entry modal only ever adds. Add Edit and Delete to the timeline rows and the day drawer, with a 20-second Undo. | The biggest gap left in a journalling tool. | `app/app.js`, `app/styles.css` | M |
-| 1.6 | **Announce the toast.** `#toast` has no `role` or `aria-live`, so a screen reader hears neither "saved" nor "could not save". | Every confirmation and every failure goes through it. | `app/index.html` | S |
-| 1.7 | **Trap focus in the four overlays** and return focus to the opener. | Tab currently walks out into the page behind the modal. | `app/app.js` | M |
-| 1.8 | **A skip link and landmark roles** in the app. | Eight nav items before anything else in the tab order. | `app/index.html` | S |
-| 1.9 | **Plain JSON export** beside the encrypted one. | Lose the PIN, lose the city. | `app/app.js` | S |
-| 1.10 | **Remember the atmosphere** across reloads, in its own localStorage key. | People set the city to night and it comes back in daylight. | `app/app.js` | S |
-| 1.12 | **Print stylesheet for the timeline.** | The archive on paper, one page. | `app/styles.css` | S |
-| 1.13 | **Keyboard shortcut for a new moment** (`N`). | One keystroke from a habit. | `app/app.js` | S |
-| 1.16 | **Licence and repository links in the help panel.** | People who love an app look for the source. | `app/index.html` | S |
-| 1.17 | **Move the landing page's service-worker registration into `assets/landing.js`.** It is the last inline script, and moving it makes `script-src 'self'` possible. | A strict CSP with no exceptions. | `index.html`, `assets/landing.js` | S |
-| 1.18 | **Bump the cache on deploy.** Wire `CACHE_VERSION` to the commit or add a release step that reminds you. | A stale cache is the one failure mode a worker introduces. | `sw.js`, `.github/workflows/` | S |
+| 1.18 | **Bump the cache on deploy.** Wire `CACHE_VERSION` to the commit, or add a release step that reminds you. | A stale cache is the one failure mode a worker introduces. Bumped by hand in 1.3.0. | `sw.js`, `.github/workflows/` | S |
+| 1.19 | **A "your city is in another browser" hint.** On an empty archive, offer one line about exports and how to bring a city across. | The most common support question in the [FAQ](docs/faq.md) is "my city is gone" when it is only in another browser profile. | `app/app.js` | S |
 
 ## 2. An afternoon each
 
@@ -144,13 +145,12 @@ Written down because the answer to "should we build this?" is usually "no, it is
 
 If you have one weekend and want the largest improvement per hour:
 
-1. **1.5** — delete and edit. It is the largest gap left, and the app is a journal.
-2. **1.6, 1.7, 1.8** — the toast announces itself, focus stays inside overlays, a skip link exists. An hour of accessibility that changes who can use the app at all.
-3. **1.9** — plain JSON export. The cheapest insurance in the repository.
-4. **2.1** — search. The most-requested feature, and an afternoon's work.
-5. **2.9, 2.10** — axe in the headless run, and two unit tests for the validator and the crypto.
-6. **2.5** — on this day. The feature that makes people come back.
-7. **6.1** — repair the 3D layer, or delete it. A broken opt-in feature is worse than no feature.
-8. **4.4** — desktop and Android builds through App Builder. The repository now has exactly the three inputs it wants.
+1. **2.1** — search. The most-requested feature left, and an afternoon's work.
+2. **2.9, 2.10** — axe in the headless run, and two unit tests for the validator and the crypto. The app has behaviour worth protecting now.
+3. **2.5** — on this day. The feature that makes people come back.
+4. **2.3** — dark mode for the app shell.
+5. **2.12** — a shareable postcard of the skyline.
+6. **6.1** — repair the 3D layer, or delete it. A broken opt-in feature is worse than no feature.
+7. **4.4** — desktop and Android builds through App Builder. The repository now has exactly the three inputs it wants.
 
 Everything after that is taste.
