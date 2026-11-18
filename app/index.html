@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f6f4ef" />
+  <title>Elsewhere — your life, taking shape</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="city-view-active">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="../" aria-label="Elsewhere home"><span class="brand-mark"><span></span><span></span><span></span></span><span>elsewhere<span class="brand-period">.</span></span></a>
+      <div class="side-label">YOUR WORLD</div>
+      <button class="nav-item active" data-view="city"><span class="nav-icon">⌂</span> My city <span class="nav-dot"></span></button>
+      <button class="nav-item" data-view="timeline"><span class="nav-icon">◷</span> Timeline</button>
+      <button class="nav-item" data-view="insights"><span class="nav-icon">✳</span> Discoveries</button>
+      <button class="nav-item mobile-demo-nav" id="mobile-demo-toggle" type="button"><span class="nav-icon">✦</span><span class="mobile-demo-label">Sample city</span></button>
+      <div class="side-spacer"></div>
+      <div class="offline-card"><span class="offline-indicator"></span>
+        <div><strong>Yours, always</strong><small>Saved on this device</small></div><span class="lock-icon">⌑</span>
+      </div>
+      <div class="profile">
+        <div class="avatar">J</div>
+        <div><strong>Just you</strong><small>Your private world</small></div><button class="more-button" aria-label="More options">···</button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="breadcrumb">Your world <span>/</span> <strong id="header-section">My city</strong></div>
+        <div class="top-actions">
+          <div class="today-pill"><span class="sun-dot"></span><span id="today-label"></span></div><button class="share-button" id="share-button" aria-label="Share or import a city" title="Share or import a city">↗ <span>Share city</span></button><button class="icon-button" id="help-button" aria-label="About Elsewhere" title="About Elsewhere">?</button><button class="add-button" id="add-entry"><span>+</span> Add a moment</button>
+        </div>
+      </header>
+
+      <section class="view-section" id="city-view">
+        <div class="page-intro">
+          <div>
+            <p class="eyebrow">A little world made of your days</p>
+            <h1>Your life, <em>taking shape.</em></h1>
+            <p class="intro-copy">Every moment leaves something behind. Look what you’ve been building.</p>
+            <button class="demo-button" id="demo-toggle" type="button"><span aria-hidden="true">✦</span> Explore a sample city <span class="demo-arrow" aria-hidden="true">↗</span></button>
+          </div>
+          <div class="city-status"><span class="status-spark">✳</span>
+            <div><strong id="city-level">A new little town</strong><small id="city-count">0 moments collected</small></div>
+          </div>
+        </div>
+
+        <div class="demo-note hidden" id="demo-note"><span class="demo-note-icon">✧</span><span><strong>You’re exploring a sample city.</strong> Its stories and Unsplash photos are just examples—your own moments stay untouched.</span></div>
+        <div class="city-card">
+          <div class="city-card-head">
+            <div><span class="card-kicker">THE CITY OF YOU</span>
+              <h2 id="city-title">A place called <span>today</span></h2>
+            </div>
+            <div class="city-weather"><span class="weather-icon">☀</span>
+              <div><strong id="city-mood">Quiet beginnings</strong><small>Your city is just getting to know you</small></div>
+            </div>
+          </div>
+          <div class="city-viewport" id="city-viewport">
+            <div class="sun-orb"></div>
+            <div class="cloud cloud-one"></div>
+            <div class="cloud cloud-two"></div>
+            <div class="weather-layer" id="weather-layer" aria-hidden="true"></div>
+            <div class="city-ground"></div>
+                         <div class="city-pan" id="city-pan" role="region" tabindex="0" aria-label="Endless illustrated city. Drag or use the arrow keys to explore.">
+              <div class="city-scene" role="group" aria-label="City district"></div>
+              <div class="city-scene" role="group" aria-label="City district"></div>
+              <div class="city-scene" role="group" aria-label="City district"></div>
+            </div>
+            <div class="city-control-deck" aria-label="City atmosphere controls">
+              <button class="scene-control" id="theme-control" type="button" aria-label="Randomize city theme" title="Randomize city theme"><span aria-hidden="true">◈</span><small>Theme</small></button>
+              <button class="scene-control" id="mood-control" type="button" aria-label="Change city mood" title="Change city mood"><span aria-hidden="true">✧</span><small>Mood</small></button>
+              <button class="scene-control" id="weather-control" type="button" aria-label="Change weather" title="Change weather"><span aria-hidden="true">☁</span><small>Weather</small></button>
+              <button class="scene-control" id="time-control" type="button" aria-label="Switch to night" title="Switch day and night"><span aria-hidden="true" id="time-icon">☾</span><small id="time-label">Night</small></button>
+            </div>
+            <button class="hud-toggle" id="hud-toggle" type="button" aria-pressed="false" aria-label="Hide city controls"><span class="hud-toggle-icon" aria-hidden="true">⤢</span><span class="hud-toggle-label">Hide controls</span></button>
+          </div>
+        </div>
+
+        <div class="lower-grid">
+          <section class="panel timeline-panel">
+            <div class="panel-heading">
+              <div><span class="card-kicker">A LIFE IN LITTLE CHAPTERS</span>
+                <h3>Your timeline</h3>
+              </div><button class="text-button" data-view-link="timeline">See all <span>→</span></button>
+            </div>
+            <div id="timeline-content"></div>
+          </section>
+          <section class="panel insight-panel">
+            <div class="panel-heading">
+              <div><span class="card-kicker">A THING YOU MAY NOT KNOW</span>
+                <h3>From your city</h3>
+              </div><span class="insight-spark">✳</span>
+            </div>
+            <div class="insight-content" id="insight-content"></div>
+          </section>
+        </div>
+        <footer class="page-footer"><span>Made of moments. Kept by you.</span><button class="text-button download-package" type="button" title="Download the complete app source bundle">↓ Download app package</button><span><i class="offline-indicator"></i> Saved on this device · Nothing leaves this device</span></footer>
+      </section>
+
+      <section class="view-section hidden" id="timeline-view">
+        <div class="page-intro compact-intro">
+          <div>
+            <p class="eyebrow">The days that made your city</p>
+            <h1>Your <em>timeline.</em></h1>
+            <p class="intro-copy">Choose a day to step back into it.</p>
+          </div><button class="add-button intro-add" id="add-entry-timeline"><span>+</span> Add a moment</button>
+        </div>
+        <section class="panel full-timeline-panel">
+          <div class="panel-heading">
+            <div><span class="card-kicker">YOUR PERSONAL ARCHIVE</span>
+              <h3>Everyday, remembered</h3>
+            </div><span class="entry-total" id="timeline-total">0 moments</span>
+          </div>
+          <div id="full-timeline-content"></div>
+        </section>
+        <footer class="page-footer"><span>Made of moments. Kept by you.</span><button class="text-button download-package" type="button" title="Download the complete app source bundle">↓ Download app package</button><span><i class="offline-indicator"></i> Saved on this device · Nothing leaves this device</span></footer>
+      </section>
+
+      <section class="view-section hidden" id="insights-view">
+        <div class="page-intro compact-intro">
+          <div>
+            <p class="eyebrow">Patterns hiding in plain sight</p>
+            <h1>Little <em>discoveries.</em></h1>
+            <p class="intro-copy">As your city grows, it starts noticing things you might miss.</p>
+          </div>
+          <div class="insight-top-note">✳ &nbsp;Your patterns, not predictions</div>
+        </div>
+        <div class="stats-grid" id="stats-grid"></div>
+        <section class="panel archive-storage-panel" aria-labelledby="archive-storage-title">
+          <div class="archive-storage-icon" aria-hidden="true">⌂</div>
+          <div class="archive-storage-copy"><span class="card-kicker">YOUR LONG-TERM ARCHIVE</span><h3 id="archive-storage-title">Room for years of moments</h3><p id="storage-summary">Checking your saved archive…</p><small id="storage-note">Your memories stay in this browser. Photo capacity depends on available device storage.</small></div>
+          <span class="archive-storage-badge">ON THIS DEVICE</span>
+        </section>
+        <section class="panel achievements-panel">
+          <div class="panel-heading">
+            <div><span class="card-kicker">MILESTONES ALONG THE WAY</span>
+              <h3>Your achievements</h3>
+            </div><span class="achievement-count" id="achievement-count">0 earned</span>
+          </div>
+          <div class="achievement-grid" id="achievement-grid"></div>
+        </section>
+        <div class="discovery-grid">
+          <section class="panel discoveries-panel">
+            <div class="panel-heading">
+              <div><span class="card-kicker">NOTICED OVER TIME</span>
+                <h3>What your days are saying</h3>
+              </div><span class="insight-spark">✳</span>
+            </div>
+            <div class="discovery-list" id="discovery-list"></div>
+          </section>
+          <section class="panel category-panel">
+            <div class="panel-heading">
+              <div><span class="card-kicker">YOUR CITY'S DISTRICTS</span>
+                <h3>What makes you, you</h3>
+              </div>
+            </div>
+            <div id="category-bars"></div>
+            <div class="privacy-note"><span>⌑</span>
+              <div><strong>Private by nature</strong>
+                <p>These observations are made from your entries, right here on your device.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+        <footer class="page-footer"><span>Made of moments. Kept by you.</span><button class="text-button download-package" type="button" title="Download the complete app source bundle">↓ Download app package</button><span><i class="offline-indicator"></i> Saved on this device · Nothing leaves this device</span></footer>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="entry-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="entry-modal"><button class="modal-close" id="close-modal" aria-label="Close">×</button>
+      <p class="eyebrow">A little piece of today</p>
+      <h2 id="modal-title">Save a <em>moment.</em></h2>
+      <p class="modal-subtitle">Small things count. What would you like your city to remember?</p>
+      <form id="entry-form"><label class="field-label" for="entry-text">Your moment</label><textarea id="entry-text" maxlength="500" placeholder="A detail, a thought, something you noticed…" required></textarea>
+        <div class="form-row">
+          <div class="form-field"><label class="field-label" for="entry-date">When was it?</label><input type="date" id="entry-date" required></div>
+          <div class="form-field"><label class="field-label" for="entry-category">What kind of moment?</label><select id="entry-category">
+              <option value="everyday">Everyday detail</option>
+              <option value="people">People & connection</option>
+              <option value="nature">Outside & nature</option>
+              <option value="ideas">Thoughts & ideas</option>
+              <option value="joy">Small joys</option>
+              <option value="milestone">Something meaningful</option>
+            </select></div>
+        </div>
+        <div class="importance-field" role="group" aria-labelledby="importance-label">
+          <div><span class="field-label" id="importance-label">How much does it matter to you?</span><small>It can be important just because you say so.</small></div>
+          <div class="importance-options"><label><input type="radio" name="importance" value="1"><span>Little</span></label><label><input type="radio" name="importance" value="2" checked><span>Some</span></label><label><input type="radio" name="importance" value="3"><span>A lot</span></label></div>
+        </div><label class="photo-picker" for="entry-photo"><span class="photo-plus">+</span><span><strong id="photo-label">Add a photo, if you like</strong><small>Stays on this device</small></span><input id="entry-photo" type="file" accept="image/*"></label>
+        <div id="photo-preview" class="photo-preview hidden"></div>
+        <div class="modal-actions"><button type="button" class="cancel-button" id="cancel-modal">Not now</button><button type="submit" class="add-button save-button">Save to my city <span>→</span></button></div>
+      </form>
+    </div>
+  </div>
+  <div class="share-backdrop hidden" id="share-modal" role="dialog" aria-modal="true" aria-labelledby="share-title">
+    <section class="share-dialog">
+      <button class="modal-close" id="share-close" aria-label="Close">×</button>
+      <div class="share-emblem">↗</div>
+      <p class="eyebrow">A small world, shared with care</p>
+      <h2 id="share-title">Send a little <em>Elsewhere.</em></h2>
+      <p class="share-intro">Make an encrypted city file on this device. Send the file and your PIN to someone you trust—separately. Nothing is uploaded.</p>
+      <div class="share-security"><span>⌑</span><span><strong>Private by design</strong><small>Your PIN encrypts the file. Only someone with the file and PIN can open it.</small></span></div>
+      <div class="share-list-wrap"><div class="share-list-title">CHOOSE WHAT TO SHARE</div><div id="share-list"></div></div>
+      <label class="field-label share-pin-label" for="share-pin">Create a 6–12 digit PIN</label>
+      <input class="share-pin-input" id="share-pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="12" placeholder="Enter a private PIN">
+      <div class="share-actions"><button class="cancel-button" id="import-city">Open a city file</button><button class="add-button" id="export-city">Encrypt & download <span>↗</span></button></div>
+      <input id="import-file" type="file" accept=".elsewhere,.json,application/json" hidden>
+      <p class="share-status" id="share-status" aria-live="polite"></p>
+      <p class="share-footnote">For importing, choose the received city file and enter the PIN its owner gave you.</p>
+    </section>
+  </div>
+  <div class="toast" id="toast"></div>
+  <div class="day-drawer-backdrop hidden" id="day-backdrop">
+    <aside class="day-drawer" id="day-drawer"><button class="drawer-close" id="drawer-close" aria-label="Close day">×</button>
+      <div id="drawer-content"></div>
+    </aside>
+  </div>
+  <div class="help-backdrop hidden" id="help-modal">
+    <div class="help-card"><button class="modal-close" id="close-help">×</button>
+      <div class="help-mark">✳</div>
+      <p class="eyebrow">A place made by you</p>
+      <h2>Welcome to <em>Elsewhere.</em></h2>
+      <p>Save the small things you want to remember. Your city gives them shape: meaningful moments become landmarks, repeating details become familiar streets, and new ideas add places that didn’t exist before.</p>
+      <p>Everything is stored on this device. The more you add, the more your city can notice about you.</p><button class="add-button" id="got-it">Let’s wander <span>→</span></button>
+    </div>
+  </div>
+  <script src="city3d.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

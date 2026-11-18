@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-time="day">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Documentation — Elsewhere</title>
+<meta name="description" content="Guides for Elsewhere: getting started, how the city works, architecture, the data model, privacy, customising, deploying and an FAQ." />
+<meta name="theme-color" content="#f6f4ef" />
+<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="../fonts/fonts.css" />
+<link rel="stylesheet" href="../assets/landing.css" />
+<style>
+  .docs-head { max-width: var(--max); margin: 0 auto; padding: 3.6rem 1.5rem 1rem; }
+  .docs-head h1 { font-size: clamp(2.2rem, 4.6vw, 3.4rem); }
+  .docs-head .lede { margin-top: 1rem; }
+  .doc-grid {
+    max-width: var(--max); margin: 0 auto; padding: 2rem 1.5rem 5rem;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;
+  }
+  .doc-card {
+    display: flex; flex-direction: column; gap: .5rem;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 1.5rem; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .doc-card:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: var(--shadow); }
+  .doc-card .doc-num { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .16em; color: var(--accent); }
+  .doc-card h2 { font-size: 1.12rem; }
+  .doc-card p { font-size: .92rem; color: var(--ink-soft); }
+  .doc-card .doc-when { margin-top: auto; padding-top: .6rem; font-family: var(--font-mono); font-size: .7rem; color: var(--muted); }
+  .docs-foot {
+    max-width: var(--max); margin: 0 auto; padding: 0 1.5rem 5rem;
+    border-top: 1px solid var(--line); padding-top: 2rem;
+    display: flex; flex-wrap: wrap; gap: 1.4rem;
+    font-family: var(--font-mono); font-size: .76rem; color: var(--muted);
+  }
+  .docs-foot a { text-decoration: underline; text-underline-offset: 3px; color: var(--primary); }
+  @media (max-width: 760px) { .doc-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../" aria-label="Elsewhere home">
+      <span class="brand-mark"><span></span><span></span><span></span></span>
+      <span class="brand-word">elsewhere<span class="dot">.</span></span>
+    </a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="../#idea">The idea</a>
+      <a href="../#districts">Districts</a>
+      <a href="../#inside">Inside</a>
+      <a href="../#support">Support</a>
+    </nav>
+    <div class="topbar-actions">
+      <a class="btn btn-solid btn-sm" href="../app/">Open your city</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="docs-head">
+    <p class="eyebrow"><span class="rule"></span>Documentation</p>
+    <h1>Everything written down.</h1>
+    <p class="lede">Eight guides. The first three are for using the app, the next three for changing it, and the last two for the questions that come after both.</p>
+  </div>
+
+  <div class="doc-grid">
+    <a class="doc-card" href="https://github.com/drsamonline/elsewhere/blob/main/docs/getting-started.md">
+      <span class="doc-num">01</span>
+      <h2>Getting started</h2>
+      <p>Your first moment, the sample city, where the archive actually lives, and the two ways to keep it safe.</p>
+      <span class="doc-when">read when: you have just opened the app</span>
+    </a>
+    <a class="doc-card" href="https://github.com/drsamonline/elsewhere/blob/main/docs/how-the-city-works.md">
+      <span class="doc-num">02</span>
+      <h2>How the city works</h2>
+      <p>The five rules behind the skyline: districts, weight, repetition, the seed that draws each block, and the atmospheres.</p>
+      <span class="doc-when">read when: you want to read your own skyline</span>
+    </a>
+    <a class="doc-card" href="https://github.com/drsamonline/elsewhere/blob/main/docs/architecture.md">
+      <span class="doc-num">03</span>
+      <h2>Architecture</h2>
+      <p>The five files, the render loop, the storage layer, the optional 3D layer, and why there is no build step.</p>
+      <span class="doc-when">read when: you are about to change the code</span>
+    </a>
+    <a class="doc-card" href="https://github.com/drsamonline/elsewhere/blob/main/docs/data-model.md">
+      <span class="doc-num">04</span>
+      <h2>Data model</h2>
+      <p>The moment schema, the IndexedDB layout, the localStorage fallback, and the <code>.elsewhere</code> file format down to the byte.</p>
+      <span class="doc-when">read when: you are writing an importer or a backup tool</span>
+    </a>
+    <a class="doc-card" href="https://github.com/drsamonline/elsewhere/blob/main/docs/privacy-and-security.md">
+      <span class="doc-num">05</span>
+      <h2>Privacy &amp; security</h2>
+      <p>What is stored, the three things that leave the device, the exact cryptography, and the honest limits of a six-digit PIN.</p>
+      <span class="doc-when">read when: you are deciding what to write in it</span>
+    </a>
+    <a class="doc-card" href="https://github.com/drsamonline/elsewhere/blob/main/docs/customising.md">
+      <span class="doc-num">06</span>
+      <h2>Customising</h2>
+      <p>Palette tokens, districts, atmospheres, copy and layout — plus how to remove the CDN dependencies in three edits.</p>
+      <span class="doc-when">read when: you want it to look like yours</span>
+    </a>
+    <a class="doc-card" href="https://github.com/drsamonline/elsewhere/blob/main/docs/deploying.md">
+      <span class="doc-num">07</span>
+      <h2>Deploying</h2>
+      <p>GitHub Pages, any static host, a LAN server, and packaging it as a desktop or Android app.</p>
+      <span class="doc-when">read when: it needs to live somewhere</span>
+    </a>
+    <a class="doc-card" href="https://github.com/drsamonline/elsewhere/blob/main/docs/faq.md">
+      <span class="doc-num">08</span>
+      <h2>FAQ</h2>
+      <p>Lost data, a share file that will not open, how many moments fit, browser support, and why there is no search yet.</p>
+      <span class="doc-when">read when: something has gone wrong</span>
+    </a>
+  </div>
+
+  <div class="docs-foot">
+    <a href="../selftest.html">Offline self-test</a>
+    <a href="https://github.com/drsamonline/elsewhere/blob/main/ENHANCEMENTS.md">Enhancement list</a>
+    <a href="https://github.com/drsamonline/elsewhere/blob/main/CHANGELOG.md">Changelog</a>
+    <a href="https://github.com/drsamonline/elsewhere/blob/main/NOTICE.md">Notices</a>
+    <a href="https://github.com/drsamonline/elsewhere/blob/main/LICENSE">Licence</a>
+    <a href="https://github.com/drsamonline/elsewhere/issues">Issues</a>
+  </div>
+</main>
+
+</body>
+</html>

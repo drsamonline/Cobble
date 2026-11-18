@@ -1,0 +1,208 @@
+<div align="center">
+
+# Elsewhere
+
+**Your life, taking shape.**
+
+A private city built from the small things you notice. Save a moment — the warm loaf in the window, a sentence someone said on a train, the light on wet pavement — and a building appears. Colour is what kind of moment it was. Height is how much it mattered. Come back in a year and see what you made.
+
+[Live demo](https://drsamonline.github.io/elsewhere/) · [Open the app](https://drsamonline.github.io/elsewhere/app/) · [Wander a sample city](https://drsamonline.github.io/elsewhere/app/?demo=1) · [Documentation](docs/) · [Report a bug](https://github.com/drsamonline/elsewhere/issues)
+
+**Status: v1.1.0 — shipped, and now offline.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
+
+[![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.1.0-e2a66f.svg)](CHANGELOG.md)
+[![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
+[![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
+[![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
+[![Data: device only](https://img.shields.io/badge/data-device%20only-2ea44f.svg)](#privacy)
+[![Tracking: none](https://img.shields.io/badge/tracking-none-2ea44f.svg)](#privacy)
+[![Server: none](https://img.shields.io/badge/backend-none-lightgrey.svg)](#architecture)
+[![Vanilla JS](https://img.shields.io/badge/built%20with-HTML%20%7C%20CSS%20%7C%20JS-f7df1e.svg)](app/)
+[![App size](https://img.shields.io/badge/app%20shell-~142%20KB-blueviolet.svg)](app/)
+[![Moments](https://img.shields.io/badge/moments-6%20districts%20%C2%B7%205%20atmospheres-d5aa64.svg)](docs/how-the-city-works.md)
+[![GitHub Sponsors](https://img.shields.io/badge/sponsor-GitHub-ea4aaa.svg)](https://github.com/sponsors/drsamonline)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-matneo-ff5e5b.svg)](https://ko-fi.com/matneo)
+[![UPI](https://img.shields.io/badge/UPI-drsohilboi%40ybl-2ea44f.svg)](#support)
+[![Stars](https://img.shields.io/github/stars/drsamonline/elsewhere?style=social)](https://github.com/drsamonline/elsewhere/stargazers)
+
+</div>
+
+---
+
+![Elsewhere landing page](screenshots/landing.png)
+
+## What it is
+
+Most journalling apps give you a list. A list is fine for finding something later; it is useless for seeing a year. Elsewhere asks one question — *what did you notice today?* — and answers it with a place.
+
+Every saved moment becomes a block in a city. Six districts sort the blocks by kind, a landmark flag makes some of them taller, and repetition makes a block wider. Nothing is scored, nothing is graded, and no streak breaks if you skip a week. The city simply shows what you have been paying attention to.
+
+- **No account.** There is no Elsewhere server, so there is nothing to sign in to.
+- **No tracking.** No analytics, no cookies, no third-party scripts reading your words.
+- **No subscription.** Noncommercial use is free, forever, under a licence that says so.
+- **No lock-in.** Your archive exports as a file you own, encrypted with a PIN you choose.
+
+## Screenshots
+
+| My city | After dark |
+|---|---|
+| ![The city view with districts, streets and weather](screenshots/city.png) | ![The same city at night, with lit windows](screenshots/city-night.png) |
+
+| Timeline | Discoveries |
+|---|---|
+| ![The timeline view, one row per day](screenshots/timeline.png) | ![Statistics, milestones and district bars](screenshots/insights.png) |
+
+| A day, opened | Share city |
+|---|---|
+| ![The day drawer, showing one moment with its photo](screenshots/day-drawer.png) | ![The share dialog, asking for a PIN](screenshots/share.png) |
+
+| Milestones | Landing page, after dark |
+|---|---|
+| ![The achievements grid on the Discoveries view](screenshots/achievements.png) | ![The landing page at night](screenshots/landing-night.png) |
+
+| On a phone — timeline | On a phone — city |
+|---|---|
+| <img src="screenshots/mobile.png" width="300" alt="The timeline on a phone"> | <img src="screenshots/mobile-city.png" width="300" alt="The city on a phone"> |
+
+Every capture is a real render of this repository at 1440×900, 1440×1000 and 390×844, produced by headless Chrome with the sample city loaded — no mock-ups, no retouching. The city shown is the illustrated CSS city, which is what everyone sees: the WebGL layer is experimental and off by default (see [the enhancement list](ENHANCEMENTS.md#6-the-3d-layer)).
+
+## What it does
+
+**The city**
+
+- **A skyline made of your days.** Six district colours, six building shapes, rooftops, windows that scale with how often something has recurred, and a crown on any block that holds more than two moments.
+- **Five atmospheres and four weathers.** Meadow, coastal, amber, lavender and midnight; clear, cloudy, rain and snow. All drawn in CSS, none of them photographs.
+- **Day and night.** Night relights the windows, darkens the hills and quiets the palette. Day and night are a button, not a clock.
+- **Streets with traffic.** Cars pass, a person walks, a bird or a cat turns up, streetlamps come on at night, and a little theatre appears every ninth district — click it to open your photo gallery.
+- **Districts you can wander.** Drag, scroll or use the arrow keys and the city pans sideways through neighbouring districts, redrawing each one from the same seed as you arrive.
+- **An optional 3D layer.** `city3d.js` adds a Three.js model of the neighbourhood when WebGL is available and steps aside silently when it is not.
+- **Immersive mode.** Hide every control and look at the city alone.
+
+**The archive**
+
+- **Six kinds of moment.** Everyday detail, people and connection, outside and nature, thoughts and ideas, small joys, something meaningful — each with its own colour and glyph.
+- **Three weights.** A detail, something that mattered, a landmark. Weight becomes height.
+- **Repetition.** Say that you noticed the same thing again; the block widens and the windows multiply.
+- **One photo per moment**, resized on the device to a 76%-quality JPEG before it is ever stored. Nothing is uploaded.
+- **A day drawer** that opens any date as a short chapter, with its photos and its order in the day.
+- **A full timeline** of every day you have saved, newest first, one click from the same drawer.
+- **Search-free by design.** The city is the index. Full-text search is the first item of the [archive section](ENHANCEMENTS.md) in the enhancement list.
+
+**The discoveries**
+
+- **Four live numbers** — moments kept, days remembered, personal landmarks, returning themes.
+- **Six milestones**, each with a progress bar rather than a broken streak: first light, a little neighbourhood, city taking shape, days remembered, many sides of you, a landmark moment.
+- **Observations in words, not predictions.** Your busiest district; the day that held the most; the shortest moment you kept, and what its length might mean. All computed from your own words, on your own device.
+- **A district bar chart** so you can see which part of your attention is winning.
+
+**Sharing and keeping**
+
+- **Encrypted city files.** Choose any subset of moments, set a 6–12 digit PIN, and Elsewhere writes a `.elsewhere` file: AES-256-GCM, key derived with PBKDF2-SHA-256 at 250,000 iterations, random 16-byte salt and 12-byte IV per export.
+- **Import with validation.** Every field of every imported moment is checked against a schema before it touches your archive; duplicates are skipped; a damaged file is refused with a reason.
+- **Download the whole app** as a zip, straight from the app, with a README inside.
+- **Honest storage reporting.** IndexedDB with a localStorage fallback, the size of your archive in KB, and how much room the browser will still give you.
+
+**Offline, installable, self-contained**
+
+- **A service worker that keeps the whole site.** The first visit caches the landing page, the app, the fonts, the icons and the docs hub; after that it opens with the network off. Navigations try the network first and fall back to the cache, so a new deploy is picked up on the next online visit.
+- **Installable.** `manifest.json` with a proper icon set (including a maskable one) and two shortcuts: "My city" and "Sample city". Install it from the address bar, or from the browser's menu on a phone.
+- **No CDN at runtime.** The three families are self-hosted as woff2, and the only two libraries are vendored: JSZip, loaded when you press "Download app package", and Three.js, loaded only if you ask for the experimental 3D layer. A page load makes no request to anyone else.
+- **`selftest.html`** loads every file the worker is supposed to keep and tells you, file by file, whether it came from the cache or the network. Run it online, then with the network off.
+
+**Built to survive a boring browser**
+
+- Escape closes every overlay; every control is a real button with a label; the city's motion stops when the system asks for reduced motion, in the app and on the landing page.
+- The illustrated city is CSS, so it renders even where WebGL, canvas or a CDN is missing.
+- No build step, no bundler, no framework, no `node_modules`. Five files, served as they are.
+
+## Quick start
+
+```bash
+git clone https://github.com/drsamonline/elsewhere.git
+cd elsewhere
+python3 -m http.server 8000
+```
+
+Open <http://localhost:8000> for the landing page, or <http://localhost:8000/app/> for the app.
+
+> Serve the folder; do not open `app/index.html` as a `file://` URL. Browsers give `file://` pages no IndexedDB and no Web Crypto, which costs you the archive and the encrypted share. Any static host works — GitHub Pages, Netlify, a Raspberry Pi on your own Wi-Fi.
+
+Nothing is loaded from a CDN. The fonts are in `fonts/`, the two libraries are in `app/vendor/`, and the service worker keeps the whole site for offline use. Serve it over `http://` or `https://` — a service worker will not register on `file://`.
+
+To check the offline promise yourself, open `/selftest.html` with the network on, then again with it off.
+
+## Documentation
+
+| Guide | What it covers |
+|---|---|
+| [Getting started](docs/getting-started.md) | First moment, the sample city, where your data lives, how to keep it |
+| [How the city works](docs/how-the-city-works.md) | Districts, weights, repetition, atmospheres, weather and the seed that draws your skyline |
+| [Architecture](docs/architecture.md) | The five files, the render loop, the storage layer, and why there is no build step |
+| [Data model](docs/data-model.md) | The moment schema, IndexedDB layout, the localStorage fallback, the `.elsewhere` file format |
+| [Privacy and security](docs/privacy-and-security.md) | What is stored, what leaves the device, the exact cryptography, and its limits |
+| [Customising](docs/customising.md) | Palettes, districts, atmospheres, copy and layout — with the token names |
+| [Deploying](docs/deploying.md) | GitHub Pages, any static host, and packaging as a desktop or Android app |
+| [FAQ](docs/faq.md) | Lost data, broken share files, big archives, browser support |
+
+## Privacy, in one paragraph
+
+Your moments live in your browser's IndexedDB on your device. There is no Elsewhere account and no Elsewhere backend, so there is nothing to leak, subpoena or sell. The app makes no analytics calls. The only data that ever leaves is a `.elsewhere` file you create yourself, encrypted with a PIN that never travels with it. The honest caveats: the page pulls fonts and two libraries from public CDNs, clearing site data clears the city, and a PIN of six digits protects against a person, not a cluster. All three are written up in [privacy and security](docs/privacy-and-security.md).
+
+## Enhancements
+
+[**ENHANCEMENTS.md**](ENHANCEMENTS.md) is the full list — every idea, ordered by effort, with the file each one touches. It opens with the quick wins: vendor the three CDN dependencies and the app becomes genuinely offline; add a manifest and a service worker and it becomes installable; add full-text search, a recycle bin and JSON export, and it becomes hard to lose anything. Then the larger bets: a year heatmap, multiple cities, print, translation, and single-file desktop and Android builds.
+
+## Built on the fleet
+
+Elsewhere is not the first offline-first app in this collection, and it borrows deliberately from the ones that came before rather than reinventing them. What came from where:
+
+| Repository | What was taken | How it was used here |
+|---|---|---|
+| [**Mood Mixer**](https://github.com/drsamonline/mood-mixer) | The versioned-cache, network-first service worker; the `manifest.json` shape; the `selftest.html` idea; the support block | `sw.js`, `manifest.json`, `selftest.html`, and the sponsor section of this README are adapted from it |
+| [**Planner Pro**](https://github.com/drsamonline/planner-pro) | The CI layout (a link check and a size budget as separate scripts), the icon sizes, the packaging approach | `.github/workflows/check.yml`, `tools/check-links.mjs`, `tools/check-size.mjs` |
+| [**App Builder**](https://github.com/drsamonline/app-builder) | The single-file Windows executable and Android WebView packaging pipeline | The route to a desktop and Android build, written up in [deploying](docs/deploying.md) — not run in this repository |
+| [**Lockhtml**](https://github.com/drsamonline/lockhtml) | Its AES-256-GCM + PBKDF2 sealing pattern, and the vocabulary used to describe it honestly | Confirmed the parameters in the share format and the wording of the [privacy page](docs/privacy-and-security.md) |
+| [**Offline PDF Toolkit**](https://github.com/drsamonline/offline-pdf-toolkit) | The habit of saying what a browser refuses to do on `file://` | The warnings in getting started and deploying |
+| [**Base Bench**](https://github.com/drsamonline/base-bench) | The PolyForm Noncommercial licence setup and the `NOTICE.md` structure | `LICENSE`, `NOTICE.md` |
+
+The app's own code — the city, the districts, the seed, the timeline, the discoveries, the sample city — is unchanged in behaviour. What changed is the ground under it: self-hosted fonts, vendored libraries, a worker, a manifest, an icon set and two CI checks.
+
+## Support
+
+<img src="docs/assets/support-portrait.jpg" width="72" height="72" alt="Dr. Sohil Momin" align="left" style="border-radius:50%;margin-right:1rem">
+
+Free, offline, accountless — and staying that way. If it earned its keep:
+
+| | |
+|---|---|
+| UPI (India) | `drsohilboi@ybl` — payee Dr. Sohil Momin, open amount, or scan [the QR](docs/assets/upi-qr.svg) |
+| GitHub Sponsors | [github.com/sponsors/drsamonline](https://github.com/sponsors/drsamonline) |
+| Ko-fi | [ko-fi.com/matneo](https://ko-fi.com/matneo) |
+| PayPal | [paypal.me/drsohilmomin](https://paypal.me/drsohilmomin?locale.x=en_GB&country.x=IN) |
+| My books | [Amazon author store](https://www.amazon.com/stores/author/B08ZT331LY/allbooks?ccs_id=aed72b9f-71d9-43dc-adee-e9368a317acc) |
+| More apps | [drsamonline.github.io](https://drsamonline.github.io/) |
+| Email | [sohilmomin2000@gmail.com](mailto:sohilmomin2000@gmail.com) |
+
+Nothing is gated behind it: no accounts, no tracking, no network requests.
+
+<div align="center">
+
+[![Sponsor on GitHub](https://img.shields.io/badge/%E2%9D%A4%20Sponsor-GitHub%20Sponsors-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/drsamonline)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-matneo-ff5e5b?style=for-the-badge&logo=kofi&logoColor=white)](https://ko-fi.com/matneo)
+[![PayPal](https://img.shields.io/badge/PayPal-drsohilmomin-00457c?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/drsohilmomin?locale.x=en_GB&country.x=IN)
+[![Books](https://img.shields.io/badge/Books-Amazon%20author%20store-ff9900?style=for-the-badge&logo=amazon&logoColor=white)](https://www.amazon.com/stores/author/B08ZT331LY/allbooks?ccs_id=aed72b9f-71d9-43dc-adee-e9368a317acc)
+
+</div>
+
+The same block is on the [landing page](https://drsamonline.github.io/elsewhere/#support), with the UPI ID copyable and the QR scannable, so nobody has to open GitHub to support the work.
+
+## Licence
+
+[PolyForm Noncommercial 1.0.0](LICENSE) — free for personal, academic, hobby, charitable and government use. Commercial use needs a written licence from the author. Third-party work is credited in [NOTICE.md](NOTICE.md).
+
+## Author
+
+**Dr Sohil Momin** — [@drsamonline](https://github.com/drsamonline), homeopathic physician and builder of offline-first software.
+
+<p align="center"><sub>Made for people who notice things.</sub></p>

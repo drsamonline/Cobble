@@ -1,0 +1,912 @@
+(() => {
+  const STORE = 'elsewhere-moments-v1';
+  const categories = {
+    everyday: {
+      label: 'Everyday detail',
+      short: 'Everyday',
+      color: '#b59a79',
+      icon: '✦'
+    },
+    people: {
+      label: 'People & connection',
+      short: 'People',
+      color: '#cb8e79',
+      icon: '♡'
+    },
+    nature: {
+      label: 'Outside & nature',
+      short: 'Nature',
+      color: '#82a58a',
+      icon: '✿'
+    },
+    ideas: {
+      label: 'Thoughts & ideas',
+      short: 'Ideas',
+      color: '#8699b8',
+      icon: '✧'
+    },
+    joy: {
+      label: 'Small joys',
+      short: 'Joy',
+      color: '#d5aa64',
+      icon: '☀'
+    },
+    milestone: {
+      label: 'Something meaningful',
+      short: 'Meaningful',
+      color: '#aa86a0',
+      icon: '✷'
+    }
+  };
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  } [char]));
+  const localDate = date => {
+    const d = date || new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  };
+  const formatDate = (date, options = {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  }) => new Date(`${date}T12:00:00`).toLocaleDateString(undefined, options);
+  const readEntries = () => {
+    try {
+      const value = JSON.parse(localStorage.getItem(STORE) || '[]');
+      return Array.isArray(value) ? value : [];
+    } catch {
+      return [];
+    }
+  };
+  const legacyEntries = readEntries();
+  let entries = legacyEntries;
+  let personalEntries = entries;
+  let databasePromise;
+  let databaseReady = false;
+  let visibleTimelineDays = 50;
+  let demoMode = false;
+  let cityCenterIndex = 0;
+  let saveQueue = Promise.resolve();
+  let photoData = '';
+  let toastTimer;
+  const atmosphere = { theme: 'meadow', mood: 'serene', weather: 'clear', night: false };
+  const themes = ['meadow', 'coastal', 'amber', 'lavender', 'midnight'];
+  const moods = ['serene', 'curious', 'dreamy', 'festive', 'tranquil'];
+  const weatherTypes = ['clear', 'cloudy', 'rain', 'snow'];
+  const pickDifferent = (items, current) => {
+    const choices = items.filter(item => item !== current);
+    return choices[Math.floor(Math.random() * choices.length)];
+  };
+
+  function applyAtmosphere() {
+    const viewport = $('#city-viewport');
+    viewport.dataset.theme = atmosphere.theme;
+    viewport.dataset.mood = atmosphere.mood;
+    viewport.dataset.weather = atmosphere.weather;
+    viewport.classList.toggle('is-night', atmosphere.night);
+    window.elsewhereCity3D?.setAtmosphere(atmosphere);
+    const weatherIcon = { clear: '☀', cloudy: '☁', rain: '☂', snow: '❄' }[atmosphere.weather];
+    $('.weather-icon').textContent = atmosphere.night ? '☾' : weatherIcon;
+    $('#weather-control').querySelector('span').textContent = weatherIcon;
+    $('#time-icon').textContent = atmosphere.night ? '☀' : '☾';
+    $('#time-label').textContent = atmosphere.night ? 'Day' : 'Night';
+    $('#time-control').setAttribute('aria-label', atmosphere.night ? 'Switch to day' : 'Switch to night');
+    $('#city-mood').textContent = `${atmosphere.mood[0].toUpperCase()}${atmosphere.mood.slice(1)} ${atmosphere.night ? 'after dark' : 'in the city'}`;
+  }
+
+  function openDatabase() {
+    if (!('indexedDB' in window)) return Promise.reject(new Error('IndexedDB is unavailable'));
+    if (!databasePromise) databasePromise = new Promise((resolve, reject) => {
+      const request = indexedDB.open('elsewhere-archive', 1);
+      request.onupgradeneeded = () => {
+        if (!request.result.objectStoreNames.contains('archive')) request.result.createObjectStore('archive', { keyPath: 'id' });
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error || new Error('Could not open archive storage'));
+    });
+    return databasePromise;
+  }
+
+  function saveToDatabase(serialized) {
+    return openDatabase().then(db => new Promise((resolve, reject) => {
+      const transaction = db.transaction('archive', 'readwrite');
+      transaction.objectStore('archive').put({ id: 'moments', value: serialized });
+      transaction.oncomplete = resolve;
+      transaction.onerror = () => reject(transaction.error || new Error('Could not save archive'));
+      transaction.onabort = () => reject(transaction.error || new Error('Archive save was interrupted'));
+    }));
+  }
+
+  async function loadArchive() {
+    try {
+      const db = await openDatabase();
+      const stored = await new Promise((resolve, reject) => {
+        const request = db.transaction('archive', 'readonly').objectStore('archive').get('moments');
+        request.onsuccess = () => resolve(request.result?.value || '');
+        request.onerror = () => reject(request.error);
+      });
+             if (legacyEntries.length) {
+         // A fallback save may be newer than a stale IndexedDB copy after a quota error.
+         entries = legacyEntries;
+         await saveToDatabase(JSON.stringify(legacyEntries));
+         try { localStorage.removeItem(STORE); } catch {}
+       } else if (stored) {
+         const parsed = JSON.parse(stored);
+         if (Array.isArray(parsed)) entries = parsed;
+              }
+       personalEntries = entries;
+      databaseReady = true;
+         } catch {
+       databaseReady = false;
+       // Restore the most recent fallback copy if IndexedDB is unavailable.
+       entries = legacyEntries;
+     }
+     personalEntries = entries;
+     try { navigator.storage?.persist?.(); } catch {}
+   }
+
+   function save() {
+    if (demoMode) return;
+    personalEntries = entries;
+    const serialized = JSON.stringify(entries);
+         if (databaseReady) {
+       // Serialize writes so a slower earlier save can never overwrite a newer archive.
+       saveQueue = saveQueue.catch(() => {}).then(() => saveToDatabase(serialized));
+       saveQueue.then(() => {
+         try { localStorage.removeItem(STORE); } catch {}
+         updateStorageInfo();
+       }).catch(() => {
+         try {
+           localStorage.setItem(STORE, serialized);
+           toast('Archive storage is unavailable. A limited backup was saved; export your city soon.');
+         } catch {
+           toast('Could not save this moment. Export your city or remove a large photo to free space.');
+         }
+       });
+    } else {
+      try {
+        localStorage.setItem(STORE, serialized);
+        toast('Using limited browser storage. Your archive may need more room—export a backup.');
+      } catch {
+        toast('Could not save this moment. This browser has run out of storage.');
+      }
+    }
+    updateStorageInfo();
+  }
+
+  function formatBytes(bytes) {
+    if (!Number.isFinite(bytes) || bytes <= 0) return '0 KB';
+    return bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
+  async function updateStorageInfo() {
+    const summary = $('#storage-summary');
+    const note = $('#storage-note');
+    if (!summary || demoMode) return;
+    const bytes = new Blob([JSON.stringify(entries)]).size;
+    summary.textContent = `${entries.length.toLocaleString()} moments · ${formatBytes(bytes)} of archive data`;
+    if (!databaseReady) {
+      note.textContent = 'This browser is using its smaller fallback storage. Export a backup regularly; adding photos may fill it sooner.';
+      return;
+    }
+    try {
+      const estimate = await navigator.storage?.estimate?.();
+      const available = estimate?.quota ? Math.max(0, estimate.quota - (estimate.usage || 0)) : 0;
+      note.textContent = available
+        ? `Stored in this browser’s expanded archive. Space varies by device; about ${formatBytes(available)} remains available to this site. Export a backup now and then.`
+        : 'Stored in this browser’s expanded archive. Text-only memories take little space; photo capacity depends on your device. Export a backup now and then.';
+    } catch {
+      note.textContent = 'Stored in this browser’s expanded archive. Text-only memories take little space; photo capacity depends on your device. Export a backup now and then.';
+    }
+  }
+
+  function toast(message) {
+    const node = $('#toast');
+    node.textContent = message;
+    node.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => node.classList.remove('show'), 3000);
+  }
+
+  let zipLibraryPromise;
+  function loadZipLibrary() {
+    if (window.JSZip) return Promise.resolve(window.JSZip);
+    if (!zipLibraryPromise) {
+      zipLibraryPromise = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'vendor/jszip.min.js';
+        script.onload = () => window.JSZip ? resolve(window.JSZip) : reject(new Error('The ZIP tool did not load.'));
+        script.onerror = () => reject(new Error('Could not load the ZIP tool. Check your internet connection and try again.'));
+        document.head.appendChild(script);
+      });
+    }
+    return zipLibraryPromise;
+  }
+
+  async function downloadAppPackage(button) {
+    const buttons = $$('.download-package');
+    buttons.forEach(item => {
+      item.disabled = true;
+      item.textContent = 'Preparing package…';
+    });
+    try {
+      const JSZip = await loadZipLibrary();
+      const files = ['index.html', 'theme.css', 'styles.css', 'app.js', 'city3d.js'];
+      const zip = new JSZip();
+      const results = await Promise.all(files.map(async name => {
+        const response = await fetch(name, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`Could not include ${name} in the package.`);
+        let content = await response.text();
+        if (name === 'index.html') {
+          content = content
+            .replaceAll('href="/theme.css"', 'href="theme.css"')
+            .replaceAll('href="/styles.css"', 'href="styles.css"')
+            .replaceAll('src="/city3d.js"', 'src="city3d.js"')
+            .replaceAll('src="/app.js"', 'src="app.js"');
+        }
+        return [name, content];
+      }));
+      results.forEach(([name, content]) => zip.file(name, content));
+      zip.file('README.txt', [
+        'ELSEWHERE — COMPLETE APP PACKAGE',
+        '',
+        'This package contains the complete static app source: HTML, styles, archive logic, and optional 3D city renderer.',
+        '',
+        'To run it, place these files in a folder and serve that folder from a local web server (for example: python -m http.server 8000), then open http://localhost:8000.',
+        'Opening index.html directly as a file may prevent browser storage and encrypted sharing from working correctly.',
+        '',
+        'The app source package does not include your personal moments or photos. Use Share city inside the app to export those separately in an encrypted city file.',
+        'Google Fonts, Tailwind CSS, JSZip (for this download), and optional Three.js are loaded from public CDNs and need an internet connection.'
+      ].join('\n'));
+      const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'elsewhere-complete-app.zip';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+      toast('Complete app package downloaded. Your private memories are not included.');
+    } catch (error) {
+      toast(error.message || 'Could not create the app package.');
+    } finally {
+      buttons.forEach(item => {
+        item.disabled = false;
+        item.textContent = '↓ Download app package';
+      });
+    }
+  }
+
+  function groupDays(list = entries) {
+    return list.reduce((days, entry) => ((days[entry.date] ||= []).push(entry), days), {});
+  }
+
+  function toggleCityHud() {
+    const hidden = document.body.classList.toggle('city-immersive');
+    const button = $('#hud-toggle');
+    button.setAttribute('aria-pressed', String(hidden));
+    button.setAttribute('aria-label', hidden ? 'Show city controls' : 'Hide city controls');
+    $('.hud-toggle-label', button).textContent = hidden ? 'Show controls' : 'Hide controls';
+    $('.hud-toggle-icon', button).textContent = hidden ? '⤡' : '⤢';
+  }
+
+  function setView(name) {
+    document.body.classList.remove('city-immersive');
+    document.body.classList.toggle('city-view-active', name === 'city');
+    $('#hud-toggle').setAttribute('aria-pressed', 'false');
+    $('#hud-toggle').setAttribute('aria-label', 'Hide city controls');
+    $('.hud-toggle-label', $('#hud-toggle')).textContent = 'Hide controls';
+    $('.hud-toggle-icon', $('#hud-toggle')).textContent = '⤢';
+    $$('.view-section').forEach(view => view.classList.toggle('hidden', view.id !== `${name}-view`));
+    $$('.nav-item').forEach(button => button.classList.toggle('active', button.dataset.view === name));
+    $('#header-section').textContent = name === 'city' ? 'My city' : name === 'timeline' ? 'Timeline' : 'Discoveries';
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  function openDay(date) {
+    const dayEntries = (groupDays()[date] || []).slice().sort((a, b) => (a.createdAt || '').localeCompare(b.createdAt || ''));
+    $('#drawer-content').innerHTML = `<p class="eyebrow">A day in your city</p><h2 class="drawer-title">${escapeHTML(formatDate(date))}</h2><p class="drawer-lede">${dayEntries.length} little ${dayEntries.length === 1 ? 'piece' : 'pieces'} of your story.</p><div class="storyboard">${dayEntries.map((entry, index) => {
+      const category = categories[entry.category] || categories.everyday;
+      return `<article class="story-card" style="--story-color:${category.color}"><div class="story-meta"><span class="story-icon">${category.icon}</span><span>${escapeHTML(category.label)}</span><span class="story-order">${String(index + 1).padStart(2, '0')}</span></div>${entry.photo ? `<img class="story-photo" src="${entry.photo}" alt="Photo saved with this moment">` : ''}<p>${escapeHTML(entry.text)}</p><div class="story-foot">${'★'.repeat(Math.max(1, Math.min(3, Number(entry.importance) || 1)))}<span>${entry.repeatCount > 1 ? ` · noticed ${entry.repeatCount} times` : ' · a moment kept'}</span></div></article>`;
+    }).join('')}</div>`;
+    $('#day-backdrop').classList.remove('hidden');
+  }
+
+  function renderTimeline() {
+    const days = groupDays();
+    const dates = Object.keys(days).sort((a, b) => b.localeCompare(a));
+    const cards = (date, items, full = false) => `<button class="${full ? 'full-day' : 'mini-day'}" data-date="${date}"><span class="${full ? 'full-date' : 'mini-date'}">${escapeHTML(formatDate(date, full ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' }))}<small>${items.length} ${items.length === 1 ? 'moment' : 'moments'}</small></span><span class="${full ? 'full-day-entries' : 'mini-day-entries'}">${items.slice(0, full ? 4 : 2).map(entry => `<span class="entry-card"><i class="entry-swatch ${Number(entry.importance) >= 3 ? 'important' : ''}" style="background:${(categories[entry.category] || categories.everyday).color}"></i>${entry.photo ? `<img class="entry-thumb" src="${entry.photo}" alt="">` : ''}<span class="entry-card-text">${escapeHTML(entry.text)}</span></span>`).join('')}${items.length > (full ? 4 : 2) ? `<span class="more-moments">+ ${items.length - (full ? 4 : 2)} more moments</span>` : ''}</span><span class="day-arrow">↗</span></button>`;
+    $('#timeline-content').innerHTML = dates.length ? dates.slice(0, 3).map(date => cards(date, days[date])).join('') : `<div class="empty-state"><span class="empty-symbol">☼</span><strong>Your story starts with a small thing.</strong><p>Save one detail from today. Your city will grow around it.</p><button class="text-button" data-open-entry>Save your first moment →</button></div>`;
+    const shownDates = dates.slice(0, visibleTimelineDays);
+    $('#full-timeline-content').innerHTML = dates.length ? `${shownDates.map(date => cards(date, days[date], true)).join('')}${dates.length > visibleTimelineDays ? `<button class="timeline-load-more" type="button" data-load-older>Show 50 older days <span>↓</span></button>` : ''}` : `<div class="empty-full"><strong>No days in the archive yet.</strong>One tiny detail is all it takes to begin.</div>`;
+    $('#timeline-total').textContent = `${entries.length.toLocaleString()} ${entries.length === 1 ? 'moment' : 'moments'} · ${dates.length.toLocaleString()} days`;
+    $$('[data-load-older]').forEach(button => button.addEventListener('click', () => {
+      visibleTimelineDays += 50;
+      renderTimeline();
+    }));
+    $$('[data-date]').forEach(button => button.addEventListener('click', () => openDay(button.dataset.date)));
+    $$('[data-open-entry]').forEach(button => button.addEventListener('click', openEntry));
+  }
+
+    function renderCity() {
+    const total = entries.length;
+    const counts = Object.fromEntries(Object.keys(categories).map(key => [key, 0]));
+    let repeated = 0;
+    let meaningful = 0;
+    for (const entry of entries) {
+      if (counts[entry.category] !== undefined) counts[entry.category]++;
+      if (Number(entry.repeatCount) > 1) repeated++;
+      if (Number(entry.importance) >= 3) meaningful++;
+    }
+    const level = total < 3 ? 'A new little town' : total < 10 ? 'A village with stories' : total < 25 ? 'A town finding its rhythm' : total < 60 ? 'A city coming alive' : 'A city full of wonder';
+    $('#city-level').textContent = level;
+    $('#city-count').textContent = `${total.toLocaleString()} ${total === 1 ? 'moment' : 'moments'} collected`;
+    $('#city-title').innerHTML = `A place called <span>${total ? 'you' : 'today'}</span>`;
+    $('#city-mood').textContent = total ? (repeated ? 'Familiar streets are forming' : 'A world in the making') : 'Quiet beginnings';
+    applyAtmosphere();
+    const top = Object.entries(counts).sort((a, b) => b[1] - a[1]).find(([, count]) => count > 0);
+    $('#insight-content').innerHTML = total ? `<div class="insight-quote">“${top ? `Your ${categories[top[0]].label.toLowerCase()} district is becoming a favorite place to wander.` : 'Your city is just starting to learn your contours.'}”</div><p>${meaningful ? `${meaningful} moments have become landmarks because you marked them as meaningful.` : 'Keep noticing what feels worth keeping. Patterns emerge gently, over time.'}</p><button class="text-button" data-view-link="insights">See what else is taking shape <span>→</span></button>` : `<div class="insight-quote">A city grows one remembered detail at a time.</div><p>As you collect moments, this space will notice the little patterns that make your days yours.</p>`;
+    renderCityScenes(counts, total);
+    const pan = $('#city-pan');
+    if (!pan.dataset.panReady) {
+      pan.dataset.panReady = 'true';
+      pan.addEventListener('click', event => {
+        const building = event.target.closest('.city-building');
+        if (building) {
+          setView('timeline');
+          toast(`${categories[building.dataset.district]?.label || 'This'} district lives across your timeline.`);
+        } else if (event.target.closest('.theatre-building')) openGallery();
+        else if (event.target.closest('.city-person')) toast('Little lives, crossing paths in your city.');
+      });
+      pan.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          if (event.target.closest('.theatre-building')) { event.preventDefault(); openGallery(); }
+        }
+        if (event.target === pan && ['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+          event.preventDefault();
+          pan.dispatchEvent(new CustomEvent('city-pan-key', { detail: event.key }));
+        }
+      });
+    }
+  }
+
+  function renderCityScenes(counts, total) {
+    const pan = $('#city-pan');
+    const active = Object.entries(counts).filter(([, count]) => count).sort((a, b) => b[1] - a[1]);
+    const palette = ['#758e87', '#8a9c86', '#bf9878', '#7d8799', '#a88791', '#b0a174'];
+    const architectures = ['building-house', 'building-office', 'building-shop', 'building-tower', 'building-stepped', 'building-home'];
+    const landscapes = [
+      '<div class="park park-left"><i class="tree tree-one"></i><i class="tree tree-two"></i><span class="park-path"></span></div>',
+      '<div class="district-water"><i></i><i></i><i></i></div><div class="park park-right"><i class="tree tree-one"></i><i class="tree tree-three"></i></div>',
+      '<div class="district-plaza"><i></i><i></i><i></i></div><div class="park park-left"><i class="tree tree-two"></i><i class="tree tree-three"></i></div>',
+      '<div class="park park-right"><i class="tree tree-one"></i><i class="tree tree-two"></i><span class="park-path"></span></div>',
+      '<div class="district-plaza"><i></i><i></i><i></i></div><div class="district-water"><i></i><i></i><i></i></div>'
+    ];
+    const scenes = Array.from({ length: 5 }, (_, slot) => {
+      const districtIndex = cityCenterIndex + slot - 2;
+      const landscapeIndex = (districtIndex % landscapes.length + landscapes.length) % landscapes.length;
+      let seed = (Math.abs(districtIndex * 2654435761) + total * 101 + active.reduce((sum, [, count]) => sum + count, 0) * 37) >>> 0;
+      const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
+      const sceneCount = total ? 2 + Math.floor(random() * 3) : 0;
+      const buildings = Array.from({ length: sceneCount }, (_, index) => {
+        const pair = active.length ? active[Math.floor(random() * active.length)] : ['everyday', 1];
+        const [key, count] = pair;
+        const height = 62 + Math.floor(random() * 90);
+        const width = 31 + Math.floor(random() * 20);
+        const architecture = architectures[Math.floor(random() * architectures.length)];
+        const shade = palette[(Math.floor(random() * palette.length) + Object.keys(categories).indexOf(key)) % palette.length];
+        const windows = Math.min(12, Math.max(4, Math.floor(count / 2) + 4));
+        return `<button class="city-building ${architecture} ${random() > .72 ? 'roof-point' : ''}" style="--building-height:${height}px;--building-width:${width}px;--building-color:${shade};--delay:${index * 90}ms" data-district="${key}" aria-label="${escapeHTML(categories[key].label)} district, ${count} moments"><span class="building-roof"></span><span class="building-windows">${'<i></i>'.repeat(windows)}</span><span class="building-door"></span><span class="building-side" aria-hidden="true"></span>${count > 2 ? '<span class="building-crown" aria-hidden="true">✦</span>' : ''}</button>`;
+      }).join('');
+      const gallery = total && districtIndex % 9 === 3 ? '<div class="theatre-building" role="button" tabindex="0" aria-label="Open your photo gallery"><span class="theatre-awning"><i></i><i></i><i></i><i></i><i></i></span><span class="theatre-door"></span></div>' : '';
+      const animal = landscapeIndex % 2 ? '<span class="city-animal animal-bird" aria-hidden="true">✦</span>' : '<span class="city-animal animal-cat" aria-hidden="true">♡</span>';
+      const district = total
+        ? `<div class="city-hill hill-back"></div><div class="city-hill hill-front"></div>${landscapes[landscapeIndex]}<div class="city-road"><span class="road-line"></span><span class="city-car car-one"></span><span class="city-car car-two"></span></div>${buildings}${gallery}<span class="city-person person-${landscapeIndex + 1}"><i></i></span>${animal}<span class="streetlamp lamp-${['one', 'two', 'three'][landscapeIndex % 3]}"><i></i></span><div class="city-lights"></div>`
+        : `<div class="empty-city-hill hill-back"></div><div class="empty-city-hill hill-front"></div><div class="seed-house"><span></span><i></i><i></i><i></i></div><div class="city-road"><span class="road-line"></span></div><span class="city-animal animal-bird" aria-hidden="true">✦</span>`;
+      return `<div class="city-scene district-scene-${landscapeIndex % 3}" role="group" aria-label="District ${districtIndex + 1}">${district}</div>`;
+    });
+    pan.innerHTML = scenes.join('');
+    window.dispatchEvent(new CustomEvent('elsewhere-city-data', { detail: { counts, total, centerIndex: cityCenterIndex } }));
+  }
+
+  function startCityMotion() {
+    const viewport = $('#city-viewport');
+    const pan = $('#city-pan');
+    let offset = 0;
+    let pointerStart = null;
+    let lastFrame = 0;
+    let pausedUntil = 0;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const renderPosition = () => {
+      const tileWidth = viewport.clientWidth || window.innerWidth;
+      pan.style.transform = `translate3d(${-2 * tileWidth + offset}px,0,0)`;
+      window.elsewhereCity3D?.setPan(cityCenterIndex, offset, tileWidth);
+    };
+    const normalize = () => {
+      const tileWidth = viewport.clientWidth || window.innerWidth;
+      while (offset >= tileWidth) { offset -= tileWidth; cityCenterIndex--; renderCityScenes(Object.fromEntries(Object.keys(categories).map(key => [key, entries.filter(entry => entry.category === key).length])), entries.length); }
+      while (offset <= -tileWidth) { offset += tileWidth; cityCenterIndex++; renderCityScenes(Object.fromEntries(Object.keys(categories).map(key => [key, entries.filter(entry => entry.category === key).length])), entries.length); }
+      renderPosition();
+    };
+    pan.addEventListener('city-pan-key', event => {
+      offset += event.detail === 'ArrowRight' ? -viewport.clientWidth * .65 : viewport.clientWidth * .65;
+      normalize();
+      pausedUntil = performance.now() + 5000;
+    });
+    viewport.addEventListener('pointerdown', event => {
+      if (event.target.closest('button, a, input, .city-control-deck, .hud-toggle, .topbar')) return;
+      pointerStart = { id: event.pointerId, x: event.clientX, offset };
+      viewport.setPointerCapture(event.pointerId);
+      pausedUntil = performance.now() + 5000;
+      viewport.classList.add('is-panning');
+    });
+    viewport.addEventListener('pointermove', event => {
+      if (!pointerStart || pointerStart.id !== event.pointerId) return;
+      offset = pointerStart.offset + event.clientX - pointerStart.x;
+      normalize();
+    });
+    const finishPan = event => {
+      if (!pointerStart || (event.pointerId && pointerStart.id !== event.pointerId)) return;
+      pointerStart = null;
+      viewport.classList.remove('is-panning');
+      pausedUntil = performance.now() + 4000;
+    };
+    viewport.addEventListener('pointerup', finishPan);
+    viewport.addEventListener('pointercancel', finishPan);
+    viewport.addEventListener('wheel', event => {
+      const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+      offset -= delta;
+      normalize();
+      pausedUntil = performance.now() + 3500;
+      event.preventDefault();
+    }, { passive: false });
+    window.addEventListener('resize', renderPosition);
+    const animate = time => {
+      if (lastFrame && !pointerStart && !reducedMotion.matches && !document.hidden && time > pausedUntil) {
+        offset -= Math.min(40, time - lastFrame) * .009;
+        normalize();
+      }
+      lastFrame = time;
+      requestAnimationFrame(animate);
+    };
+    renderPosition();
+    requestAnimationFrame(animate);
+  }
+
+  function openGallery() {
+    const photos = entries.filter(entry => entry.photo);
+    $('#drawer-content').innerHTML = `<p class="eyebrow">Your little theatre of memories</p><h2 class="drawer-title">The photo gallery.</h2><p class="drawer-lede">${photos.length ? `${photos.length} little windows into your days.` : 'The theatre is ready for its first picture.'}</p>${photos.length ? `<div class="gallery-grid">${photos.map(entry => `<button class="gallery-tile" data-gallery-date="${escapeHTML(entry.date)}"><img src="${entry.photo}" alt="${escapeHTML(entry.text)}"><span>${escapeHTML(entry.text)}</span><small>${escapeHTML(formatDate(entry.date, { month: 'short', day: 'numeric', year: 'numeric' }))}</small></button>`).join('')}</div>` : `<div class="gallery-empty"><span>✦</span><strong>A stage for the things you want to keep.</strong><p>Add a photo to any moment and it will appear here.</p><button class="add-button" id="gallery-add">+ Add a moment</button></div>`}`;
+    $('#day-backdrop').classList.remove('hidden');
+    $$('[data-gallery-date]').forEach(tile => tile.addEventListener('click', () => openDay(tile.dataset.galleryDate)));
+    const addButton = $('#gallery-add');
+    if (addButton) addButton.addEventListener('click', openEntry);
+  }
+
+  function renderAchievements(total, activeDays, categoryVariety) {
+    const milestones = [
+      { icon: '✦', title: 'First light', detail: 'Save your first moment', goal: 1, value: total, unit: 'moment' },
+      { icon: '⌂', title: 'A little neighborhood', detail: 'Collect 5 moments', goal: 5, value: total, unit: 'moments' },
+      { icon: '🏙', title: 'City taking shape', detail: 'Collect 25 moments', goal: 25, value: total, unit: 'moments' },
+      { icon: '◷', title: 'Days remembered', detail: 'Save moments on 7 different days', goal: 7, value: activeDays, unit: 'days' },
+      { icon: '✿', title: 'Many sides of you', detail: 'Explore 4 kinds of moments', goal: 4, value: categoryVariety, unit: 'kinds' },
+      { icon: '★', title: 'A landmark moment', detail: 'Mark something as very meaningful', goal: 1, value: entries.filter(entry => Number(entry.importance) >= 3).length, unit: 'landmark' }
+    ];
+    const earned = milestones.filter(item => item.value >= item.goal).length;
+    $('#achievement-count').textContent = `${earned} of ${milestones.length} earned`;
+    $('#achievement-grid').innerHTML = milestones.map(item => {
+      const unlocked = item.value >= item.goal;
+      const progress = Math.min(100, Math.round(item.value / item.goal * 100));
+      return `<article class="achievement-card ${unlocked ? 'is-earned' : ''}"><span class="achievement-icon" aria-hidden="true">${item.icon}</span><div class="achievement-copy"><strong>${item.title}</strong><span>${unlocked ? 'Milestone reached' : item.detail}</span>${unlocked ? '' : `<div class="achievement-progress"><i style="width:${progress}%"></i></div>`}</div><span class="achievement-status" aria-label="${unlocked ? 'Earned' : `${item.value} of ${item.goal} ${item.unit}`} ">${unlocked ? '✓' : `${item.value}/${item.goal}`}</span></article>`;
+    }).join('');
+  }
+
+  function renderInsights() {
+    const total = entries.length;
+    const activeDays = Object.keys(groupDays()).length;
+    const categoryCounts = Object.entries(categories).map(([key, info]) => ({
+      key,
+      info,
+      count: entries.filter(entry => entry.category === key).length
+    })).sort((a, b) => b.count - a.count);
+    const favorite = categoryCounts[0];
+    const cards = [
+      ['✧', total, 'moments kept', 'Every detail adds a little light.'],
+      ['◷', activeDays, 'days remembered', 'Different days, gathered together.'],
+      ['✦', entries.filter(entry => Number(entry.importance) >= 3).length, 'personal landmarks', 'The things you said matter.'],
+      ['↻', entries.filter(entry => Number(entry.repeatCount) > 1).length, 'returning themes', 'Familiar things finding their way back.']
+    ];
+    $('#stats-grid').innerHTML = cards.map(([icon, value, label, note]) => `<article class="stat-card"><span class="stat-icon">${icon}</span><strong class="stat-value">${value}</strong><span class="stat-label">${label}</span><small>${note}</small></article>`).join('');
+    renderAchievements(total, activeDays, categoryCounts.filter(item => item.count > 0).length);
+    const discoveries = [];
+    if (total && favorite?.count) discoveries.push(`<article class="discovery-item"><span class="discovery-icon">${favorite.info.icon}</span><div><strong>${favorite.info.label} is your busiest district.</strong><p>${favorite.count} of your ${total} saved ${total === 1 ? 'moment lives' : 'moments live'} there. That's the shape of your attention, lately.</p></div></article>`);
+    const days = groupDays();
+    const busiest = Object.entries(days).sort((a, b) => b[1].length - a[1].length)[0];
+    if (busiest && busiest[1].length > 1) discoveries.push(`<article class="discovery-item"><span class="discovery-icon">☼</span><div><strong>${formatDate(busiest[0], { month: 'long', day: 'numeric' })} held a lot.</strong><p>You gathered ${busiest[1].length} moments in a single day. Some days leave a bigger footprint.</p></div></article>`);
+    if (total >= 3) {
+      const longest = entries.slice().sort((a, b) => (a.text || '').length - (b.text || '').length)[0];
+      discoveries.push(`<article class="discovery-item"><span class="discovery-icon">⌁</span><div><strong>Small can hold a whole world.</strong><p>Your shortest saved moment is just ${longest.text.trim().split(/\s+/).length} ${longest.text.trim().split(/\s+/).length === 1 ? 'word' : 'words'} long. Not everything needs explaining.</p></div></article>`);
+    }
+    $('#discovery-list').innerHTML = discoveries.length ? discoveries.join('') : `<div class="no-insights"><strong>Your city is still learning your shape.</strong>Add a few more moments, and gentle observations will begin to appear here. No predictions—just patterns from your own words and choices.</div>`;
+    $('#category-bars').innerHTML = categoryCounts.map(({
+      info,
+      count
+    }) => `<div class="category-row"><div><span>${info.icon} &nbsp;${info.label}</span><small>${count}</small></div><div class="bar-track"><i style="width:${total ? Math.max(count ? 5 : 0, count / total * 100) : 0}%;background:${info.color}"></i></div></div>`).join('');
+  }
+
+  function render() {
+    renderCity();
+    renderTimeline();
+    renderInsights();
+  }
+
+  function openEntry() {
+    if (demoMode) exitDemo();
+    $('#entry-date').value = localDate();
+    $('#entry-modal').classList.remove('hidden');
+    setTimeout(() => $('#entry-text').focus(), 50);
+  }
+
+  function closeEntry() {
+    $('#entry-modal').classList.add('hidden');
+  }
+
+  function openShare() {
+    if (demoMode) exitDemo();
+    $('#share-status').textContent = '';
+    $('#share-pin').value = '';
+    $('#share-list').innerHTML = entries.length ? `<label class="share-select-all"><input type="checkbox" id="share-all" checked> Share my whole city <span>${entries.length} moments</span></label><div class="share-entry-list">${entries.slice().sort((a, b) => b.date.localeCompare(a.date)).map(entry => `<label class="share-entry"><input type="checkbox" class="share-check" value="${escapeHTML(entry.id)}" checked><span><small>${escapeHTML(formatDate(entry.date, { month: 'short', day: 'numeric', year: 'numeric' }))} · ${(categories[entry.category] || categories.everyday).label}</small>${escapeHTML(entry.text.slice(0, 100))}</span></label>`).join('')}</div>` : `<div class="share-empty">Your city is waiting for its first memory.</div>`;
+    const all = $('#share-all');
+    if (all) all.addEventListener('change', () => $$('.share-check').forEach(check => check.checked = all.checked));
+    $$('.share-check').forEach(check => check.addEventListener('change', () => {
+      const checks = $$('.share-check');
+      if (all) all.checked = checks.every(item => item.checked);
+    }));
+    $('#share-modal').classList.remove('hidden');
+  }
+
+  function closeShare() {
+    $('#share-modal').classList.add('hidden');
+  }
+
+  function getSharePin() {
+    const pin = $('#share-pin').value.trim();
+    if (!/^\d{6,12}$/.test(pin)) {
+      throw new Error('Choose a PIN with 6–12 digits.');
+    }
+    return pin;
+  }
+  async function deriveKey(pin, salt) {
+    const encoder = new TextEncoder();
+    const base = await crypto.subtle.importKey('raw', encoder.encode(pin), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({
+      name: 'PBKDF2',
+      salt,
+      iterations: 250000,
+      hash: 'SHA-256'
+    }, base, {
+      name: 'AES-GCM',
+      length: 256
+    }, false, ['encrypt', 'decrypt']);
+  }
+  async function exportCity() {
+    const button = $('#export-city');
+    try {
+      if (!crypto?.subtle) throw new Error('Secure encryption is not available in this browser. Try the published site or a modern browser.');
+      const pin = getSharePin();
+      const selected = $$('.share-check:checked').map(check => check.value);
+      if (!selected.length) throw new Error('Choose at least one moment to share.');
+      const payload = JSON.stringify({
+        app: 'Elsewhere',
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        entries: entries.filter(entry => selected.includes(String(entry.id)))
+      });
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await deriveKey(pin, salt);
+      const encrypted = await crypto.subtle.encrypt({
+        name: 'AES-GCM',
+        iv
+      }, key, new TextEncoder().encode(payload));
+      const bundle = {
+        format: 'elsewhere-pincode',
+        version: 1,
+        salt: [...salt],
+        iv: [...iv],
+        data: [...new Uint8Array(encrypted)]
+      };
+             const blob = new Blob([JSON.stringify(bundle)], {
+         type: 'application/json'
+       });
+       const link = document.createElement('a');
+       const objectUrl = URL.createObjectURL(blob);
+       link.href = objectUrl;
+       link.download = `elsewhere-city-${localDate()}.elsewhere`;
+       link.click();
+       setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+      $('#share-status').textContent = `${selected.length} ${selected.length === 1 ? 'moment' : 'moments'} encrypted and downloaded. Share the file and PIN separately.`;
+    } catch (error) {
+      $('#share-status').textContent = error.message || 'Could not create your encrypted city file.';
+    }
+    button.blur();
+  }
+  async function importCity(file) {
+         try {
+       if (!file) return;
+       if (file.size > 50 * 1024 * 1024) throw new Error('This city file is larger than the 50 MB safety limit.');
+       if (!crypto?.subtle) throw new Error('Secure decryption is not available in this browser.');
+       const pin = getSharePin();
+       const bundle = JSON.parse(await file.text());
+       if (bundle.format !== 'elsewhere-pincode' || bundle.version !== 1) throw new Error('That does not look like an Elsewhere city file.');
+       if (!Array.isArray(bundle.salt) || bundle.salt.length !== 16 || !Array.isArray(bundle.iv) || bundle.iv.length !== 12 || !Array.isArray(bundle.data) || bundle.data.length < 16 || bundle.data.length > 38 * 1024 * 1024 || [...bundle.salt, ...bundle.iv, ...bundle.data].some(value => !Number.isInteger(value) || value < 0 || value > 255)) throw new Error('The city file is damaged or uses an unsupported format.');
+       const key = await deriveKey(pin, new Uint8Array(bundle.salt));
+      const clear = await crypto.subtle.decrypt({
+        name: 'AES-GCM',
+        iv: new Uint8Array(bundle.iv)
+      }, key, new Uint8Array(bundle.data));
+      const shared = JSON.parse(new TextDecoder().decode(clear));
+             if (!Array.isArray(shared.entries) || shared.entries.length > 100000) throw new Error('The city file is incomplete or too large.');
+       const known = new Set(entries.map(entry => String(entry.id)));
+       const imported = [];
+       for (const entry of shared.entries) {
+         if (!entry || typeof entry.id !== 'string' || entry.id.length > 120 || typeof entry.text !== 'string' || !entry.text.trim() || entry.text.length > 500 || typeof entry.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(entry.date)) continue;
+         const date = new Date(`${entry.date}T12:00:00`);
+         if (Number.isNaN(date.getTime()) || localDate(date) !== entry.date) continue;
+         if (!Object.prototype.hasOwnProperty.call(categories, entry.category) || known.has(entry.id)) continue;
+         if (entry.photo && (typeof entry.photo !== 'string' || entry.photo.length > 16 * 1024 * 1024 || !/^data:image\/(?:jpeg|png|webp|gif);base64,[A-Za-z0-9+/]+=*$/.test(entry.photo))) continue;
+         known.add(entry.id);
+         imported.push({ id: entry.id, text: entry.text.trim(), date: entry.date, category: entry.category, importance: Math.max(1, Math.min(3, Number(entry.importance) || 1)), repeatCount: Math.max(1, Math.min(5, Number(entry.repeatCount) || 1)), createdAt: typeof entry.createdAt === 'string' ? entry.createdAt.slice(0, 40) : '', photo: entry.photo || '' });
+       }
+      if (!imported.length) throw new Error('No new moments found. You may have already added this city.');
+      entries = [...entries, ...imported];
+      save();
+      render();
+      closeShare();
+      toast(`${imported.length} ${imported.length === 1 ? 'moment added' : 'moments added'} to your city.`);
+    } catch (error) {
+      $('#share-status').textContent = error.name === 'OperationError' ? 'That PIN did not unlock this city file. Try again.' : (error.message || 'Could not open this city file.');
+    }
+    $('#import-file').value = '';
+  }
+
+  function makeDemoCity() {
+    const daysAgo = days => {
+      const date = new Date();
+      date.setDate(date.getDate() - days);
+      return localDate(date);
+    };
+    const photo = id => ({
+      'photo-1442512595331-e89e73853f31': 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=900&q=82',
+      'photo-1511988617509-a57c8a288659': 'https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=900&q=82',
+      'photo-1470252649378-9c29740c9fa8': 'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=900&q=82',
+      'photo-1509440159596-0249088772ff': 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=82',
+      'photo-1490474418585-ba9bad8fd0ea': 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=900&q=82',
+      'photo-1470770841072-f978cf4d019e': 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=82',
+      'photo-1414235077428-338989a2e8c0': 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=82',
+      'photo-1490750967868-88aa4486c946': 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=900&q=82',
+      'photo-1511632765486-a01980e01a18': 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=82',
+      'photo-1519608487953-e999c86e7455': 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&q=82',
+      'photo-1517849845537-4d257902454a': 'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=900&q=82',
+      'photo-1500530855697-b586d89ba3ee': 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=82'
+    })[id] || '';
+    const examples = [
+      [0, 'joy', 'The first sip of coffee tasted like the whole morning had finally exhaled.', 2, 1, 'photo-1442512595331-e89e73853f31'],
+      [1, 'people', 'Mara said, “You don’t have to make a home all at once.” I wrote it down on the train.', 3, 1, 'photo-1511988617509-a57c8a288659'],
+      [2, 'nature', 'The rain stopped just long enough for the light to turn every pavement gold.', 2, 2, 'photo-1470252649378-9c29740c9fa8'],
+      [3, 'ideas', 'Maybe a good life is mostly noticing when you are already inside one.', 3, 1, ''],
+      [4, 'everyday', 'The corner bakery puts the warm loaves in the window at exactly 4:15.', 1, 3, 'photo-1509440159596-0249088772ff'],
+      [5, 'people', 'A stranger held the door, then we both kept walking like tiny kindness was ordinary.', 2, 1, ''],
+      [7, 'joy', 'Bought the peach that smelled most like summer. It was the right one.', 2, 2, 'photo-1490474418585-ba9bad8fd0ea'],
+      [9, 'nature', 'A little green thing growing through a crack in the wall. Stubborn looks good on it.', 3, 1, 'photo-1470770841072-f978cf4d019e'],
+      [11, 'ideas', '“Begin anywhere.” A line in an old book that felt like permission.', 3, 1, ''],
+      [14, 'everyday', 'The bus driver waited while someone ran for it. The whole bus cheered.', 2, 2, ''],
+      [17, 'milestone', 'First dinner at the new table. Nothing matched, and somehow everything did.', 3, 1, 'photo-1414235077428-338989a2e8c0'],
+      [21, 'nature', 'Walked the long way home just to see the magnolia trees again.', 2, 1, 'photo-1490750967868-88aa4486c946'],
+      [24, 'people', 'We laughed so hard at dinner that the candle went out. Nobody relit it.', 3, 1, 'photo-1511632765486-a01980e01a18'],
+      [29, 'joy', 'A song I loved at seventeen came on in the grocery store. Still knew every word.', 2, 2, ''],
+      [34, 'milestone', 'Today I realized this neighborhood has started to feel like mine.', 3, 1, 'photo-1519608487953-e999c86e7455'],
+      [40, 'everyday', 'The old dog on Maple Street now recognizes me before I reach the gate.', 2, 3, 'photo-1517849845537-4d257902454a'],
+      [48, 'nature', 'Sat outside without checking the time. The clouds did a better job of keeping it.', 1, 1, 'photo-1500530855697-b586d89ba3ee'],
+      [60, 'ideas', 'Some things keep returning because they are asking to be noticed.', 3, 1, '']
+    ];
+    return examples.map(([ago, category, text, importance, repeatCount, image], index) => ({
+      id: `sample-${index}`,
+      date: daysAgo(ago),
+      category,
+      text,
+      importance,
+      repeatCount,
+      photo: image ? photo(image) : '',
+      createdAt: new Date(`${daysAgo(ago)}T12:00:00`).toISOString()
+    }));
+  }
+
+  function updateDemoButtons() {
+    const mainButton = $('#demo-toggle');
+    const mobileButton = $('#mobile-demo-toggle');
+    if (mainButton) {
+      mainButton.innerHTML = demoMode
+        ? '<span aria-hidden="true">←</span> Back to my city'
+        : '<span aria-hidden="true">✦</span> Explore a sample city <span class="demo-arrow" aria-hidden="true">↗</span>';
+    }
+    if (mobileButton) {
+      $('.mobile-demo-label', mobileButton).textContent = demoMode ? 'Back to my city' : 'Sample city';
+      mobileButton.setAttribute('aria-label', demoMode ? 'Exit sample city and return to my city' : 'Explore a sample city');
+      mobileButton.setAttribute('aria-pressed', String(demoMode));
+    }
+    $('#demo-note').classList.toggle('hidden', !demoMode);
+  }
+
+  function enterDemo() {
+    if (demoMode) return;
+    personalEntries = entries;
+    entries = makeDemoCity();
+    demoMode = true;
+    updateDemoButtons();
+    render();
+    setView('city');
+    toast('Welcome to a little preview of a grown Elsewhere city.');
+  }
+
+  function exitDemo() {
+    if (!demoMode) return;
+    entries = personalEntries;
+    demoMode = false;
+    updateDemoButtons();
+    render();
+    updateStorageInfo();
+    setView('city');
+  }
+
+     async function init() {
+     $('#today-label').textContent = new Date().toLocaleDateString(undefined, {
+       weekday: 'short',
+       month: 'short',
+       day: 'numeric'
+     });
+     render();
+     startCityMotion();
+     await loadArchive();
+     render();
+     updateStorageInfo();
+    // Deep link: app/?demo=1 (or #demo) drops a visitor straight into the sample city.
+    try {
+      if (/[?&]demo=1(&|$)/.test(location.search) || location.hash === '#demo') enterDemo();
+    } catch {}
+    const toggleDemo = event => {
+      event?.preventDefault();
+      event?.stopPropagation();
+      if (demoMode) exitDemo();
+      else enterDemo();
+    };
+    $('#demo-toggle').addEventListener('click', toggleDemo);
+    $('#mobile-demo-toggle').addEventListener('click', toggleDemo);
+    $('#hud-toggle').addEventListener('click', toggleCityHud);
+    $('#theme-control').addEventListener('click', () => {
+      atmosphere.theme = pickDifferent(themes, atmosphere.theme);
+      applyAtmosphere();
+      toast(`A new ${atmosphere.theme} palette settles over your city.`);
+    });
+    $('#mood-control').addEventListener('click', () => {
+      atmosphere.mood = pickDifferent(moods, atmosphere.mood);
+      applyAtmosphere();
+      toast(`The city feels ${atmosphere.mood} today.`);
+    });
+    $('#weather-control').addEventListener('click', () => {
+      atmosphere.weather = weatherTypes[(weatherTypes.indexOf(atmosphere.weather) + 1) % weatherTypes.length];
+      applyAtmosphere();
+      toast(`Weather changed to ${atmosphere.weather}.`);
+    });
+    $('#time-control').addEventListener('click', () => {
+      atmosphere.night = !atmosphere.night;
+      applyAtmosphere();
+    });
+    $$('.nav-item[data-view]').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
+    $$('[data-view-link]').forEach(button => button.addEventListener('click', () => setView(button.dataset.viewLink)));
+    $('#add-entry').addEventListener('click', openEntry);
+    $('#add-entry-timeline').addEventListener('click', openEntry);
+    $('#entry-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const text = $('#entry-text').value.trim();
+      if (!text) return;
+      const category = $('#entry-category').value;
+      const duplicate = entries.filter(entry => entry.category === category).length;
+      entries.push({
+        id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
+        text,
+        date: $('#entry-date').value || localDate(),
+        category,
+        importance: $('input[name="importance"]:checked').value,
+        photo: photoData,
+        repeatCount: duplicate >= 2 ? Math.min(5, duplicate) : 1,
+        createdAt: new Date().toISOString()
+      });
+      save();
+      render();
+      event.target.reset();
+      photoData = '';
+      $('#photo-preview').classList.add('hidden');
+      $('#photo-label').textContent = 'Add a photo, if you like';
+      closeEntry();
+      toast('A new little piece of your city has arrived.');
+    });
+    $('#entry-photo').addEventListener('change', async event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.size > 12 * 1024 * 1024) {
+        toast('Choose a photo smaller than 12 MB; it will be resized before saving.');
+        event.target.value = '';
+        return;
+      }
+      try {
+        if (!file.type.startsWith('image/')) throw new Error('Choose an image file.');
+        const bitmap = await createImageBitmap(file);
+        const scale = Math.min(1, 1280 / Math.max(bitmap.width, bitmap.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+        canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+        canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        bitmap.close();
+        photoData = canvas.toDataURL('image/jpeg', 0.76);
+        $('#photo-preview').innerHTML = `<img src="${photoData}" alt="Photo preview">`;
+        $('#photo-preview').classList.remove('hidden');
+        $('#photo-label').textContent = `${file.name} · resized`;
+        updateStorageInfo();
+      } catch {
+        toast('This photo could not be prepared. Try another image.');
+        event.target.value = '';
+      }
+    });
+    $('#close-modal').addEventListener('click', closeEntry);
+    $('#cancel-modal').addEventListener('click', closeEntry);
+    $('#entry-modal').addEventListener('click', event => {
+      if (event.target === event.currentTarget) closeEntry();
+    });
+    $('#drawer-close').addEventListener('click', () => $('#day-backdrop').classList.add('hidden'));
+    $('#day-backdrop').addEventListener('click', event => {
+      if (event.target === event.currentTarget) $('#day-backdrop').classList.add('hidden');
+    });
+    $('#help-button').addEventListener('click', () => $('#help-modal').classList.remove('hidden'));
+    $('#close-help').addEventListener('click', () => $('#help-modal').classList.add('hidden'));
+    $('#got-it').addEventListener('click', () => $('#help-modal').classList.add('hidden'));
+    $('.more-button').addEventListener('click', () => $('#help-modal').classList.remove('hidden'));
+         $('#share-button').addEventListener('click', openShare);
+     $$('.download-package').forEach(button => button.addEventListener('click', () => downloadAppPackage(button)));
+     $('#share-close').addEventListener('click', closeShare);
+    $('#share-modal').addEventListener('click', event => {
+      if (event.target === event.currentTarget) closeShare();
+    });
+    $('#export-city').addEventListener('click', exportCity);
+    $('#import-city').addEventListener('click', () => $('#import-file').click());
+    $('#import-file').addEventListener('change', event => importCity(event.target.files[0]));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        closeEntry();
+        closeShare();
+        $('#help-modal').classList.add('hidden');
+        $('#day-backdrop').classList.add('hidden');
+        if (document.body.classList.contains('city-immersive')) toggleCityHud();
+      }
+    });
+  }
+  init();
+
+  // The worker lives at the site root so one cache covers the landing page and
+  // the app. Registration is silent: no worker, no problem.
+  if ('serviceWorker' in navigator) {
+    addEventListener('load', () => {
+      navigator.serviceWorker.register('../sw.js').catch(() => {});
+    });
+  }
+})();

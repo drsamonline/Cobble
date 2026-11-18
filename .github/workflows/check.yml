@@ -1,0 +1,30 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Local links, precache list, manifest and CDN references
+        run: node tools/check-links.mjs
+
+      - name: Size budget
+        run: node tools/check-size.mjs
+
+      - name: Script syntax
+        run: |
+          node --check sw.js
+          node --check app/app.js
+          node --check app/city3d.js
+          node --check assets/landing.js

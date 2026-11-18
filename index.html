@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-time="day">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Elsewhere — your life, taking shape</title>
+<meta name="description" content="Elsewhere turns the small things you notice into a private city you build one day at a time. No account, no server, no tracking — your moments stay on your device." />
+<meta name="theme-color" content="#f6f4ef" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Elsewhere — your life, taking shape" />
+<meta property="og:description" content="A private city built from the small things you notice. One moment, one building. No account, no server, no tracking." />
+<meta property="og:image" content="screenshots/city.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="fonts/fonts.css" />
+<link rel="stylesheet" href="assets/landing.css" />
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="./" aria-label="Elsewhere home">
+      <span class="brand-mark"><span></span><span></span><span></span></span>
+      <span class="brand-word">elsewhere<span class="dot">.</span></span>
+    </a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#idea">The idea</a>
+      <a href="#districts">Districts</a>
+      <a href="#inside">Inside</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#support">Support</a>
+      <a href="docs/">Docs</a>
+    </nav>
+    <div class="topbar-actions">
+      <button class="time-toggle" id="time-toggle" type="button" aria-pressed="false">
+        <span class="time-icon" aria-hidden="true">☀</span><span class="time-label">Night</span>
+      </button>
+      <a class="btn btn-solid btn-sm" href="app/">Open your city</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ── hero ───────────────────────────────────────────── -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="gridlines" aria-hidden="true"></div>
+    <div class="hero-inner">
+
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="rule"></span>A private city of your own days</p>
+        <h1 id="hero-title">Your life,<br /><span class="hand">taking shape.</span></h1>
+        <p class="lede">Elsewhere turns the small things you notice into a city you build one day at a time. Save a moment — the warm loaf in the window, a sentence someone said, the light on wet pavement — and a building appears. Keep going, and your ordinary life starts to look like a place.</p>
+        <div class="cta-row">
+          <a class="btn btn-solid" href="app/">Open your city <span aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href="app/?demo=1">Wander a sample city <span aria-hidden="true">✦</span></a>
+        </div>
+        <ul class="promise" role="list">
+          <li><span aria-hidden="true">◍</span> No account</li>
+          <li><span aria-hidden="true">◍</span> No server</li>
+          <li><span aria-hidden="true">◍</span> No tracking</li>
+          <li><span aria-hidden="true">◍</span> Yours to export</li>
+        </ul>
+      </div>
+
+      <div class="hero-stage">
+        <div class="stage-meta">
+          <span>district plan · <b id="stage-count">0</b> moments</span>
+          <span class="stage-meta-right">hover a block</span>
+        </div>
+        <div class="sky" aria-hidden="true">
+          <div class="orb"><span class="orb-core"></span></div>
+          <div class="cloud cloud-a"></div>
+          <div class="cloud cloud-b"></div>
+          <div class="cloud cloud-c"></div>
+          <div class="stars"></div>
+        </div>
+        <div class="skyline" id="skyline" role="img" aria-label="An illustrated city skyline where each building is one saved moment">
+          <div class="hills"></div>
+          <div class="blocks" id="blocks"></div>
+          <div class="ground"><span class="road-line"></span></div>
+        </div>
+        <p class="stage-caption" id="stage-caption">Every block is a moment you kept. Colour is what kind of moment it was.</p>
+      </div>
+
+    </div>
+
+    <div class="numbers" role="list">
+      <div role="listitem"><b>6</b><span>kinds of moment</span></div>
+      <div role="listitem"><b>5</b><span>city atmospheres</span></div>
+      <div role="listitem"><b>4</b><span>weathers, drawn by hand</span></div>
+      <div role="listitem"><b>0</b><span>servers involved</span></div>
+    </div>
+  </section>
+
+  <!-- ── the idea ───────────────────────────────────────── -->
+  <section class="section" id="idea" aria-labelledby="idea-title">
+    <div class="section-head">
+      <span class="sec-num">01</span>
+      <h2 id="idea-title">Three rules, and then it runs itself.</h2>
+      <p>Elsewhere is not a journal with a nicer font. It is a small model of a city where the geometry means something, so you can read a year at a glance instead of scrolling through it.</p>
+    </div>
+
+    <div class="rules">
+      <article class="rule-card">
+        <span class="rule-glyph" aria-hidden="true">▮▮▯</span>
+        <h3>Height is meaning</h3>
+        <p>Mark a moment as a small detail, something that mattered, or a landmark. Landmarks stand taller. Over months, the skyline becomes a map of what you actually cared about — not what you meant to.</p>
+        <div class="mini-scale" aria-hidden="true"><i style="--h:26%"></i><i style="--h:52%"></i><i style="--h:86%"></i></div>
+      </article>
+      <article class="rule-card">
+        <span class="rule-glyph" aria-hidden="true">◐</span>
+        <h3>Colour is kind</h3>
+        <p>Every moment files itself under one of six districts — everyday detail, people, outside, ideas, small joys, something meaningful. Districts cluster together, so the city shows where your attention keeps going.</p>
+        <div class="mini-swatches" aria-hidden="true"><i style="--c:#b59a79"></i><i style="--c:#cb8e79"></i><i style="--c:#82a58a"></i><i style="--c:#8699b8"></i><i style="--c:#d5aa64"></i><i style="--c:#aa86a0"></i></div>
+      </article>
+      <article class="rule-card">
+        <span class="rule-glyph" aria-hidden="true">↻</span>
+        <h3>Repetition is a pattern</h3>
+        <p>If the same thing keeps happening — the 4:15 loaves, the old dog on Maple Street — say so. Returning themes get wider buildings and more windows, and Elsewhere starts naming them back to you.</p>
+        <div class="mini-windows" aria-hidden="true"><span>▦▦</span><span>▦▦▦</span><span>▦▦▦▦</span></div>
+      </article>
+    </div>
+
+    <div class="grow-demo" aria-labelledby="grow-title">
+      <div class="grow-copy">
+        <h3 id="grow-title">Try the whole idea here.</h3>
+        <p>Pick a district. A block appears, exactly as it would in your own city. Six presses and it already looks like somewhere.</p>
+        <div class="grow-controls" role="group" aria-label="Add a sample moment">
+          <button type="button" data-add="everyday" style="--c:#b59a79">Everyday</button>
+          <button type="button" data-add="people" style="--c:#cb8e79">People</button>
+          <button type="button" data-add="nature" style="--c:#82a58a">Outside</button>
+          <button type="button" data-add="ideas" style="--c:#8699b8">Ideas</button>
+          <button type="button" data-add="joy" style="--c:#d5aa64">Joy</button>
+          <button type="button" data-add="milestone" style="--c:#aa86a0">Meaningful</button>
+        </div>
+        <p class="grow-count"><b id="grow-total">0</b> moments in this block of the city <button class="link-btn" id="grow-reset" type="button">clear</button></p>
+      </div>
+      <div class="grow-stage">
+        <div class="grow-blocks" id="grow-blocks" aria-live="polite" aria-label="Your test city"></div>
+        <div class="grow-ground"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── districts ──────────────────────────────────────── -->
+  <section class="section section-tint" id="districts" aria-labelledby="districts-title">
+    <div class="section-head">
+      <span class="sec-num">02</span>
+      <h2 id="districts-title">Six districts. One of them is you.</h2>
+      <p>The categories are deliberately loose. Nothing here asks you to rate your day out of ten.</p>
+    </div>
+    <div class="district-grid">
+      <article class="district" style="--c:#b59a79"><span class="d-icon" aria-hidden="true">✦</span><h3>Everyday detail</h3><p>The bakery's 4:15 loaves. The bus driver who waited. Small machinery of a normal day.</p></article>
+      <article class="district" style="--c:#cb8e79"><span class="d-icon" aria-hidden="true">♡</span><h3>People &amp; connection</h3><p>What someone said on a train. A door held. Dinner where the candle went out.</p></article>
+      <article class="district" style="--c:#82a58a"><span class="d-icon" aria-hidden="true">✿</span><h3>Outside &amp; nature</h3><p>Pavement turned gold after rain. A green thing through a crack in the wall.</p></article>
+      <article class="district" style="--c:#8699b8"><span class="d-icon" aria-hidden="true">✧</span><h3>Thoughts &amp; ideas</h3><p>The line in the old book that felt like permission. The thing you keep circling.</p></article>
+      <article class="district" style="--c:#d5aa64"><span class="d-icon" aria-hidden="true">☀</span><h3>Small joys</h3><p>The peach that smelled most like summer. A song from when you were seventeen.</p></article>
+      <article class="district" style="--c:#aa86a0"><span class="d-icon" aria-hidden="true">✷</span><h3>Something meaningful</h3><p>First dinner at the new table. The day the neighbourhood started to feel like yours.</p></article>
+    </div>
+  </section>
+
+  <!-- ── inside ─────────────────────────────────────────── -->
+  <section class="section" id="inside" aria-labelledby="inside-title">
+    <div class="section-head">
+      <span class="sec-num">03</span>
+      <h2 id="inside-title">A look inside the city.</h2>
+      <p>Real captures of this repository, at 1440×900 and on a phone. The sample city is built into the app — nothing you see here is a mock-up.</p>
+    </div>
+
+    <div class="shots">
+      <figure class="shot shot-wide">
+        <a href="app/?demo=1"><img src="screenshots/city.png" alt="The city view, with buildings coloured by category and a day drawer open beside the skyline" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>My city.</b> Districts, streets, weather and a skyline that is entirely your own data. Hover a block to read the moment.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="app/?demo=1"><img src="screenshots/timeline.png" alt="The timeline view listing moments by day" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>Timeline.</b> The same life, in the order it happened.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="app/?demo=1"><img src="screenshots/insights.png" alt="The discoveries view with statistics, achievements and category bars" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>Discoveries.</b> Patterns, milestones and one quiet observation about your shortest moment.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="app/?demo=1"><img src="screenshots/city-night.png" alt="The city at night with lit windows" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>After dark.</b> Five atmospheres, four weathers, and windows that light up at night.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="app/?demo=1"><img src="screenshots/share.png" alt="The share dialog, asking for a six to twelve digit PIN" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>Share city.</b> Choose moments, set a PIN, get one encrypted file. The PIN travels separately.</figcaption>
+      </figure>
+      <figure class="shot shot-phone">
+        <a href="app/?demo=1"><img src="screenshots/mobile.png" alt="The city on a phone screen" loading="lazy" width="390" height="844" /></a>
+        <figcaption><b>On a phone.</b> The same archive, drawn to fit a pocket.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ── privacy ────────────────────────────────────────── -->
+  <section class="section section-ink" id="privacy" aria-labelledby="privacy-title">
+    <div class="section-head">
+      <span class="sec-num">04</span>
+      <h2 id="privacy-title">The city never leaves the device.</h2>
+      <p>There is no Elsewhere account, because there is no Elsewhere server. Your archive lives in your browser's own storage. The only thing that ever travels is a file you encrypt yourself.</p>
+    </div>
+    <div class="privacy-grid">
+      <article class="privacy-card">
+        <h3>Where it lives</h3>
+        <p>Moments are saved in IndexedDB, with a localStorage fallback if the browser refuses. Photos are resized on the device before they are stored. Nothing is uploaded, ever.</p>
+      </article>
+      <article class="privacy-card">
+        <h3>When you share</h3>
+        <p>Sharing produces a <code>.elsewhere</code> file: AES-256-GCM, key derived from your 6–12 digit PIN with PBKDF2-SHA-256 at 250,000 iterations. Send the file and the PIN separately.</p>
+      </article>
+      <article class="privacy-card">
+        <h3>What it does not do</h3>
+        <p>No analytics, no cookies, no fonts tracking you, no third-party scripts on your data. The page asks for nothing but a browser with storage and Web Crypto.</p>
+      </article>
+      <article class="privacy-card">
+        <h3>What to watch</h3>
+        <p>Clearing site data clears the city. Export a backup before you clear a browser — and keep the file somewhere you trust.</p>
+      </article>
+    </div>
+    <p class="privacy-foot">Read the detail: <a href="https://github.com/drsamonline/elsewhere/blob/main/docs/privacy-and-security.md">privacy &amp; security</a> · <a href="https://github.com/drsamonline/elsewhere/blob/main/docs/data-model.md">the data model</a></p>
+  </section>
+
+  <!-- ── support ────────────────────────────────────────── -->
+  <section class="section" id="support" aria-labelledby="support-title">
+    <div class="section-head">
+      <span class="sec-num">05</span>
+      <h2 id="support-title">Support</h2>
+      <p>Free, offline, accountless — and staying that way. Nothing is gated behind it.</p>
+    </div>
+
+    <div class="support">
+      <div class="support-who">
+        <img src="docs/assets/support-portrait.jpg" alt="Dr. Sohil Momin" width="88" height="88" />
+        <div>
+          <strong>Dr. Sohil Momin</strong>
+          <span>Homeopathic physician, builder of offline-first software.</span>
+        </div>
+      </div>
+
+      <div class="support-methods">
+        <div class="method">
+          <span class="method-label">UPI (India)</span>
+          <div class="method-body">
+            <code id="upi-id">drsohilboi@ybl</code>
+            <button class="link-btn" id="copy-upi" type="button">copy</button>
+          </div>
+          <small>Payee: Dr. Sohil Momin · open amount</small>
+        </div>
+        <a class="method" href="https://github.com/sponsors/drsamonline"><span class="method-label">GitHub Sponsors</span><div class="method-body"><span>github.com/sponsors/drsamonline</span><span aria-hidden="true">↗</span></div><small>Recurring, or one-off</small></a>
+        <a class="method" href="https://ko-fi.com/matneo"><span class="method-label">Ko-fi</span><div class="method-body"><span>ko-fi.com/matneo</span><span aria-hidden="true">↗</span></div><small>One coffee, no account needed</small></a>
+        <a class="method" href="https://paypal.me/drsohilmomin?locale.x=en_GB&amp;country.x=IN"><span class="method-label">PayPal</span><div class="method-body"><span>paypal.me/drsohilmomin</span><span aria-hidden="true">↗</span></div><small>For outside India</small></a>
+        <a class="method" href="https://www.amazon.com/stores/author/B08ZT331LY/allbooks"><span class="method-label">My books</span><div class="method-body"><span>Amazon author store</span><span aria-hidden="true">↗</span></div><small>Also a way to support the work</small></a>
+        <a class="method" href="https://drsamonline.github.io/"><span class="method-label">More apps</span><div class="method-body"><span>drsamonline.github.io</span><span aria-hidden="true">↗</span></div><small>Everything else, in one index</small></a>
+      </div>
+
+      <div class="support-qr">
+        <img src="assets/upi-qr.svg" alt="UPI QR code for drsohilboi@ybl" width="150" height="150" loading="lazy" />
+        <small>Scan with any UPI app</small>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+      <p><b>elsewhere.</b> A private city of your own days.</p>
+      <small>Part of the <a href="https://drsamonline.github.io/">drsamonline</a> collection of offline-first software.</small>
+    </div>
+    <div class="foot-links">
+      <div>
+        <span class="foot-label">The app</span>
+        <a href="app/">Open your city</a>
+        <a href="app/?demo=1">Sample city</a>
+        <a href="https://github.com/drsamonline/elsewhere/blob/main/docs/getting-started.md">Getting started</a>
+      </div>
+      <div>
+        <span class="foot-label">Reading</span>
+        <a href="docs/">Documentation</a>
+        <a href="https://github.com/drsamonline/elsewhere/blob/main/docs/architecture.md">Architecture</a>
+        <a href="https://github.com/drsamonline/elsewhere/blob/main/ENHANCEMENTS.md">Enhancement list</a>
+      </div>
+      <div>
+        <span class="foot-label">Project</span>
+        <a href="https://github.com/drsamonline/elsewhere">GitHub</a>
+        <a href="https://github.com/drsamonline/elsewhere/issues">Issues</a>
+        <a href="https://github.com/drsamonline/elsewhere/blob/main/LICENSE">Licence</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-base">
+    <span>© 2026 Dr Sohil Momin · PolyForm Noncommercial 1.0.0</span>
+    <span>Made for people who notice things.</span>
+  </div>
+</footer>
+
+<script src="assets/landing.js"></script>
+<script>if ("serviceWorker" in navigator) { addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }</script>
+</body>
+</html>

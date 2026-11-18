@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Offline self-test — Elsewhere</title>
+<meta name="theme-color" content="#f6f4ef" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="fonts/fonts.css" />
+<link rel="stylesheet" href="assets/landing.css" />
+<style>
+  body { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.4rem 4rem; }
+  h1 { font-size: 2rem; margin-bottom: .4rem; }
+  .sub { color: var(--ink-soft); margin-bottom: 1.6rem; }
+  .sw-state {
+    display: inline-flex; align-items: center; gap: .5rem; font-family: var(--font-mono);
+    font-size: .76rem; letter-spacing: .05em; padding: .45rem .8rem; border-radius: 999px;
+    border: 1px solid var(--line); margin-bottom: 1.6rem;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .dot.ok { background: #4f9d69; } .dot.bad { background: #c4675c; }
+  table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+  th, td { text-align: left; padding: .5rem .4rem; border-bottom: 1px solid var(--line); }
+  th { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  td.path { font-family: var(--font-mono); font-size: .78rem; word-break: break-all; }
+  .tag { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .06em; padding: .15rem .45rem; border-radius: 4px; }
+  .tag.cache { background: #e6efe3; color: #3f6b4c; }
+  .tag.net { background: #f4ead9; color: #8a6a35; }
+  .tag.fail { background: #f7e3e0; color: #9c4034; }
+  .actions { display: flex; flex-wrap: wrap; gap: .6rem; margin: 1.6rem 0; }
+  button { font-family: var(--font-body); font-size: .9rem; padding: .55rem 1rem; border-radius: 999px; border: 1px solid var(--line); background: var(--card); cursor: pointer; }
+  button:hover { border-color: var(--primary); color: var(--primary); }
+  .note { font-size: .86rem; color: var(--muted); margin-top: 1.4rem; line-height: 1.6; }
+  code { font-family: var(--font-mono); font-size: .82em; background: var(--paper-2); padding: .1rem .3rem; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<h1>Offline self-test</h1>
+<p class="sub">Loads every file the service worker is supposed to keep, and says where each one came from.</p>
+
+<div class="sw-state"><span class="dot" id="sw-dot"></span><span id="sw-label">checking the service worker…</span></div>
+
+<div class="actions">
+  <button id="run" type="button">Run the check</button>
+  <button id="clear" type="button">Clear the cache</button>
+  <a href="app/"><button type="button">Open the app</button></a>
+</div>
+
+<table>
+  <thead><tr><th>File</th><th>Status</th><th>Source</th><th>Bytes</th></tr></thead>
+  <tbody id="rows"><tr><td colspan="4" class="path">waiting…</td></tr></tbody>
+</table>
+
+<p class="note">
+  <strong>How to read this.</strong> Run it once with the network on: everything should be
+  <span class="tag cache">cache</span> after the first pass, because the worker fetches each
+  file with <code>cache: reload</code> at install time. Then switch the network off and run
+  it again — every row should still say <span class="tag cache">cache</span> or
+  <span class="tag net">network</span> with the response served from disk. A row that fails
+  with the network off is a file the worker is not keeping.
+</p>
+
+<script>
+(async () => {
+  const FILES = [
+    'index.html', 'app/', 'app/index.html', 'app/theme.css', 'app/styles.css',
+    'app/app.js', 'app/city3d.js', 'app/vendor/jszip.min.js',
+    'assets/landing.css', 'assets/landing.js', 'assets/upi-qr.svg',
+    'fonts/fonts.css', 'fonts/Manrope.woff2', 'fonts/DMSans.woff2',
+    'fonts/IBMPlexMono-400.woff2', 'fonts/IBMPlexMono-500.woff2',
+    'docs/', 'docs/index.html', 'docs/assets/support-portrait.jpg',
+    'manifest.json', 'favicon.svg',
+    'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png',
+    'icons/apple-touch-icon.png'
+  ];
+
+  const dot = document.getElementById('sw-dot');
+  const label = document.getElementById('sw-label');
+  const rows = document.getElementById('rows');
+
+  if (!('serviceWorker' in navigator)) {
+    dot.classList.add('bad');
+    label.textContent = 'no service worker in this browser';
+  } else {
+    const registration = await navigator.serviceWorker.getRegistration();
+    if (registration) {
+      dot.classList.add('ok');
+      label.textContent = `service worker active · ${registration.active?.state || 'waiting'}`;
+    } else {
+      dot.classList.add('bad');
+      label.textContent = 'no service worker registered — reload this page once';
+    }
+  }
+
+  const row = (path, status, source, bytes) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="path">${path}</td>
+      <td><span class="tag ${source}">${status}</span></td>
+      <td>${source === 'cache' ? 'from the cache' : source === 'net' ? 'from the network' : '—'}</td>
+      <td>${bytes ?? '—'}</td>`;
+    rows.appendChild(tr);
+  };
+
+  const check = async path => {
+    const inCache = await caches.match(path, { ignoreSearch: true });
+    try {
+      const response = await fetch(path, { cache: 'no-store' });
+      const blob = await response.clone().blob();
+      if (!response.ok) return row(path, `HTTP ${response.status}`, 'fail', '—');
+      return row(path, inCache ? 'cached' : 'fetched', inCache ? 'cache' : 'net', blob.size.toLocaleString());
+    } catch {
+      return row(path, inCache ? 'cache only' : 'offline', inCache ? 'cache' : 'fail', '—');
+    }
+  };
+
+  document.getElementById('run').addEventListener('click', async () => {
+    rows.innerHTML = '';
+    for (const file of FILES) await check(file);
+  });
+
+  document.getElementById('clear').addEventListener('click', async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(key => caches.delete(key)));
+    rows.innerHTML = '<tr><td colspan="4" class="path">cache cleared — reload with the network on to refill it</td></tr>';
+  });
+
+  document.getElementById('run').click();
+})();
+</script>
+</body>
+</html>

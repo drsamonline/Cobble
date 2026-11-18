@@ -1,0 +1,21 @@
+:root {
+  --color-primary: #477d70;
+  --color-primary-contrast: #ffffff;
+  --color-bg: #f6f4ef;
+  --color-surface: #ffffff;
+  --color-text: #293632;
+  --color-muted: #88918c;
+  --font-heading: 'Manrope', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --radius: 16px;
+  --color-line: #e9e8e1;
+  --color-soft: #eff4f0;
+  --color-accent: #e2a66f;
+}
+
+/* These two values were the app's only use of Tailwind, loaded from a CDN for
+   two utility classes. They are ordinary CSS now, and the CDN is gone. */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
