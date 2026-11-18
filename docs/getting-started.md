@@ -5,7 +5,7 @@ Cobble is a static web app. There is nothing to install and no account to make. 
 ## Run it locally
 
 ```bash
-git clone https://github.com/drsamonline/cobble.git
+git clone https://github.com/drsamonline/Cobble.git
 cd cobble
 python3 -m http.server 8000
 ```

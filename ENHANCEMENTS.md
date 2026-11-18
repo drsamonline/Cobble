@@ -4,8 +4,8 @@ Everything Cobble could do next, in order of effort — quick wins first. Nothin
 
 Each entry says **what**, **why it matters**, **where** it lands, and **how long** it should take someone who knows the codebase. Effort is honest: `S` is under an hour, `M` is an afternoon, `L` is a day or two, `XL` is a week or more.
 
-- **Repo:** <https://github.com/drsamonline/cobble>
-- **App:** <https://drsamonline.github.io/cobble/app/>
+- **Repo:** <https://github.com/drsamonline/Cobble>
+- **App:** <https://drsamonline.github.io/Cobble/app/>
 - **Baseline:** v1.1.0 — no CDN at runtime, works offline, installable, two CI checks.
 
 ---

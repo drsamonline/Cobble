@@ -6,7 +6,7 @@
 
 Your life, taking shape. A private city built from the small things you notice. Save a moment — the warm loaf in the window, a sentence someone said on a train, the light on wet pavement — and a building appears. Colour is what kind of moment it was. Height is how much it mattered. Come back in a year and see what you made.
 
-[Live demo](https://drsamonline.github.io/cobble/) · [Open the app](https://drsamonline.github.io/cobble/app/) · [Wander a sample city](https://drsamonline.github.io/cobble/app/?demo=1) · [Documentation](docs/) · [Report a bug](https://github.com/drsamonline/cobble/issues)
+[Live demo](https://drsamonline.github.io/Cobble/) · [Open the app](https://drsamonline.github.io/Cobble/app/) · [Wander a sample city](https://drsamonline.github.io/Cobble/app/?demo=1) · [Documentation](docs/) · [Report a bug](https://github.com/drsamonline/Cobble/issues)
 
 **Status: v1.2.0 — shipped, offline, and named.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
@@ -24,7 +24,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 [![GitHub Sponsors](https://img.shields.io/badge/sponsor-GitHub-ea4aaa.svg)](https://github.com/sponsors/drsamonline)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-matneo-ff5e5b.svg)](https://ko-fi.com/matneo)
 [![UPI](https://img.shields.io/badge/UPI-drsohilboi%40ybl-2ea44f.svg)](#support)
-[![Stars](https://img.shields.io/github/stars/drsamonline/cobble?style=social)](https://github.com/drsamonline/cobble/stargazers)
+[![Stars](https://img.shields.io/github/stars/drsamonline/cobble?style=social)](https://github.com/drsamonline/Cobble/stargazers)
 
 </div>
 
@@ -121,7 +121,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 ## Quick start
 
 ```bash
-git clone https://github.com/drsamonline/cobble.git
+git clone https://github.com/drsamonline/Cobble.git
 cd cobble
 python3 -m http.server 8000
 ```
@@ -197,7 +197,7 @@ Nothing is gated behind it: no accounts, no tracking, no network requests.
 
 </div>
 
-The same block is on the [landing page](https://drsamonline.github.io/cobble/#support), with the UPI ID copyable and the QR scannable, so nobody has to open GitHub to support the work.
+The same block is on the [landing page](https://drsamonline.github.io/Cobble/#support), with the UPI ID copyable and the QR scannable, so nobody has to open GitHub to support the work.
 
 ## Licence
 

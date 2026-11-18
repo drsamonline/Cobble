@@ -85,4 +85,4 @@ Since v1.1.0 the app also works with the network switched off. That is not a pri
 
 ## If you find a problem
 
-Open an issue at <https://github.com/drsamonline/cobble/issues>, or email <sohilmomin2000@gmail.com> for anything you would rather not post publicly. There is no bounty programme; there is a person who will fix it and credit you.
+Open an issue at <https://github.com/drsamonline/Cobble/issues>, or email <sohilmomin2000@gmail.com> for anything you would rather not post publicly. There is no bounty programme; there is a person who will fix it and credit you.
