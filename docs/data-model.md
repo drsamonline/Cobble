@@ -96,7 +96,7 @@ Because the tag is part of `data`, a wrong PIN and a corrupted file fail identic
 
 ### Import validation
 
-Before a single moment is added, `importCity()` checks:
+The rules live in `app/core.js` (`normaliseEntry`, `decryptBundle`), and the limits — 500 characters of text, 120 of id, 100,000 entries, 38 MB of ciphertext, 250,000 PBKDF2 iterations — are constants in that file. `tests/core.test.mjs` holds them to it. Before a single moment is added, `importCity()` checks:
 
 | Check | Failure |
 |---|---|

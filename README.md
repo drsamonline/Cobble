@@ -8,10 +8,10 @@ Your life, taking shape. A private city built from the small things you notice. 
 
 [Live demo](https://drsamonline.github.io/Cobble/) · [Open the app](https://drsamonline.github.io/Cobble/app/) · [Wander a sample city](https://drsamonline.github.io/Cobble/app/?demo=1) · [Documentation](docs/) · [Report a bug](https://github.com/drsamonline/Cobble/issues)
 
-**Status: v1.4.0 — shipped, offline, editable and searchable.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
+**Status: v1.5.0 — shipped, offline, editable, searchable, and tested.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.4.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.5.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -19,7 +19,8 @@ Your life, taking shape. A private city built from the small things you notice. 
 [![Tracking: none](https://img.shields.io/badge/tracking-none-2ea44f.svg)](#privacy)
 [![Server: none](https://img.shields.io/badge/backend-none-lightgrey.svg)](#architecture)
 [![Vanilla JS](https://img.shields.io/badge/built%20with-HTML%20%7C%20CSS%20%7C%20JS-f7df1e.svg)](app/)
-[![App size](https://img.shields.io/badge/app%20shell-~142%20KB-blueviolet.svg)](app/)
+[![Tests](https://img.shields.io/badge/tests-24%20passing-34D399.svg)](tests/core.test.mjs)
+[![App size](https://img.shields.io/badge/app%20shell-~162%20KB-blueviolet.svg)](app/)
 [![Moments](https://img.shields.io/badge/moments-6%20districts%20%C2%B7%205%20atmospheres-d5aa64.svg)](docs/how-the-city-works.md)
 [![GitHub Sponsors](https://img.shields.io/badge/sponsor-GitHub-ea4aaa.svg)](https://github.com/sponsors/drsamonline)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-matneo-ff5e5b.svg)](https://ko-fi.com/matneo)
@@ -126,6 +127,14 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 - Printing the timeline gives you the days on paper, without the chrome.
 - The illustrated city is CSS, so it renders even where WebGL, canvas or a CDN is missing.
 - No build step, no bundler, no framework, no `node_modules`. Five files, served as they are.
+
+## Tests
+
+```bash
+node --test tests/
+```
+
+Twenty-four tests over the two places where a bug costs data rather than pixels: the share format and the import validator. No framework, no dependencies — Node 20 ships the same Web Crypto the browser exposes, so the round-trip exercises the real format. The suite covers a city surviving encryption, two exports of the same city producing different salt and IV, a wrong PIN and a flipped ciphertext byte both failing, malformed bundles refused before any crypto runs, weights clamped rather than trusted, and eleven kinds of bad moment each rejected for its own reason.
 
 ## Quick start
 

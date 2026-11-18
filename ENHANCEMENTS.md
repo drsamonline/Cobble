@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.4.0 — offline, installable, editable, searchable, keyboard-first, two CI checks.
+- **Baseline:** v1.5.0 — offline, installable, editable, searchable, keyboard-first, 24 tests and three CI checks.
 
 ---
 
@@ -49,6 +49,7 @@ These were the top of this list. They are done, verified and in the repository, 
 | 1.17 | **The landing page's worker registration moved out of the inline script.** | `assets/landing.js` |
 | 1.19 | **An empty archive explains where the city lives** and points at the readable backup. | `app/app.js` |
 | 2.1 | **Full-text search** over text, district and date, with accent folding, in-place marks and honest empty states. | `app/app.js`, `app/index.html` |
+| 2.10 | **Unit tests for the validator and the crypto** — 24 of them, no dependencies, run in CI. The share logic moved to `app/core.js` so the tests exercise the real code. | `app/core.js`, `tests/core.test.mjs` |
 
 What is left of the quick-win tier:
 
@@ -69,7 +70,6 @@ What is left of the quick-win tier:
 | 2.7 | **Storage guard.** Warn at 80% of the origin quota, refuse photos beyond a threshold, and offer a one-click "export and clear old photos". | The current failure mode is a toast saying the save failed. That is one moment too late. | `app/app.js` | M |
 | 2.8 | **Photo pipeline upgrade.** Try `createImageBitmap` with `imageOrientation: 'from-image'`, encode to WebP when the browser supports it, and store the smaller of WebP/JPEG. | Roughly 30% smaller archives and correct orientation for phone photos, which currently can land sideways. | `app/app.js` | M |
 | 2.9 | **Accessibility pass with axe.** Run axe-core in the headless script, fix the violations it reports, and add the check to CI. | A one-off audit that turns into a permanent guarantee. | `tools/`, `.github/workflows/` | M |
-| 2.10 | **Unit tests for the two risky modules.** Crypto round-trip, and the import validator against a table of malformed files. Plain `node --test`, no framework. | These are the two places where a bug costs data rather than pixels. | `tests/` | M |
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
 | 2.12 | **A shareable postcard.** Render the current skyline to a 1200×630 PNG on a canvas and download it with the city's level and count. | The city is the most shareable thing in the app and there is currently no way to show anyone without a screenshot. | `app/app.js` | M |
 
@@ -146,7 +146,7 @@ Written down because the answer to "should we build this?" is usually "no, it is
 
 If you have one weekend and want the largest improvement per hour:
 
-1. **2.9, 2.10** — axe in the headless run, and two unit tests for the validator and the crypto. The app has behaviour worth protecting now.
+1. **2.9** — axe in the headless run. The tests are in; the accessibility audit still needs a browser in CI.
 2. **2.5** — on this day. The feature that makes people come back.
 3. **2.3** — dark mode for the app shell.
 4. **2.12** — a shareable postcard of the skyline.

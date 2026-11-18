@@ -1,0 +1,156 @@
+/* Cobble — the part that can be tested without a browser.
+ *
+ * The share format, the key derivation and the import validator live here so
+ * that `tests/core.test.mjs` can exercise the same code the app runs, instead
+ * of a copy of it. Everything in this file is pure: it takes values, it returns
+ * values, and it touches no DOM.
+ *
+ * Loaded as a plain script before app.js, and imported directly by Node.
+ */
+(() => {
+  const FORMAT = 'cobble-pincode';
+  const VERSION = 1;
+  const ITERATIONS = 250000;
+  const SALT_BYTES = 16;
+  const IV_BYTES = 12;
+  const MAX_FILE_BYTES = 50 * 1024 * 1024;
+  const MAX_CIPHERTEXT_BYTES = 38 * 1024 * 1024;
+  const MAX_ENTRIES = 100000;
+  const MAX_TEXT = 500;
+  const MAX_ID = 120;
+  const MAX_PHOTO_CHARS = 16 * 1024 * 1024;
+  const PHOTO_PATTERN = /^data:image\/(?:jpeg|png|webp|gif);base64,[A-Za-z0-9+/]+=*$/;
+  const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+  const CATEGORIES = ['everyday', 'people', 'nature', 'ideas', 'joy', 'milestone'];
+
+  const subtle = () => {
+    const api = globalThis.crypto;
+    if (!api || !api.subtle) {
+      throw new Error('Secure encryption is not available in this browser. Try the published site or a modern browser.');
+    }
+    return api;
+  };
+
+  async function deriveKey(pin, salt) {
+    const api = subtle();
+    const base = await api.subtle.importKey(
+      'raw',
+      new TextEncoder().encode(pin),
+      'PBKDF2',
+      false,
+      ['deriveKey']
+    );
+    return api.subtle.deriveKey(
+      { name: 'PBKDF2', salt, iterations: ITERATIONS, hash: 'SHA-256' },
+      base,
+      { name: 'AES-GCM', length: 256 },
+      false,
+      ['encrypt', 'decrypt']
+    );
+  }
+
+  /* Encrypt a list of moments into the on-disk bundle. */
+  async function encryptEntries(entries, pin) {
+    const api = subtle();
+    const payload = JSON.stringify({
+      app: 'Cobble',
+      version: VERSION,
+      exportedAt: new Date().toISOString(),
+      entries
+    });
+    const salt = api.getRandomValues(new Uint8Array(SALT_BYTES));
+    const iv = api.getRandomValues(new Uint8Array(IV_BYTES));
+    const key = await deriveKey(pin, salt);
+    const encrypted = await api.subtle.encrypt(
+      { name: 'AES-GCM', iv },
+      key,
+      new TextEncoder().encode(payload)
+    );
+    return {
+      format: FORMAT,
+      version: VERSION,
+      salt: [...salt],
+      iv: [...iv],
+      data: [...new Uint8Array(encrypted)]
+    };
+  }
+
+  /* Decrypt a bundle back to its moments. Throws with a human sentence. */
+  async function decryptBundle(bundle, pin) {
+    if (!bundle || bundle.format !== FORMAT || bundle.version !== VERSION) {
+      throw new Error('That does not look like a Cobble city file.');
+    }
+    const bytes = value => Array.isArray(value) && value.every(n => Number.isInteger(n) && n >= 0 && n <= 255);
+    if (!bytes(bundle.salt) || bundle.salt.length !== SALT_BYTES ||
+        !bytes(bundle.iv) || bundle.iv.length !== IV_BYTES ||
+        !bytes(bundle.data) || bundle.data.length < 16 || bundle.data.length > MAX_CIPHERTEXT_BYTES) {
+      throw new Error('The city file is damaged or uses an unsupported format.');
+    }
+    const key = await deriveKey(pin, new Uint8Array(bundle.salt));
+    let clear;
+    try {
+      clear = await subtle().subtle.decrypt(
+        { name: 'AES-GCM', iv: new Uint8Array(bundle.iv) },
+        key,
+        new Uint8Array(bundle.data)
+      );
+    } catch {
+      throw new Error('That PIN did not unlock this city file. Try again.');
+    }
+    const shared = JSON.parse(new TextDecoder().decode(clear));
+    if (!Array.isArray(shared.entries) || shared.entries.length > MAX_ENTRIES) {
+      throw new Error('The city file is incomplete or too large.');
+    }
+    return shared.entries;
+  }
+
+  /* One imported moment, or null if it cannot be trusted.
+     Whitelist, not passthrough: unknown fields are dropped. */
+  function normaliseEntry(raw, known) {
+    if (!raw || typeof raw !== 'object') return null;
+    if (typeof raw.id !== 'string' || !raw.id || raw.id.length > MAX_ID) return null;
+    if (typeof raw.text !== 'string' || !raw.text.trim() || raw.text.length > MAX_TEXT) return null;
+    if (typeof raw.date !== 'string' || !DATE_PATTERN.test(raw.date)) return null;
+    const date = new Date(`${raw.date}T12:00:00`);
+    if (Number.isNaN(date.getTime())) return null;
+    const roundTrip = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    if (roundTrip !== raw.date) return null;
+    if (!CATEGORIES.includes(raw.category)) return null;
+    if (known && known.has(raw.id)) return null;
+    if (raw.photo) {
+      if (typeof raw.photo !== 'string') return null;
+      if (raw.photo.length > MAX_PHOTO_CHARS) return null;
+      if (!PHOTO_PATTERN.test(raw.photo)) return null;
+    }
+    return {
+      id: raw.id,
+      text: raw.text.trim(),
+      date: raw.date,
+      category: raw.category,
+      importance: Math.max(1, Math.min(3, Number(raw.importance) || 1)),
+      repeatCount: Math.max(1, Math.min(5, Number(raw.repeatCount) || 1)),
+      createdAt: typeof raw.createdAt === 'string' ? raw.createdAt.slice(0, 40) : '',
+      photo: raw.photo || ''
+    };
+  }
+
+  const api = {
+    FORMAT,
+    VERSION,
+    ITERATIONS,
+    SALT_BYTES,
+    IV_BYTES,
+    MAX_FILE_BYTES,
+    MAX_ENTRIES,
+    MAX_TEXT,
+    CATEGORIES,
+    deriveKey,
+    encryptEntries,
+    decryptBundle,
+    normaliseEntry
+  };
+
+  globalThis.CobbleCore = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})();

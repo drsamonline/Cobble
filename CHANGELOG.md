@@ -2,6 +2,23 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.5.0 — 2026-11-19
+
+The share format and the import validator moved into `app/core.js`, and got a test suite.
+
+### Changed
+
+- **`app/core.js`** now holds the things that do not need a browser: the bundle format, `deriveKey`, `encryptEntries`, `decryptBundle`, and `normaliseEntry` (the import validator). `app.js` calls it. Same behaviour, one copy of the rules instead of two.
+- The app shell budget went from 190 KB to 200 KB to cover the extra file; it currently sits at 162 KB.
+
+### Added
+
+- **`tests/core.test.mjs`** — 24 tests, no dependencies, `node --test tests/`. They cover: a city round-tripping through the encrypted bundle; two exports of the same city producing different salt, IV and ciphertext; a wrong PIN failing; a flipped ciphertext byte being detected rather than decrypted; malformed bundles refused before any crypto runs; weights clamped rather than trusted; unknown fields dropped; and a table of eleven malformed moments (bad ids, empty text, impossible dates, unknown districts, a `javascript:` photo, an SVG data URL) each rejected for its own reason.
+- **A hostile-file test**: a bundle carrying two good moments and three broken ones imports exactly the two good ones.
+- **CI runs the tests** — `node --test tests/` sits beside the link check and the size budget.
+
+The validator's constants now have one home. `docs/data-model.md` points at `core.js` for the limits rather than repeating them from memory.
+
 ## 1.4.0 — 2026-11-19
 
 **Search.** The most-requested missing feature, and the last of the app's obvious absences.

@@ -19,13 +19,15 @@ cobble/
 │   ├── index.html        the whole app: sidebar, three views, four overlays
 │   ├── theme.css         the design tokens (17 variables)
 │   ├── styles.css        ~2,600 lines: layout, the city, the panels
-│   ├── app.js            ~900 lines: state, storage, render, crypto
+│   ├── core.js           the share format, key derivation and import validator — no DOM
+│   ├── app.js            ~950 lines: state, storage, render, wiring
 │   ├── city3d.js         experimental WebGL layer, off unless ?3d=1
 │   └── vendor/           jszip 3.10.1 and three r128, unmodified
 ├── fonts/                Manrope, DM Sans, IBM Plex Mono — woff2, latin subset
 ├── icons/               192, 512, maskable, apple-touch
 ├── docs/                 these guides
 ├── screenshots/          real renders of this repository
+├── tests/                core.test.mjs — 24 tests, node --test
 ├── tools/                check-links.mjs, check-size.mjs
 ├── .github/workflows/    check.yml — links, size budget, script syntax
 ├── README.md
@@ -60,7 +62,7 @@ Only the active view carries the `.hidden` class; `setView()` swaps them and upd
 3. **Storage** — `openDatabase`, `saveToDatabase`, `loadArchive`, `save`, `updateStorageInfo`. Covered in detail in [the data model](data-model.md).
 4. **Render** — `render()` calls `renderCity()`, `renderTimeline()` and `renderInsights()`. Everything is a full re-render of its container; there is no diffing and no virtual DOM. With a few thousand moments this is imperceptible; the thresholds are discussed in [ENHANCEMENTS.md](../ENHANCEMENTS.md).
 5. **The city** — `renderCityScenes()` builds five district scenes from a seed, `startCityMotion()` owns panning and the animation loop.
-6. **Sharing** — `deriveKey`, `exportCity`, `importCity`, and `downloadAppPackage` (which pulls JSZip from cdnjs only when you press the button).
+6. **Sharing** — `exportCity` and `importCity` handle the file and the dialog; the format, the key derivation and the per-entry validation live in `core.js`, which touches no DOM and is therefore testable in Node.
 7. **The sample city** — `makeDemoCity()`, `enterDemo()`, `exitDemo()`.
 8. **Wiring** — one `init()` that attaches every listener. No inline `onclick` anywhere, so a strict Content-Security-Policy is feasible later.
 
@@ -122,6 +124,12 @@ Both pages share the same palette values, copied deliberately rather than import
 ## The checks
 
 `tools/check-links.mjs` resolves every local `href`, `src`, CSS `url()`, manifest icon and service-worker precache path, and fails if any page still references a CDN. `tools/check-size.mjs` holds four budgets. `.github/workflows/check.yml` runs both plus `node --check` on the four scripts. The link check exists because this repository has already made the classic mistake once: a path that works at a domain root and 404s on a project page.
+
+## The core, and why it is separate
+
+`app/core.js` is the only file with a boundary drawn around it: `deriveKey`, `encryptEntries`, `decryptBundle` and `normaliseEntry`. Everything else in the app is a render function with a DOM dependency. Keeping the data-touching code DOM-free means `tests/core.test.mjs` can run the real functions under `node --test` — Node 20 exposes the same Web Crypto — instead of a reimplementation that could drift.
+
+`core.js` assigns `globalThis.CobbleCore` and also `module.exports` when it is loaded as CommonJS, which is how the tests reach it. It is loaded before `app.js` in `index.html` and is in the service worker's precache list.
 
 ## What is not here
 

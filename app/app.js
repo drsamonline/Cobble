@@ -720,46 +720,19 @@
     }
     return pin;
   }
-  async function deriveKey(pin, salt) {
-    const encoder = new TextEncoder();
-    const base = await crypto.subtle.importKey('raw', encoder.encode(pin), 'PBKDF2', false, ['deriveKey']);
-    return crypto.subtle.deriveKey({
-      name: 'PBKDF2',
-      salt,
-      iterations: 250000,
-      hash: 'SHA-256'
-    }, base, {
-      name: 'AES-GCM',
-      length: 256
-    }, false, ['encrypt', 'decrypt']);
-  }
+  /* The share format, key derivation and import validator live in core.js so
+     the same code can be unit-tested outside a browser. */
+  const core = globalThis.CobbleCore;
   async function exportCity() {
     const button = $('#export-city');
     try {
-      if (!crypto?.subtle) throw new Error('Secure encryption is not available in this browser. Try the published site or a modern browser.');
       const pin = getSharePin();
       const selected = $$('.share-check:checked').map(check => check.value);
       if (!selected.length) throw new Error('Choose at least one moment to share.');
-      const payload = JSON.stringify({
-        app: 'Cobble',
-        version: 1,
-        exportedAt: new Date().toISOString(),
-        entries: entries.filter(entry => selected.includes(String(entry.id)))
-      });
-      const salt = crypto.getRandomValues(new Uint8Array(16));
-      const iv = crypto.getRandomValues(new Uint8Array(12));
-      const key = await deriveKey(pin, salt);
-      const encrypted = await crypto.subtle.encrypt({
-        name: 'AES-GCM',
-        iv
-      }, key, new TextEncoder().encode(payload));
-      const bundle = {
-        format: 'cobble-pincode',
-        version: 1,
-        salt: [...salt],
-        iv: [...iv],
-        data: [...new Uint8Array(encrypted)]
-      };
+      const bundle = await core.encryptEntries(
+        entries.filter(entry => selected.includes(String(entry.id))),
+        pin
+      );
              const blob = new Blob([JSON.stringify(bundle)], {
          type: 'application/json'
        });
@@ -803,25 +776,14 @@
        if (!crypto?.subtle) throw new Error('Secure decryption is not available in this browser.');
        const pin = getSharePin();
        const bundle = JSON.parse(await file.text());
-       if (bundle.format !== 'cobble-pincode' || bundle.version !== 1) throw new Error('That does not look like a Cobble city file.');
-       if (!Array.isArray(bundle.salt) || bundle.salt.length !== 16 || !Array.isArray(bundle.iv) || bundle.iv.length !== 12 || !Array.isArray(bundle.data) || bundle.data.length < 16 || bundle.data.length > 38 * 1024 * 1024 || [...bundle.salt, ...bundle.iv, ...bundle.data].some(value => !Number.isInteger(value) || value < 0 || value > 255)) throw new Error('The city file is damaged or uses an unsupported format.');
-       const key = await deriveKey(pin, new Uint8Array(bundle.salt));
-      const clear = await crypto.subtle.decrypt({
-        name: 'AES-GCM',
-        iv: new Uint8Array(bundle.iv)
-      }, key, new Uint8Array(bundle.data));
-      const shared = JSON.parse(new TextDecoder().decode(clear));
-             if (!Array.isArray(shared.entries) || shared.entries.length > 100000) throw new Error('The city file is incomplete or too large.');
+       const shared = await core.decryptBundle(bundle, pin);
        const known = new Set(entries.map(entry => String(entry.id)));
        const imported = [];
-       for (const entry of shared.entries) {
-         if (!entry || typeof entry.id !== 'string' || entry.id.length > 120 || typeof entry.text !== 'string' || !entry.text.trim() || entry.text.length > 500 || typeof entry.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(entry.date)) continue;
-         const date = new Date(`${entry.date}T12:00:00`);
-         if (Number.isNaN(date.getTime()) || localDate(date) !== entry.date) continue;
-         if (!Object.prototype.hasOwnProperty.call(categories, entry.category) || known.has(entry.id)) continue;
-         if (entry.photo && (typeof entry.photo !== 'string' || entry.photo.length > 16 * 1024 * 1024 || !/^data:image\/(?:jpeg|png|webp|gif);base64,[A-Za-z0-9+/]+=*$/.test(entry.photo))) continue;
-         known.add(entry.id);
-         imported.push({ id: entry.id, text: entry.text.trim(), date: entry.date, category: entry.category, importance: Math.max(1, Math.min(3, Number(entry.importance) || 1)), repeatCount: Math.max(1, Math.min(5, Number(entry.repeatCount) || 1)), createdAt: typeof entry.createdAt === 'string' ? entry.createdAt.slice(0, 40) : '', photo: entry.photo || '' });
+       for (const entry of shared) {
+         const clean = core.normaliseEntry(entry, known);
+         if (!clean) continue;
+         known.add(clean.id);
+         imported.push(clean);
        }
       if (!imported.length) throw new Error('No new moments found. You may have already added this city.');
       entries = [...entries, ...imported];
