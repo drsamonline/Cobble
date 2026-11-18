@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.4.0 — 2026-11-19
+
+**Search.** The most-requested missing feature, and the last of the app's obvious absences.
+
+- **One box over the whole archive**, in the timeline. Results keep their day grouping; the matching run of characters is marked in every card and in the day drawer.
+- **Folded matching.** Case and accents are stripped on both sides, so `cafe` finds `café`, `sebastien` finds `Sébastien`, `crepe` finds `crêpe`. Plain substring — no stemming, no ranking, no fuzzy distance, because an archive of a few thousand moments does not need any of that.
+- **It searches three things**: what you wrote, the district name ("nature" finds every outside moment), and the date (`2026-11` finds a month).
+- **Honest states.** A query with no hits says so and suggests a shorter word; the count line changes from "18 moments · 18 days" to "1 found"; the clear button appears only when there is something to clear; `Esc` in the box clears it.
+- While a search is active, every matching day is shown, not just the first fifty of the archive.
+
+Also in this release: an empty archive now carries one line about the city living in this browser, and points at **Share city → Export readable backup** — the answer to the most common support question.
+
 ## 1.3.0 — 2026-11-19
 
 The top of the [enhancement list](ENHANCEMENTS.md) — the things a journalling app needs before anything else.

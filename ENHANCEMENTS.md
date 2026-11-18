@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.3.0 — offline, installable, editable, undoable, keyboard-first, two CI checks.
+- **Baseline:** v1.4.0 — offline, installable, editable, searchable, keyboard-first, two CI checks.
 
 ---
 
@@ -47,6 +47,8 @@ These were the top of this list. They are done, verified and in the repository, 
 | 1.13 | **`N` for a new moment**, `Ctrl`/`Cmd`+`Z` to undo a delete. | `app/app.js` |
 | 1.16 | **Source, licence and docs links** in the help panel. | `app/index.html` |
 | 1.17 | **The landing page's worker registration moved out of the inline script.** | `assets/landing.js` |
+| 1.19 | **An empty archive explains where the city lives** and points at the readable backup. | `app/app.js` |
+| 2.1 | **Full-text search** over text, district and date, with accent folding, in-place marks and honest empty states. | `app/app.js`, `app/index.html` |
 
 What is left of the quick-win tier:
 
@@ -59,7 +61,6 @@ What is left of the quick-win tier:
 
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
-| 2.1 | **Full-text search.** Build an in-memory index of `text` on load; a search box filters the timeline and highlights the match. No fuzzy matching, no stemming — substring plus case folding is enough at this scale. | The most-requested missing feature. "What did I write about the bakery?" currently means scrolling. | `app/app.js`, `app/index.html` | M |
 | 2.2 | **Filters on the timeline.** By district, by weight, by date range. | With two years of moments the timeline is a wall. Six chips and a date picker fix it. | `app/app.js` | M |
 | 2.3 | **Dark mode for the app shell.** `prefers-color-scheme: dark` plus a manual override, driven by the same tokens in `theme.css`. The city already has a night state to borrow from. | Half the app's users open it at 11 pm. A white page at 11 pm is a reason not to open it. | `app/theme.css`, `app/styles.css` | M |
 | 2.4 | **A year heatmap.** 53 × 7 cells, one per day, shaded by how many moments it held; click a cell to open the day. | The one view that answers "have I been keeping up?" without a streak or a scold. | `app/app.js`, `app/styles.css` | M |
@@ -145,12 +146,11 @@ Written down because the answer to "should we build this?" is usually "no, it is
 
 If you have one weekend and want the largest improvement per hour:
 
-1. **2.1** — search. The most-requested feature left, and an afternoon's work.
-2. **2.9, 2.10** — axe in the headless run, and two unit tests for the validator and the crypto. The app has behaviour worth protecting now.
-3. **2.5** — on this day. The feature that makes people come back.
-4. **2.3** — dark mode for the app shell.
-5. **2.12** — a shareable postcard of the skyline.
-6. **6.1** — repair the 3D layer, or delete it. A broken opt-in feature is worse than no feature.
-7. **4.4** — desktop and Android builds through App Builder. The repository now has exactly the three inputs it wants.
+1. **2.9, 2.10** — axe in the headless run, and two unit tests for the validator and the crypto. The app has behaviour worth protecting now.
+2. **2.5** — on this day. The feature that makes people come back.
+3. **2.3** — dark mode for the app shell.
+4. **2.12** — a shareable postcard of the skyline.
+5. **6.1** — repair the 3D layer, or delete it. A broken opt-in feature is worse than no feature.
+6. **4.4** — desktop and Android builds through App Builder. The repository now has exactly the three inputs it wants.
 
 Everything after that is taste.

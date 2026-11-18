@@ -121,6 +121,12 @@
               <h3>Everyday, remembered</h3>
             </div><span class="entry-total" id="timeline-total">0 moments</span>
           </div>
+          <div class="timeline-search">
+            <label class="visually-hidden" for="timeline-query">Search your moments</label>
+            <input id="timeline-query" type="search" placeholder="Search your moments — a word, a name, a street…" autocomplete="off" spellcheck="false" />
+            <button type="button" class="timeline-search-clear hidden" id="timeline-query-clear" aria-label="Clear the search">×</button>
+          </div>
+          <p class="timeline-search-status" id="timeline-search-status" role="status" aria-live="polite"></p>
           <div id="full-timeline-content"></div>
         </section>
         <footer class="page-footer"><span>Made of moments. Kept by you.</span><button class="text-button download-package" type="button" title="Download the complete app source bundle">↓ Download app package</button><span><i class="offline-indicator"></i> Saved on this device · Nothing leaves this device</span></footer>

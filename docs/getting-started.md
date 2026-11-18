@@ -66,6 +66,12 @@ Two mechanisms, for two different jobs.
 
 **Import** (`Open a city file` in the share dialog) reads a `.cobble` file, asks for its PIN, validates every field, skips moments whose ids already exist, and reports how many were added.
 
+## Finding something again
+
+The timeline has a search box. It looks at three things: what you wrote, the district (so `nature` finds every outside moment) and the date (`2026-11` finds a month). Case and accents are folded — `cafe` finds `café`. Matches are marked in place, and every matching day is shown, not just the first fifty.
+
+`Esc` in the box clears it; so does the × that appears once you have typed something.
+
 ## The sample city
 
 `Explore a sample city` loads eighteen example moments and their photographs. While it is on, the app is read-only with respect to your archive: saving is suppressed, the Add and Share buttons return you to your own city first, and leaving the sample restores exactly what you had. It exists so that someone arriving at an empty app can see what a city looks like after a couple of months.

@@ -58,9 +58,9 @@ Not a global one. There is a **Night** control in the city, which changes the ci
 
 It is built on IndexedDB, Web Crypto, service workers and standard CSS, all of which are supported in current Safari, Firefox, Chrome, Edge and Brave. Firefox will not offer to install a PWA on the desktop, and Safari's "Add to Home Screen" is a different thing from Chrome's install prompt — but both keep working. Two known differences: Safari's storage eviction is more aggressive for sites you rarely visit, so export more often; and Brave's shields can restrict storage per-site, in which case the app falls back to localStorage and says so.
 
-**Why no search?**
+**Is there a search?**
 
-Because the city was built as the index, and search is a list-shaped answer to a place-shaped question. That said: it is the most-requested thing this app does not have, and it is first in the archive section of the enhancement list.
+Yes, since v1.4.0 — a box at the top of the timeline. It matches what you wrote, the district name and the date, folds case and accents, and marks the hit inside each card. It is a substring search, not a ranked one: no stemming, no fuzzy distance, no "did you mean". At this scale that is the honest trade.
 
 **Can I use it at work / in my clinic / commercially?**
 

@@ -8,10 +8,10 @@ Your life, taking shape. A private city built from the small things you notice. 
 
 [Live demo](https://drsamonline.github.io/Cobble/) · [Open the app](https://drsamonline.github.io/Cobble/app/) · [Wander a sample city](https://drsamonline.github.io/Cobble/app/?demo=1) · [Documentation](docs/) · [Report a bug](https://github.com/drsamonline/Cobble/issues)
 
-**Status: v1.3.0 — shipped, offline, and editable.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
+**Status: v1.4.0 — shipped, offline, editable and searchable.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.3.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.4.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -51,21 +51,25 @@ The name: *to cobble* is to make a thing from whatever is at hand, and a cobble 
 |---|---|
 | ![The city view with districts, streets and weather](screenshots/city.png) | ![The same city at night, with lit windows](screenshots/city-night.png) |
 
-| Timeline | Discoveries |
+| Timeline | Search |
 |---|---|
-| ![The timeline view, one row per day](screenshots/timeline.png) | ![Statistics, milestones and district bars](screenshots/insights.png) |
+| ![The timeline view, one row per day](screenshots/timeline.png) | ![One search result, with the match marked](screenshots/search.png) |
+
+| Discoveries | Milestones |
+|---|---|
+| ![Statistics, milestones and district bars](screenshots/insights.png) | ![The achievements grid on the Discoveries view](screenshots/achievements.png) |
 
 | A day, opened | Share city |
 |---|---|
 | ![The day drawer, with a moment, its photo, and the Edit and Delete buttons](screenshots/day-drawer.png) | ![The share dialog, asking for a PIN](screenshots/share.png) |
 
-| Milestones | Landing page, after dark |
+| Landing page, after dark | On a phone — timeline |
 |---|---|
-| ![The achievements grid on the Discoveries view](screenshots/achievements.png) | ![The landing page at night](screenshots/landing-night.png) |
+| ![The landing page at night](screenshots/landing-night.png) | <img src="screenshots/mobile.png" width="300" alt="The timeline on a phone"> |
 
-| On a phone — timeline | On a phone — city |
-|---|---|
-| <img src="screenshots/mobile.png" width="300" alt="The timeline on a phone"> | <img src="screenshots/mobile-city.png" width="300" alt="The city on a phone"> |
+| On a phone — city |
+|---|
+| <img src="screenshots/mobile-city.png" width="300" alt="The city on a phone"> |
 
 Every capture is a real render of this repository at 1440×900, 1440×1000 and 390×844, produced by headless Chrome with the sample city loaded — no mock-ups, no retouching. The city shown is the illustrated CSS city, which is what everyone sees: the WebGL layer is experimental and off by default (see [the enhancement list](ENHANCEMENTS.md#6-the-3d-layer)).
 
@@ -90,7 +94,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 - **A day drawer** that opens any date as a short chapter, with its photos and its order in the day.
 - **Edit and delete.** Any moment in the drawer can be changed or removed; a delete leaves an Undo strip for twenty seconds, and `Ctrl`/`Cmd`+`Z` works after that.
 - **A full timeline** of every day you have saved, newest first, one click from the same drawer.
-- **Search-free by design.** The city is the index. Full-text search is the first item of the [archive section](ENHANCEMENTS.md) in the enhancement list.
+- **Search over the whole archive.** One box in the timeline: what you wrote, the district name, or a date. Case and accents are folded (`cafe` finds `café`), the match is marked in place, and results keep their day grouping.
 
 **The discoveries**
 

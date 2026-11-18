@@ -2691,3 +2691,101 @@ select:focus {
    All four backdrops share z-index 20 and the drawer comes later in the DOM,
    which meant "Edit" opened a dialog behind the panel it came from. */
 .modal-backdrop { z-index: 30; }
+
+/* ── Search ───────────────────────────────────────────────────────
+   One box, over the whole archive. Substring, case- and accent-folded;
+   results keep their day grouping, and the match is marked. */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.timeline-search {
+  position: relative;
+  padding: 0 20px 4px;
+}
+.timeline-search input {
+  width: 100%;
+  font: 400 13.5px var(--font-body);
+  color: var(--color-text);
+  background: #fbfaf4;
+  border: 1px solid #e9e8e1;
+  border-radius: 11px;
+  padding: 11px 38px 11px 13px;
+  transition: border-color .18s ease, background .18s ease;
+}
+.timeline-search input::placeholder { color: #a6aea6; }
+/* Chrome draws its own clear button inside type="search"; ours is the one
+   with the label, so the native one goes. */
+.timeline-search input::-webkit-search-cancel-button,
+.timeline-search input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; }
+.timeline-search input:focus {
+  outline: none;
+  border-color: #b9cdb0;
+  background: #fffefa;
+  box-shadow: 0 0 0 3px #dfe8d640;
+}
+.timeline-search-clear {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px; height: 22px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #efeee5;
+  color: #6f7a72;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+.timeline-search-clear:hover { background: #e4e2d5; color: #3a4740; }
+
+.timeline-search-status {
+  padding: 6px 22px 0;
+  font: 500 11px var(--font-mono);
+  letter-spacing: .05em;
+  color: #8d968f;
+  min-height: 0;
+}
+.timeline-search-status:empty { display: none; }
+
+mark {
+  background: #f6e3c4;
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+.no-search-results {
+  padding: 34px 22px 40px;
+  text-align: center;
+  color: #7b8781;
+  font-size: 13.5px;
+}
+.no-search-results strong {
+  display: block;
+  font: 600 15px var(--font-heading);
+  color: #3a4740;
+  margin-bottom: 6px;
+}
+
+.empty-hint {
+  margin-top: 10px;
+  font: 400 11.5px var(--font-body);
+  line-height: 1.6;
+  color: #8d968f;
+  max-width: 34em;
+  margin-inline: auto;
+}
+@media (max-width: 640px) {
+  .timeline-search { padding-inline: 14px; }
+  .timeline-search-clear { right: 24px; }
+  .timeline-search-status { padding-inline: 16px; }
+}
