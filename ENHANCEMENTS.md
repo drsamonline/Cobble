@@ -1,11 +1,11 @@
 # Enhancement list
 
-Everything Elsewhere could do next, in order of effort — quick wins first. Nothing here is a promise of a date; it is a map of the terrain, with the path that costs least marked in chalk.
+Everything Cobble could do next, in order of effort — quick wins first. Nothing here is a promise of a date; it is a map of the terrain, with the path that costs least marked in chalk.
 
 Each entry says **what**, **why it matters**, **where** it lands, and **how long** it should take someone who knows the codebase. Effort is honest: `S` is under an hour, `M` is an afternoon, `L` is a day or two, `XL` is a week or more.
 
-- **Repo:** <https://github.com/drsamonline/elsewhere>
-- **App:** <https://drsamonline.github.io/elsewhere/app/>
+- **Repo:** <https://github.com/drsamonline/cobble>
+- **App:** <https://drsamonline.github.io/cobble/app/>
 - **Baseline:** v1.1.0 — no CDN at runtime, works offline, installable, two CI checks.
 
 ---
@@ -18,7 +18,7 @@ Five things that were broken in the app as received, fixed during the repository
 |---|---|---|
 | 0.1 | **The achievements grid had no CSS.** `app.js` generated six `.achievement-card` elements and `styles.css` had no rules for any of them, so Discoveries rendered them as stacked plain text. Grid, cards, icons, progress bars and earned states added. | `app/styles.css` |
 | 0.2 | **The mobile share button was an empty pill.** It sets `font-size: 0` to hide its label, which also hid the `↗` glyph. The glyph is restored with a `::before`, and the button gained an `aria-label`. | `app/styles.css`, `app/index.html` |
-| 0.3 | **The app assumed it lived at a domain root.** `downloadAppPackage()` fetched `/index.html` and friends, which 404s on a project page like `…github.io/elsewhere/app/`. Now relative. The brand link points at `../` instead of `/`. | `app/app.js`, `app/index.html` |
+| 0.3 | **The app assumed it lived at a domain root.** `downloadAppPackage()` fetched `/index.html` and friends, which 404s on a project page like `…github.io/cobble/app/`. Now relative. The brand link points at `../` instead of `/`. | `app/app.js`, `app/index.html` |
 | 0.4 | **The add button rendered a tofu box.** `＋` (U+FF0B) is absent from DM Sans, so "Add a moment" showed a missing-glyph square. Replaced with `+` in the three places it appeared. | `app/index.html`, `app/app.js` |
 | 0.5 | **No deep link into the sample city.** `app/?demo=1` and `app/#demo` now open the sample city directly, which is what the landing page's "Wander a sample city" button uses. | `app/app.js` |
 
@@ -126,7 +126,7 @@ Written down so they stop being suggested.
 
 ## What the rest of the collection already solved
 
-Written down because the answer to "should we build this?" is usually "no, it is two repositories over". These are the pieces of the author's own fleet that fit Elsewhere, and what each one would save:
+Written down because the answer to "should we build this?" is usually "no, it is two repositories over". These are the pieces of the author's own fleet that fit Cobble, and what each one would save:
 
 | Repository | What it has | What it would save here |
 |---|---|---|

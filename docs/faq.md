@@ -10,17 +10,17 @@ In order of likelihood:
 4. **The site moved.** Storage is keyed by origin. `localhost:8000`, `127.0.0.1:8000`, `drsamonline.github.io` and a Netlify preview are four different cities. This catches people out constantly when testing locally.
 5. **`file://`.** Opening `app/index.html` by double-clicking gives you no IndexedDB at all, so every save silently lands in the smaller fallback or nowhere.
 
-If you have a `.elsewhere` file, open the share dialog, choose **Open a city file**, and import it. If you do not, there is no recovery — and the fix for next time is a monthly export.
+If you have a `.cobble` file, open the share dialog, choose **Open a city file**, and import it. If you do not, there is no recovery — and the fix for next time is a monthly export.
 
 **Can I get my data out as plain text?**
 
 Not from the UI yet (it is the first item in the [archive section](../ENHANCEMENTS.md) of the enhancement list). You can today: open the app, open DevTools, and run
 
 ```js
-copy(JSON.parse(localStorage.getItem('elsewhere-moments-v1') || '[]'))
+copy(JSON.parse(localStorage.getItem('cobble-moments-v1') || '[]'))
 ```
 
-on the localStorage path, or read the `moments` record from IndexedDB's `elsewhere-archive` on the primary path. Both are your data in plain JSON, with no protection to bypass. The `.elsewhere` format is documented in [the data model](data-model.md) if you would rather write a script.
+on the localStorage path, or read the `moments` record from IndexedDB's `cobble-archive` on the primary path. Both are your data in plain JSON, with no protection to bypass. The `.cobble` format is documented in [the data model](data-model.md) if you would rather write a script.
 
 **The share file says the PIN is wrong, and I am certain it is right.**
 

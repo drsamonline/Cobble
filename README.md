@@ -1,17 +1,17 @@
 <div align="center">
 
-# Elsewhere
+# Cobble
 
-**Your life, taking shape.**
+**A city made of small things.**
 
-A private city built from the small things you notice. Save a moment — the warm loaf in the window, a sentence someone said on a train, the light on wet pavement — and a building appears. Colour is what kind of moment it was. Height is how much it mattered. Come back in a year and see what you made.
+Your life, taking shape. A private city built from the small things you notice. Save a moment — the warm loaf in the window, a sentence someone said on a train, the light on wet pavement — and a building appears. Colour is what kind of moment it was. Height is how much it mattered. Come back in a year and see what you made.
 
-[Live demo](https://drsamonline.github.io/elsewhere/) · [Open the app](https://drsamonline.github.io/elsewhere/app/) · [Wander a sample city](https://drsamonline.github.io/elsewhere/app/?demo=1) · [Documentation](docs/) · [Report a bug](https://github.com/drsamonline/elsewhere/issues)
+[Live demo](https://drsamonline.github.io/cobble/) · [Open the app](https://drsamonline.github.io/cobble/app/) · [Wander a sample city](https://drsamonline.github.io/cobble/app/?demo=1) · [Documentation](docs/) · [Report a bug](https://github.com/drsamonline/cobble/issues)
 
-**Status: v1.1.0 — shipped, and now offline.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
+**Status: v1.2.0 — shipped, offline, and named.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.1.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -24,21 +24,23 @@ A private city built from the small things you notice. Save a moment — the war
 [![GitHub Sponsors](https://img.shields.io/badge/sponsor-GitHub-ea4aaa.svg)](https://github.com/sponsors/drsamonline)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-matneo-ff5e5b.svg)](https://ko-fi.com/matneo)
 [![UPI](https://img.shields.io/badge/UPI-drsohilboi%40ybl-2ea44f.svg)](#support)
-[![Stars](https://img.shields.io/github/stars/drsamonline/elsewhere?style=social)](https://github.com/drsamonline/elsewhere/stargazers)
+[![Stars](https://img.shields.io/github/stars/drsamonline/cobble?style=social)](https://github.com/drsamonline/cobble/stargazers)
 
 </div>
 
 ---
 
-![Elsewhere landing page](screenshots/landing.png)
+![Cobble landing page](screenshots/landing.png)
 
 ## What it is
 
-Most journalling apps give you a list. A list is fine for finding something later; it is useless for seeing a year. Elsewhere asks one question — *what did you notice today?* — and answers it with a place.
+Most journalling apps give you a list. A list is fine for finding something later; it is useless for seeing a year. Cobble asks one question — *what did you notice today?* — and answers it with a place.
 
 Every saved moment becomes a block in a city. Six districts sort the blocks by kind, a landmark flag makes some of them taller, and repetition makes a block wider. Nothing is scored, nothing is graded, and no streak breaks if you skip a week. The city simply shows what you have been paying attention to.
 
-- **No account.** There is no Elsewhere server, so there is nothing to sign in to.
+The name: *to cobble* is to make a thing from whatever is at hand, and a cobble is the stone underfoot on a street that was laid one stone at a time. Both halves are the app.
+
+- **No account.** There is no Cobble server, so there is nothing to sign in to.
 - **No tracking.** No analytics, no cookies, no third-party scripts reading your words.
 - **No subscription.** Noncommercial use is free, forever, under a licence that says so.
 - **No lock-in.** Your archive exports as a file you own, encrypted with a PIN you choose.
@@ -98,7 +100,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 
 **Sharing and keeping**
 
-- **Encrypted city files.** Choose any subset of moments, set a 6–12 digit PIN, and Elsewhere writes a `.elsewhere` file: AES-256-GCM, key derived with PBKDF2-SHA-256 at 250,000 iterations, random 16-byte salt and 12-byte IV per export.
+- **Encrypted city files.** Choose any subset of moments, set a 6–12 digit PIN, and Cobble writes a `.cobble` file: AES-256-GCM, key derived with PBKDF2-SHA-256 at 250,000 iterations, random 16-byte salt and 12-byte IV per export.
 - **Import with validation.** Every field of every imported moment is checked against a schema before it touches your archive; duplicates are skipped; a damaged file is refused with a reason.
 - **Download the whole app** as a zip, straight from the app, with a README inside.
 - **Honest storage reporting.** IndexedDB with a localStorage fallback, the size of your archive in KB, and how much room the browser will still give you.
@@ -119,8 +121,8 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 ## Quick start
 
 ```bash
-git clone https://github.com/drsamonline/elsewhere.git
-cd elsewhere
+git clone https://github.com/drsamonline/cobble.git
+cd cobble
 python3 -m http.server 8000
 ```
 
@@ -139,7 +141,7 @@ To check the offline promise yourself, open `/selftest.html` with the network on
 | [Getting started](docs/getting-started.md) | First moment, the sample city, where your data lives, how to keep it |
 | [How the city works](docs/how-the-city-works.md) | Districts, weights, repetition, atmospheres, weather and the seed that draws your skyline |
 | [Architecture](docs/architecture.md) | The five files, the render loop, the storage layer, and why there is no build step |
-| [Data model](docs/data-model.md) | The moment schema, IndexedDB layout, the localStorage fallback, the `.elsewhere` file format |
+| [Data model](docs/data-model.md) | The moment schema, IndexedDB layout, the localStorage fallback, the `.cobble` file format |
 | [Privacy and security](docs/privacy-and-security.md) | What is stored, what leaves the device, the exact cryptography, and its limits |
 | [Customising](docs/customising.md) | Palettes, districts, atmospheres, copy and layout — with the token names |
 | [Deploying](docs/deploying.md) | GitHub Pages, any static host, and packaging as a desktop or Android app |
@@ -147,7 +149,7 @@ To check the offline promise yourself, open `/selftest.html` with the network on
 
 ## Privacy, in one paragraph
 
-Your moments live in your browser's IndexedDB on your device. There is no Elsewhere account and no Elsewhere backend, so there is nothing to leak, subpoena or sell. The app makes no analytics calls. The only data that ever leaves is a `.elsewhere` file you create yourself, encrypted with a PIN that never travels with it. The honest caveats: the page pulls fonts and two libraries from public CDNs, clearing site data clears the city, and a PIN of six digits protects against a person, not a cluster. All three are written up in [privacy and security](docs/privacy-and-security.md).
+Your moments live in your browser's IndexedDB on your device. There is no Cobble account and no Cobble backend, so there is nothing to leak, subpoena or sell. The app makes no analytics calls. The only data that ever leaves is a `.cobble` file you create yourself, encrypted with a PIN that never travels with it. The honest caveats: the page pulls fonts and two libraries from public CDNs, clearing site data clears the city, and a PIN of six digits protects against a person, not a cluster. All three are written up in [privacy and security](docs/privacy-and-security.md).
 
 ## Enhancements
 
@@ -155,7 +157,7 @@ Your moments live in your browser's IndexedDB on your device. There is no Elsewh
 
 ## Built on the fleet
 
-Elsewhere is not the first offline-first app in this collection, and it borrows deliberately from the ones that came before rather than reinventing them. What came from where:
+Cobble is not the first offline-first app in this collection, and it borrows deliberately from the ones that came before rather than reinventing them. What came from where:
 
 | Repository | What was taken | How it was used here |
 |---|---|---|
@@ -195,7 +197,7 @@ Nothing is gated behind it: no accounts, no tracking, no network requests.
 
 </div>
 
-The same block is on the [landing page](https://drsamonline.github.io/elsewhere/#support), with the UPI ID copyable and the QR scannable, so nobody has to open GitHub to support the work.
+The same block is on the [landing page](https://drsamonline.github.io/cobble/#support), with the UPI ID copyable and the QR scannable, so nobody has to open GitHub to support the work.
 
 ## Licence
 

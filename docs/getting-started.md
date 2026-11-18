@@ -1,12 +1,12 @@
 # Getting started
 
-Elsewhere is a static web app. There is nothing to install and no account to make. You need a browser, and a folder to serve.
+Cobble is a static web app. There is nothing to install and no account to make. You need a browser, and a folder to serve.
 
 ## Run it locally
 
 ```bash
-git clone https://github.com/drsamonline/elsewhere.git
-cd elsewhere
+git clone https://github.com/drsamonline/cobble.git
+cd cobble
 python3 -m http.server 8000
 ```
 
@@ -38,12 +38,12 @@ The block appears in the city, and the day appears in the timeline. That is the 
 In this browser, on this device, in IndexedDB:
 
 ```
-database: elsewhere-archive
+database: cobble-archive
   object store: archive
     record: { id: 'moments', value: '<JSON array of every moment>' }
 ```
 
-If IndexedDB is unavailable or refuses a write — private windows, some managed browsers, a full disk — the app falls back to `localStorage` under the key `elsewhere-moments-v1` and tells you it is on the smaller store. On the next load it prefers whichever copy is newer, and moves the localStorage copy back into IndexedDB when it can.
+If IndexedDB is unavailable or refuses a write — private windows, some managed browsers, a full disk — the app falls back to `localStorage` under the key `cobble-moments-v1` and tells you it is on the smaller store. On the next load it prefers whichever copy is newer, and moves the localStorage copy back into IndexedDB when it can.
 
 Consequences worth internalising:
 
@@ -56,11 +56,11 @@ Consequences worth internalising:
 
 Two mechanisms, for two different jobs.
 
-**Share city** (`Share city` in the top bar) writes an encrypted `.elsewhere` file. Choose which moments to include, set a PIN of 6–12 digits, and the app writes AES-256-GCM ciphertext with a key derived from your PIN. This is the format for sending a city to another person. It is also a perfectly good backup format — write the PIN on the same piece of paper as the filename, not in the same file.
+**Share city** (`Share city` in the top bar) writes an encrypted `.cobble` file. Choose which moments to include, set a PIN of 6–12 digits, and the app writes AES-256-GCM ciphertext with a key derived from your PIN. This is the format for sending a city to another person. It is also a perfectly good backup format — write the PIN on the same piece of paper as the filename, not in the same file.
 
 **Download app package** (`↓ Download app package`, in the app's help panel) writes a zip of the five source files, so you can keep running the app even if the repository disappears. It deliberately does not include your moments: those are personal, and a "backup" that quietly bundles your diary into a zip is a bad default.
 
-**Import** (`Open a city file` in the share dialog) reads a `.elsewhere` file, asks for its PIN, validates every field, skips moments whose ids already exist, and reports how many were added.
+**Import** (`Open a city file` in the share dialog) reads a `.cobble` file, asks for its PIN, validates every field, skips moments whose ids already exist, and reports how many were added.
 
 ## The sample city
 

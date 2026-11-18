@@ -1,4 +1,4 @@
-/* Elsewhere service worker.
+/* Cobble service worker.
  *
  * Strategy: network-first for same-origin requests, cache as the fallback.
  * The first visit fills the cache; every visit after that works with the
@@ -13,8 +13,8 @@
  * during install so a stale copy cannot win.
  */
 const CACHE_VERSION = 'v1';
-const CACHE_NAME = `elsewhere-${CACHE_VERSION}`;
-const ASSET_VERSION = '1.1.0';
+const CACHE_NAME = `cobble-${CACHE_VERSION}`;
+const ASSET_VERSION = '1.2.0';
 
 const PRECACHE = [
   './',
@@ -104,7 +104,7 @@ self.addEventListener('fetch', event => {
         return (await cache.match(request)) ||
                (await cache.match('./app/')) ||
                (await cache.match('./index.html')) ||
-               new Response('Elsewhere is offline and this page is not cached yet.', {
+               new Response('Cobble is offline and this page is not cached yet.', {
                  status: 503,
                  headers: { 'Content-Type': 'text/plain; charset=utf-8' }
                });

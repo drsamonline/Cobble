@@ -1,5 +1,5 @@
 (() => {
-  const STORE = 'elsewhere-moments-v1';
+  const STORE = 'cobble-moments-v1';
   const categories = {
     everyday: {
       label: 'Everyday detail',
@@ -91,7 +91,7 @@
     viewport.dataset.mood = atmosphere.mood;
     viewport.dataset.weather = atmosphere.weather;
     viewport.classList.toggle('is-night', atmosphere.night);
-    window.elsewhereCity3D?.setAtmosphere(atmosphere);
+    window.cobbleCity3D?.setAtmosphere(atmosphere);
     const weatherIcon = { clear: '☀', cloudy: '☁', rain: '☂', snow: '❄' }[atmosphere.weather];
     $('.weather-icon').textContent = atmosphere.night ? '☾' : weatherIcon;
     $('#weather-control').querySelector('span').textContent = weatherIcon;
@@ -104,7 +104,7 @@
   function openDatabase() {
     if (!('indexedDB' in window)) return Promise.reject(new Error('IndexedDB is unavailable'));
     if (!databasePromise) databasePromise = new Promise((resolve, reject) => {
-      const request = indexedDB.open('elsewhere-archive', 1);
+      const request = indexedDB.open('cobble-archive', 1);
       request.onupgradeneeded = () => {
         if (!request.result.objectStoreNames.contains('archive')) request.result.createObjectStore('archive', { keyPath: 'id' });
       };
@@ -255,7 +255,7 @@
       }));
       results.forEach(([name, content]) => zip.file(name, content));
       zip.file('README.txt', [
-        'ELSEWHERE — COMPLETE APP PACKAGE',
+        'COBBLE — COMPLETE APP PACKAGE',
         '',
         'This package contains the complete static app source: HTML, styles, archive logic, and optional 3D city renderer.',
         '',
@@ -269,7 +269,7 @@
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'elsewhere-complete-app.zip';
+      link.download = 'cobble-complete-app.zip';
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -417,7 +417,7 @@
       return `<div class="city-scene district-scene-${landscapeIndex % 3}" role="group" aria-label="District ${districtIndex + 1}">${district}</div>`;
     });
     pan.innerHTML = scenes.join('');
-    window.dispatchEvent(new CustomEvent('elsewhere-city-data', { detail: { counts, total, centerIndex: cityCenterIndex } }));
+    window.dispatchEvent(new CustomEvent('cobble-data', { detail: { counts, total, centerIndex: cityCenterIndex } }));
   }
 
   function startCityMotion() {
@@ -431,7 +431,7 @@
     const renderPosition = () => {
       const tileWidth = viewport.clientWidth || window.innerWidth;
       pan.style.transform = `translate3d(${-2 * tileWidth + offset}px,0,0)`;
-      window.elsewhereCity3D?.setPan(cityCenterIndex, offset, tileWidth);
+      window.cobbleCity3D?.setPan(cityCenterIndex, offset, tileWidth);
     };
     const normalize = () => {
       const tileWidth = viewport.clientWidth || window.innerWidth;
@@ -607,7 +607,7 @@
       const selected = $$('.share-check:checked').map(check => check.value);
       if (!selected.length) throw new Error('Choose at least one moment to share.');
       const payload = JSON.stringify({
-        app: 'Elsewhere',
+        app: 'Cobble',
         version: 1,
         exportedAt: new Date().toISOString(),
         entries: entries.filter(entry => selected.includes(String(entry.id)))
@@ -620,7 +620,7 @@
         iv
       }, key, new TextEncoder().encode(payload));
       const bundle = {
-        format: 'elsewhere-pincode',
+        format: 'cobble-pincode',
         version: 1,
         salt: [...salt],
         iv: [...iv],
@@ -632,7 +632,7 @@
        const link = document.createElement('a');
        const objectUrl = URL.createObjectURL(blob);
        link.href = objectUrl;
-       link.download = `elsewhere-city-${localDate()}.elsewhere`;
+       link.download = `cobble-${localDate()}.cobble`;
        link.click();
        setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
       $('#share-status').textContent = `${selected.length} ${selected.length === 1 ? 'moment' : 'moments'} encrypted and downloaded. Share the file and PIN separately.`;
@@ -648,7 +648,7 @@
        if (!crypto?.subtle) throw new Error('Secure decryption is not available in this browser.');
        const pin = getSharePin();
        const bundle = JSON.parse(await file.text());
-       if (bundle.format !== 'elsewhere-pincode' || bundle.version !== 1) throw new Error('That does not look like an Elsewhere city file.');
+       if (bundle.format !== 'cobble-pincode' || bundle.version !== 1) throw new Error('That does not look like a Cobble city file.');
        if (!Array.isArray(bundle.salt) || bundle.salt.length !== 16 || !Array.isArray(bundle.iv) || bundle.iv.length !== 12 || !Array.isArray(bundle.data) || bundle.data.length < 16 || bundle.data.length > 38 * 1024 * 1024 || [...bundle.salt, ...bundle.iv, ...bundle.data].some(value => !Number.isInteger(value) || value < 0 || value > 255)) throw new Error('The city file is damaged or uses an unsupported format.');
        const key = await deriveKey(pin, new Uint8Array(bundle.salt));
       const clear = await crypto.subtle.decrypt({
@@ -756,7 +756,7 @@
     updateDemoButtons();
     render();
     setView('city');
-    toast('Welcome to a little preview of a grown Elsewhere city.');
+    toast('Welcome to a little preview of a grown cobble city.');
   }
 
   function exitDemo() {

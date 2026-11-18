@@ -1,4 +1,4 @@
-/* Elsewhere landing page — the skyline is drawn from a seed, not an image. */
+/* Cobble landing page — the skyline is drawn from a seed, not an image. */
 (() => {
   const districts = {
     everyday: { label: 'Everyday detail', colour: '#b59a79' },

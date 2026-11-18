@@ -1,10 +1,20 @@
 # Changelog
 
-All notable changes to Elsewhere. Dates are ISO 8601.
+All notable changes to Cobble. Dates are ISO 8601.
+
+## 1.2.0 — 2026-11-19
+
+Renamed, before the first release, from *Elsewhere* to **Cobble**. Nothing had shipped and nobody had an archive, which is the only cheap moment to change a name that is baked into storage keys, a file extension and a URL.
+
+- **Name.** *To cobble* is to make something out of whatever is at hand; a cobble is the stone underfoot. The tagline becomes "a city made of small things", and "your life, taking shape" stays as the emotional line.
+- **Storage keys** are now `cobble-archive` (IndexedDB) and `cobble-moments-v1` (the localStorage fallback).
+- **The share format** is `cobble-pincode`, and exported files end in `.cobble`.
+- **Every URL, badge, manifest field, service-worker cache name and screenshot** was regenerated to match.
+- The icon set is unchanged: three bars, a skyline, in the same palette.
 
 ## 1.1.0 — 2026-11-18
 
-The app becomes genuinely self-contained: no CDN at runtime, works with the network off, installable, and checked in CI. Everything in this release was adapted from elsewhere in the same collection — see [Built on the fleet](README.md#built-on-the-fleet).
+The app becomes genuinely self-contained: no CDN at runtime, works with the network off, installable, and checked in CI. Everything in this release was adapted from the other repositories in the same collection — see [Built on the fleet](README.md#built-on-the-fleet).
 
 ### Added
 
@@ -48,7 +58,7 @@ The first public release: the app as it was written, plus the four fixes it need
 - **The achievements grid rendered as plain stacked text.** `app.js` generated `.achievement-card`, `.achievement-icon`, `.achievement-copy`, `.achievement-progress` and `.achievement-status`, and `styles.css` contained no rules for any of them. The Discoveries view now shows a proper grid, with earned states, icons and progress bars.
 - **The mobile share button was an empty pill.** It hides its label with `font-size: 0`, which also hid the `↗` glyph. The glyph is restored with a `::before`.
 - **The add button showed a tofu box.** It used the fullwidth plus `＋` (U+FF0B), which DM Sans does not carry, so "Add a moment" rendered as a missing-glyph square on systems without a fallback for that codepoint. Replaced with an ordinary `+`.
-- **The app assumed a domain root.** `downloadAppPackage()` fetched `/index.html` and its siblings, which fails on a project page such as `drsamonline.github.io/elsewhere/app/`. All paths are now relative, and the brand link points at `../`.
+- **The app assumed a domain root.** `downloadAppPackage()` fetched `/index.html` and its siblings, which fails on a project page such as `drsamonline.github.io/cobble/app/`. All paths are now relative, and the brand link points at `../`.
 ### Moved
 
 - The app now lives in `app/`, with the landing page at the root. Every reference inside the app was already relative except the brand link and the package downloader, both fixed above.

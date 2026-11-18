@@ -1,6 +1,6 @@
-# Elsewhere — documentation
+# Cobble — documentation
 
-Elsewhere is a private city built from the small things you notice. These guides cover how to use it, how it is put together, and how to change it.
+Cobble is a private city built from the small things you notice. These guides cover how to use it, how it is put together, and how to change it.
 
 | Guide | Read it when |
 |---|---|
@@ -17,8 +17,8 @@ Elsewhere is a private city built from the small things you notice. These guides
 
 - **Five files.** `app/index.html`, `app/theme.css`, `app/styles.css`, `app/app.js`, and an experimental `app/city3d.js`. No build step, no framework, no dependencies to install. Fonts and two libraries sit beside them in `fonts/` and `app/vendor/` so nothing is fetched from a CDN.
 - **One worker, one cache.** `sw.js` at the root keeps the whole site, so the app opens with the network off. `selftest.html` proves it, file by file.
-- **One storage layer.** IndexedDB (`elsewhere-archive` → `archive` → `moments`), with a localStorage fallback under the key `elsewhere-moments-v1`.
-- **No backend.** Nothing is uploaded, ever. The only thing that leaves the device is a `.elsewhere` file you encrypt yourself.
+- **One storage layer.** IndexedDB (`cobble-archive` → `archive` → `moments`), with a localStorage fallback under the key `cobble-moments-v1`.
+- **No backend.** Nothing is uploaded, ever. The only thing that leaves the device is a `.cobble` file you encrypt yourself.
 - **A sample city is built in.** Open `app/?demo=1` and it appears; your own archive is never touched while it is on.
 
 ## Conventions in this documentation

@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────────
-   Elsewhere — landing page
+   Cobble — landing page
    A survey sheet for a city that does not exist yet.
    ───────────────────────────────────────────────────────────── */
 
@@ -277,6 +277,7 @@ html[data-time="night"] .stars {
   margin-top: .75rem; font-family: var(--font-mono); font-size: .7rem;
   letter-spacing: .04em; color: var(--muted); line-height: 1.5;
 }
+.stage-caption .name-note { color: var(--ink-soft); }
 
 .numbers {
   max-width: var(--max); margin: 1.6rem auto 0; padding: 1.4rem 1.5rem 3.2rem;

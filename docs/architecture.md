@@ -5,7 +5,7 @@ Five files, no build step, no dependencies to install. This guide is the map you
 ## The tree
 
 ```
-elsewhere/
+cobble/
 ├── index.html            landing page (what GitHub Pages serves first)
 ├── manifest.json         installable app: icons, shortcuts, colours
 ├── sw.js                 the service worker — one cache for the whole site
@@ -98,7 +98,7 @@ init()
 - it injects a Three.js `<script>` from cdnjs asynchronously;
 - if the script fails, or WebGL is missing, it returns silently and the CSS city stays;
 - if it succeeds, it appends a canvas over the illustrated city and draws a low-poly neighbourhood from the same category counts;
-- it exposes `window.elsewhereCity3D.setPan()` and `.setAtmosphere()`, which `app.js` calls only if the object exists.
+- it exposes `window.cobbleCity3D.setPan()` and `.setAtmosphere()`, which `app.js` calls only if the object exists.
 
 Nothing else in the app depends on it. Deleting the file and its `<script>` tag leaves a complete, working app.
 

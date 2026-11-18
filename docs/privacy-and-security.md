@@ -1,6 +1,6 @@
 # Privacy and security
 
-A journal is the most personal thing on a phone after the photographs. This page states what Elsewhere does, what it does not do, and where the edges are. It is written to be checkable against the source, not to be reassuring.
+A journal is the most personal thing on a phone after the photographs. This page states what Cobble does, what it does not do, and where the edges are. It is written to be checkable against the source, not to be reassuring.
 
 ## What is stored
 
@@ -12,7 +12,7 @@ Nothing else persists. Not the atmosphere you chose, not the view you were on, n
 
 Three things, and you should know all three:
 
-**1. A `.elsewhere` file — only when you press the button.** Created by your browser, saved to your downloads folder, encrypted with a key derived from your PIN. Nothing is uploaded; the file never touches a network until you send it to someone yourself.
+**1. A `.cobble` file — only when you press the button.** Created by your browser, saved to your downloads folder, encrypted with a key derived from your PIN. Nothing is uploaded; the file never touches a network until you send it to someone yourself.
 
 **2. Unsplash images, in the sample city only.** The eighteen sample moments use photographs hosted by Unsplash, and those images are fetched from `images.unsplash.com` when the sample is on. Your own moments never load anything from anywhere.
 
@@ -42,7 +42,7 @@ If `crypto.subtle` is unavailable — which happens on `file://` pages and on pl
 
 **Send the file and the PIN separately.** Two messages in the same chat is one message. A file in email and a PIN by voice is a different thing entirely.
 
-**Clearing site data deletes the city.** So does a browser "cleanup", a profile reset, or a private window closing. Elsewhere cannot prevent this — it has no copy anywhere else. Export before you clean.
+**Clearing site data deletes the city.** So does a browser "cleanup", a profile reset, or a private window closing. Cobble cannot prevent this — it has no copy anywhere else. Export before you clean.
 
 **Browser extensions can read the page.** Any extension with permission to run on all sites can read your archive as you look at it. That is true of every web app, including ones with servers; it is worth knowing anyway.
 
@@ -85,4 +85,4 @@ Since v1.1.0 the app also works with the network switched off. That is not a pri
 
 ## If you find a problem
 
-Open an issue at <https://github.com/drsamonline/elsewhere/issues>, or email <sohilmomin2000@gmail.com> for anything you would rather not post publicly. There is no bounty programme; there is a person who will fix it and credit you.
+Open an issue at <https://github.com/drsamonline/cobble/issues>, or email <sohilmomin2000@gmail.com> for anything you would rather not post publicly. There is no bounty programme; there is a person who will fix it and credit you.

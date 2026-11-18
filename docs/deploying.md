@@ -1,14 +1,14 @@
 # Deploying
 
-Elsewhere is static files. Anywhere that can serve HTML can serve it.
+Cobble is static files. Anywhere that can serve HTML can serve it.
 
 ## GitHub Pages (what this repository uses)
 
 The repository is already set up for it: **Settings → Pages → Source: Deploy from a branch → `main` / `/ (root)`**.
 
-- Landing page: `https://<user>.github.io/elsewhere/`
-- The app: `https://<user>.github.io/elsewhere/app/`
-- Sample city: `https://<user>.github.io/elsewhere/app/?demo=1`
+- Landing page: `https://<user>.github.io/cobble/`
+- The app: `https://<user>.github.io/cobble/app/`
+- Sample city: `https://<user>.github.io/cobble/app/?demo=1`
 
 Two things to know about a project page like this one:
 
@@ -34,7 +34,7 @@ The only server requirement is correct MIME types for `.html`, `.css`, `.js`, `.
 The app is a good fit for a home server, because the archive lives in the browser anyway — the server only ever hands over five files.
 
 ```bash
-cd elsewhere
+cd cobble
 python3 -m http.server 8000 --bind 0.0.0.0
 # then open http://<server-ip>:8000/app/ from any device on the Wi-Fi
 ```

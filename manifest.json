@@ -1,6 +1,6 @@
 {
-  "name": "Elsewhere — your life, taking shape",
-  "short_name": "Elsewhere",
+  "name": "Cobble — your life, taking shape",
+  "short_name": "Cobble",
   "description": "A private city built from the small things you notice. Save a moment, and a building appears. No account, no server, no tracking.",
   "id": "./",
   "start_url": "./app/",

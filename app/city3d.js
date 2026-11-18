@@ -346,7 +346,7 @@
       centerIndex = event.detail?.centerIndex || 0;
       rebuild();
     }
-    window.elsewhereCity3D = {
+    window.cobbleCity3D = {
       setData,
       setPan(center, offset, width) {
         centerIndex = center;
@@ -372,7 +372,7 @@
         targetDarkWindowGlow = night ? .32 : .02;
       }
     };
-    window.addEventListener('elsewhere-city-data', setData);
+    window.addEventListener('cobble-data', setData);
     const observer = new ResizeObserver(resize);
     observer.observe(viewport);
     resize();
@@ -384,7 +384,7 @@
       }
     });
     const initial = viewport.dataset;
-    window.elsewhereCity3D.setAtmosphere({
+    window.cobbleCity3D.setAtmosphere({
       mood: initial.mood,
       night: viewport.classList.contains('is-night')
     });

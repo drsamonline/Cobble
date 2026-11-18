@@ -1,6 +1,6 @@
 # Notices
 
-Elsewhere — © 2026 Dr Sohil Momin. Licensed under [PolyForm Noncommercial 1.0.0](LICENSE).
+Cobble — © 2026 Dr Sohil Momin. Licensed under [PolyForm Noncommercial 1.0.0](LICENSE).
 
 The app's own source is five files with no build step. It does, however, use other people's work. This file records what, under which terms, and what you need to keep if you redistribute it.
 
@@ -32,7 +32,7 @@ The eighteen sample moments' text was written for this project.
 
 - `docs/assets/support-portrait.jpg` — a photograph of the author, used with his consent in the support block.
 - `docs/assets/upi-qr.svg`, `assets/upi-qr.svg` — a UPI payment QR code for `drsohilboi@ybl`, generated with [Segno](https://pypi.org/project/segno/) (BSD-3-Clause). It encodes a payment address, not personal data.
-- The `elsewhere.` wordmark and the three-bar mark are drawn in CSS and SVG in this repository. They are part of the project's identity; please do not reuse them for a different app.
+- The `cobble.` wordmark and the three-bar mark are drawn in CSS and SVG in this repository. They are part of the project's identity; please do not reuse them for a different app.
 
 ## Licence of the PolyForm text
 

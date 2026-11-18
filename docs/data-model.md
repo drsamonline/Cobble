@@ -1,6 +1,6 @@
 # Data model
 
-Everything Elsewhere knows about you is one array of objects. This guide is the exact shape of that array, where it is stored, and the file format used to move it.
+Everything Cobble knows about you is one array of objects. This guide is the exact shape of that array, where it is stored, and the file format used to move it.
 
 ## The moment
 
@@ -29,7 +29,7 @@ Notes that matter in practice:
 ### IndexedDB (primary)
 
 ```
-database:  elsewhere-archive        version 1
+database:  cobble-archive        version 1
 store:     archive                  keyPath: 'id'
 record:    { id: 'moments', value: '<JSON.stringify(entries)>' }
 ```
@@ -47,7 +47,7 @@ so a slow earlier save can never land after a newer one.
 ### localStorage (fallback)
 
 ```
-key: elsewhere-moments-v1
+key: cobble-moments-v1
 ```
 
 Used when IndexedDB is missing or a write fails (private windows, restricted profiles, quota exhaustion). It is roughly a 5 MB budget, so photos fill it fast — the app says so in the UI when it is on this path. On the next load, `loadArchive()` prefers whichever copy is newer: if the localStorage copy is non-empty it wins, is written back into IndexedDB, and the localStorage copy is removed. This is what stops a quota failure from silently reverting your archive to a stale IndexedDB snapshot.
@@ -60,13 +60,13 @@ The app also calls `navigator.storage.persist()` where it is offered, asking the
 - No analytics, no event log, no error reports.
 - No settings. Atmosphere, view and scroll position reset on reload; only moments are persisted.
 
-## The `.elsewhere` file
+## The `.cobble` file
 
 A single JSON document, produced by **Share city** and read by **Open a city file**.
 
 ```json
 {
-  "format": "elsewhere-pincode",
+  "format": "cobble-pincode",
   "version": 1,
   "salt": [ 16 integers, 0–255 ],
   "iv":   [ 12 integers, 0–255 ],
@@ -78,7 +78,7 @@ A single JSON document, produced by **Share city** and read by **Open a city fil
 
 ```json
 {
-  "app": "Elsewhere",
+  "app": "Cobble",
   "version": 1,
   "exportedAt": "2026-11-18T12:10:02.441Z",
   "entries": [ /* only the moments you ticked */ ]
@@ -100,7 +100,7 @@ Before a single moment is added, `importCity()` checks:
 
 | Check | Failure |
 |---|---|
-| `format === 'elsewhere-pincode'`, `version === 1` | "That does not look like an Elsewhere city file." |
+| `format === 'cobble-pincode'`, `version === 1` | "That does not look like a Cobble city file." |
 | `salt` is 16 bytes, `iv` is 12 bytes, `data` is ≥ 16 and ≤ 38 MB | "The city file is damaged or uses an unsupported format." |
 | Every byte is an integer 0–255 | same as above |
 | File is ≤ 50 MB on disk | "This city file is larger than the 50 MB safety limit." |
@@ -115,8 +115,8 @@ Then `importance` is clamped to 1–3 and `repeatCount` to 1–5. If nothing sur
 
 Two honest routes:
 
-1. **Unencrypted, in the browser.** Open the app's DevTools console on your own device and read `JSON.parse(localStorage.getItem('elsewhere-moments-v1') || '[]')` — or, on the IndexedDB path, the `moments` record. This is your data; there is no protection to bypass.
-2. **Encrypted, anywhere.** Read the `.elsewhere` file and do the same PBKDF2 + AES-GCM derivation. In Python:
+1. **Unencrypted, in the browser.** Open the app's DevTools console on your own device and read `JSON.parse(localStorage.getItem('cobble-moments-v1') || '[]')` — or, on the IndexedDB path, the `moments` record. This is your data; there is no protection to bypass.
+2. **Encrypted, anywhere.** Read the `.cobble` file and do the same PBKDF2 + AES-GCM derivation. In Python:
 
 ```python
 import json, base64
@@ -124,7 +124,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 
-bundle = json.load(open('elsewhere-city-2026-11-18.elsewhere'))
+bundle = json.load(open('cobble-2026-11-18.cobble'))
 key = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32,
                  salt=bytes(bundle['salt']), iterations=250000
                  ).derive(open('pin.txt','rb').read().strip())
