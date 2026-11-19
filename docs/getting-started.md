@@ -108,6 +108,10 @@ Open `/selftest.html`. It loads every file the service worker is supposed to kee
 
 Discoveries → **Lock this city** asks for a passphrase of at least eight characters and seals the archive. From then on the app opens with an unlock screen, and every save re-encrypts before it reaches the disk. There is no recovery: if you forget the passphrase the city is gone, and the app says so before it locks. **Start a new city instead** wipes the sealed archive if you would rather begin again.
 
+## Following the clock
+
+**Auto** in the city's control deck matches the scene to the time of day: dawn is coastal and tranquil, midday is meadow and serene, dusk is amber and dreamy, night is midnight and after dark. It re-checks every five minutes, so a tab left open drifts with the day. Press Theme, Mood, Weather or Night and Auto switches off — a scene that keeps changing under a deliberate choice is a scene fighting you.
+
 ## Another language
 
 Three pills at the bottom of the sidebar — **EN · हिं · ગુ** — translate the interface's chrome: the sidebar, the breadcrumb, the three view headings, the section titles, the city's control deck and the primary buttons. The choice is remembered. The sentences Cobble writes about your archive stay in English for now, because they are built from templates with numbers in them.

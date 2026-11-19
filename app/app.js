@@ -81,6 +81,42 @@
   let photoData = '';
   let toastTimer;
   const atmosphere = { theme: 'meadow', mood: 'serene', weather: 'clear', night: false };
+  /* When `auto` is on the city follows the clock: dawn, day, dusk, night.
+     Any manual press on Theme, Mood, Weather or Night turns it off, because a
+     scene that keeps changing under a deliberate choice is a scene fighting
+     you. */
+  let autoDay = false;
+  const AUTO_KEY = 'cobble-auto-day';
+
+  function partOfDay(hour = new Date().getHours()) {
+    if (hour < 5) return 'night';
+    if (hour < 8) return 'dawn';
+    if (hour < 17) return 'day';
+    if (hour < 20) return 'dusk';
+    return 'night';
+  }
+
+  function applyAutoDay(silent = true) {
+    if (!autoDay) return;
+    const part = partOfDay();
+    const preset = {
+      dawn: { theme: 'coastal', mood: 'tranquil', weather: 'clear', night: false },
+      day: { theme: 'meadow', mood: 'serene', weather: 'clear', night: false },
+      dusk: { theme: 'amber', mood: 'dreamy', weather: 'clear', night: false },
+      night: { theme: 'midnight', mood: 'tranquil', weather: 'clear', night: true }
+    }[part];
+    Object.assign(atmosphere, preset);
+    applyAtmosphere();
+    if (!silent) toast(`The city is at ${part} with you.`);
+  }
+
+  function setAutoDay(on) {
+    autoDay = !!on;
+    try { localStorage.setItem(AUTO_KEY, autoDay ? 'on' : 'off'); } catch {}
+    const button = $('#auto-day');
+    if (button) button.setAttribute('aria-pressed', String(autoDay));
+    if (autoDay) applyAutoDay(false);
+  }
   const themes = ['meadow', 'coastal', 'amber', 'lavender', 'midnight'];
   const moods = ['serene', 'curious', 'dreamy', 'festive', 'tranquil'];
   const weatherTypes = ['clear', 'cloudy', 'rain', 'snow'];
@@ -1521,6 +1557,10 @@
        month: 'short',
        day: 'numeric'
      });
+     try { autoDay = localStorage.getItem(AUTO_KEY) === 'on'; } catch {}
+     $('#auto-day')?.setAttribute('aria-pressed', String(autoDay));
+     if (autoDay) applyAutoDay(true);
+     setInterval(() => { if (autoDay) applyAutoDay(true); }, 5 * 60 * 1000);
      restoreShellTheme();
      restoreAtmosphere();
      render();
@@ -1542,21 +1582,26 @@
     $('#mobile-demo-toggle').addEventListener('click', toggleDemo);
     $('#hud-toggle').addEventListener('click', toggleCityHud);
     $('#theme-control').addEventListener('click', () => {
+      if (autoDay) setAutoDay(false);
       atmosphere.theme = pickDifferent(themes, atmosphere.theme);
       applyAtmosphere();
       toast(`A new ${atmosphere.theme} palette settles over your city.`);
     });
     $('#mood-control').addEventListener('click', () => {
+      if (autoDay) setAutoDay(false);
       atmosphere.mood = pickDifferent(moods, atmosphere.mood);
       applyAtmosphere();
       toast(`The city feels ${atmosphere.mood} today.`);
     });
     $('#weather-control').addEventListener('click', () => {
+      if (autoDay) setAutoDay(false);
       atmosphere.weather = weatherTypes[(weatherTypes.indexOf(atmosphere.weather) + 1) % weatherTypes.length];
       applyAtmosphere();
       toast(`Weather changed to ${atmosphere.weather}.`);
     });
+    $('#auto-day').addEventListener('click', () => setAutoDay(!autoDay));
     $('#time-control').addEventListener('click', () => {
+      if (autoDay) setAutoDay(false);
       atmosphere.night = !atmosphere.night;
       applyAtmosphere();
     });

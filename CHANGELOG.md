@@ -2,6 +2,22 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.35.0 — 2026-11-19
+
+### Added
+
+- **Auto: the city follows the clock.** A seventh control in the deck. Turn it on and the scene matches the time of day — dawn (coastal, tranquil), day (meadow, serene), dusk (amber, dreamy), night (midnight, after dark). It re-checks every five minutes, so a tab left open drifts with the day, and the choice is remembered.
+- Any manual press on Theme, Mood, Weather or Night turns Auto off. A scene that keeps changing under a deliberate choice is a scene fighting you.
+
+### Fixed
+
+- **The control deck's labels were two different sizes.** `Theme`, `Mood` and `Weather` were `<span>` (16px) while `Sound` and `3D city` were `<small>` (8px), so the deck looked uneven and, with a seventh control, ran past its own rounded edge. All seven labels are `<small>` now and the row sits inside the pill.
+
+### Verified
+
+- Four times of day faked in the page: 06:00 → coastal/tranquil, 13:00 → meadow/serene, 18:00 → amber/dreamy, 23:00 → midnight with "after dark" in the status line. Auto's `aria-pressed` follows, the choice survives a reload, and a manual press clears it.
+- Screenshots at dawn and dusk inspected; no horizontal overflow at 1440px.
+
 ## 1.34.0 — 2026-11-19
 
 ### Changed

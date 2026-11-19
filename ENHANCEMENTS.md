@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.34.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.35.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -65,6 +65,7 @@ What is left of the quick-win tier:
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 2.18 | **Auto day** — the scene follows the clock (dawn/day/dusk/night), re-checked every five minutes; any manual press clears it. | `app/app.js` |
 | 4.1c | **The app's chrome in Hindi and Gujarati** — sidebar, breadcrumb, view headings, deck, primary buttons. Generated sentences (toasts, observations, year review) still English: templates with numbers inside them. | `app/i18n.js` |
 | 4.1b | **The landing page in Gujarati** — `gu.html`, values zipped to the English keys by index with a length assertion. Three-language switcher on all pages. Awaiting native review. | `gu.html`, `hi.html`, `index.html` |
 | 4.1a | **The landing page in Hindi** — `hi.html`, hand-written, switcher in both headers, `hreflang` alternates, precached. Awaiting native review. | `hi.html`, `index.html` |
