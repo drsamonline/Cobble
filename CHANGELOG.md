@@ -2,6 +2,27 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.6.0 — 2026-11-19
+
+An audit pass with four skills, and the fixes it turned up.
+
+### Added
+
+- **`PRIVACY.md`** — what is stored, in which browser store, what leaves the device, how to delete it, and the three requests that do leave. Every claim names the file that proves it, so a reader can check rather than trust.
+- **`SECURITY.md`** — how to report a vulnerability, what is in scope (a malicious `.cobble` file is the real surface), and the limitations listed rather than buried: no encryption at rest, no CSP header, no `frame-ancestors`, six-digit PINs are guessable offline.
+- Both are linked from the README, the docs hub and the landing footer. There is still no terms-of-service file, and the README now says why: no service, no accounts, nothing to buy.
+
+### Fixed
+
+- **Muted text failed contrast.** Measured, not guessed: the app's muted grey was 3.02:1 on its own card and the landing page's was 3.4:1 on paper, against the 4.5:1 that small text needs. Both tokens are now `#66726c`, which measures 4.56–4.97:1 across every surface they sit on, and the landing page's section numbers moved from the decorative apricot (1.93:1) to a darkened `#8f6130` (4.87:1).
+- **A cancelled edit left `editingId` set**, so a later save could have overwritten the moment you had been editing instead of adding a new one. `closeEntry()` now clears it, and the save path clears it too if the moment has vanished.
+- **The service worker cached every stylesheet and script twice** — once under its bare path and once under a `?v=` URL it never matched, because lookups use `ignoreSearch`. The versioned list is gone.
+- **Copy.** Thirteen em dashes in the landing page, five now; the hero lede, the three rule cards and the privacy paragraph were rewritten to state things rather than stage them. Every claim was kept.
+
+### Known, measured, and not fixed
+
+- Roughly forty distinct small-text colours in `app/styles.css` still sit between 2.5:1 and 4.4:1. They are mostly chip labels and one-off captions; fixing them is a visual redesign rather than a find-and-replace, so it is an enhancement item with the measurements attached rather than a silent half-fix.
+
 ## 1.5.0 — 2026-11-19
 
 The share format and the import validator moved into `app/core.js`, and got a test suite.

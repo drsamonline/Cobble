@@ -4,7 +4,7 @@
 
 **A city made of small things.**
 
-Your life, taking shape. A private city built from the small things you notice. Save a moment — the warm loaf in the window, a sentence someone said on a train, the light on wet pavement — and a building appears. Colour is what kind of moment it was. Height is how much it mattered. Come back in a year and see what you made.
+Your life, taking shape. A private city built from the small things you notice. Save a moment: the warm loaf in the window, a sentence someone said on a train, the light on wet pavement. A building appears. Colour is what kind of moment it was. Height is how much it mattered. Come back in a year and see what you made.
 
 [Live demo](https://drsamonline.github.io/Cobble/) · [Open the app](https://drsamonline.github.io/Cobble/app/) · [Wander a sample city](https://drsamonline.github.io/Cobble/app/?demo=1) · [Documentation](docs/) · [Report a bug](https://github.com/drsamonline/Cobble/issues)
 
@@ -164,6 +164,8 @@ To check the offline promise yourself, open `/selftest.html` with the network on
 | [Customising](docs/customising.md) | Palettes, districts, atmospheres, copy and layout — with the token names |
 | [Deploying](docs/deploying.md) | GitHub Pages, any static host, and packaging as a desktop or Android app |
 | [FAQ](docs/faq.md) | Lost data, broken share files, big archives, browser support |
+| [Privacy notice](PRIVACY.md) | What is stored, where, what leaves the device, how to delete it |
+| [Security policy](SECURITY.md) | How to report a vulnerability, and the limitations stated up front |
 
 ## Privacy, in one paragraph
 
@@ -175,24 +177,24 @@ Your moments live in your browser's IndexedDB on your device. There is no Cobble
 
 ## Built on the fleet
 
-Cobble is not the first offline-first app in this collection, and it borrows deliberately from the ones that came before rather than reinventing them. What came from where:
+Several of these projects came before this one. It borrows from them instead of reinventing them. What came from where:
 
 | Repository | What was taken | How it was used here |
 |---|---|---|
-| [**Mood Mixer**](https://github.com/drsamonline/mood-mixer) | The versioned-cache, network-first service worker; the `manifest.json` shape; the `selftest.html` idea; the support block | `sw.js`, `manifest.json`, `selftest.html`, and the sponsor section of this README are adapted from it |
+| [**Mood Mixer**](https://github.com/drsamonline/mood-mixer) | The versioned-cache, network-first service worker, the `manifest.json` shape, the `selftest.html` idea and the support block | `sw.js`, `manifest.json`, `selftest.html`, and the sponsor section of this README are adapted from it |
 | [**Planner Pro**](https://github.com/drsamonline/planner-pro) | The CI layout (a link check and a size budget as separate scripts), the icon sizes, the packaging approach | `.github/workflows/check.yml`, `tools/check-links.mjs`, `tools/check-size.mjs` |
 | [**App Builder**](https://github.com/drsamonline/app-builder) | The single-file Windows executable and Android WebView packaging pipeline | The route to a desktop and Android build, written up in [deploying](docs/deploying.md) — not run in this repository |
 | [**Lockhtml**](https://github.com/drsamonline/lockhtml) | Its AES-256-GCM + PBKDF2 sealing pattern, and the vocabulary used to describe it honestly | Confirmed the parameters in the share format and the wording of the [privacy page](docs/privacy-and-security.md) |
 | [**Offline PDF Toolkit**](https://github.com/drsamonline/offline-pdf-toolkit) | The habit of saying what a browser refuses to do on `file://` | The warnings in getting started and deploying |
 | [**Base Bench**](https://github.com/drsamonline/base-bench) | The PolyForm Noncommercial licence setup and the `NOTICE.md` structure | `LICENSE`, `NOTICE.md` |
 
-The app's own code — the city, the districts, the seed, the timeline, the discoveries, the sample city — is unchanged in behaviour. What changed is the ground under it: self-hosted fonts, vendored libraries, a worker, a manifest, an icon set and two CI checks.
+The app's own code is unchanged in behaviour: the city, the districts, the seed, the timeline, the discoveries, the sample city. What changed is the ground under it. Self-hosted fonts, vendored libraries, a worker, a manifest, an icon set and two CI checks.
 
 ## Support
 
 <img src="docs/assets/support-portrait.jpg" width="72" height="72" alt="Dr. Sohil Momin" align="left" style="border-radius:50%;margin-right:1rem">
 
-Free, offline, accountless — and staying that way. If it earned its keep:
+Free, offline, accountless, and staying that way. If it earned its keep:
 
 | | |
 |---|---|
@@ -220,6 +222,8 @@ The same block is on the [landing page](https://drsamonline.github.io/Cobble/#su
 ## Licence
 
 [PolyForm Noncommercial 1.0.0](LICENSE) — free for personal, academic, hobby, charitable and government use. Commercial use needs a written licence from the author. Third-party work is credited in [NOTICE.md](NOTICE.md).
+
+The legal surface is four files, sized to what the app actually does: [LICENSE](LICENSE), [NOTICE.md](NOTICE.md) (fonts, libraries, sample photographs), [PRIVACY.md](PRIVACY.md) (on-device storage, stated plainly, with the file that proves each claim) and [SECURITY.md](SECURITY.md) (how to report a problem, and the limitations listed rather than buried). There is no terms-of-service file: there is no service, no account and nothing to buy.
 
 ## Author
 

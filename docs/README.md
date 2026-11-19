@@ -13,6 +13,8 @@ Cobble is a private city built from the small things you notice. These guides co
 | [Deploying](deploying.md) | You want it on your own domain, your LAN, or in a desktop wrapper |
 | [FAQ](faq.md) | Something went wrong, or you are wondering about a browser |
 
+Two documents live at the repository root rather than here, because they are about the project rather than the software: [PRIVACY.md](../PRIVACY.md) and [SECURITY.md](../SECURITY.md).
+
 ## The short version
 
 - **Five files.** `app/index.html`, `app/theme.css`, `app/styles.css`, `app/app.js`, and an experimental `app/city3d.js`. No build step, no framework, no dependencies to install. Fonts and two libraries sit beside them in `fonts/` and `app/vendor/` so nothing is fetched from a CDN.

@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.5.0 — offline, installable, editable, searchable, keyboard-first, 24 tests and three CI checks.
+- **Baseline:** v1.6.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -48,8 +48,11 @@ These were the top of this list. They are done, verified and in the repository, 
 | 1.16 | **Source, licence and docs links** in the help panel. | `app/index.html` |
 | 1.17 | **The landing page's worker registration moved out of the inline script.** | `assets/landing.js` |
 | 1.19 | **An empty archive explains where the city lives** and points at the readable backup. | `app/app.js` |
+| 2.14 | **Two edit-state bugs** — a cancelled edit left `editingId` set, and the worker cached css/js twice. | `app/app.js`, `sw.js` |
 | 2.1 | **Full-text search** over text, district and date, with accent folding, in-place marks and honest empty states. | `app/app.js`, `app/index.html` |
 | 2.10 | **Unit tests for the validator and the crypto** — 24 of them, no dependencies, run in CI. The share logic moved to `app/core.js` so the tests exercise the real code. | `app/core.js`, `tests/core.test.mjs` |
+| new | **`PRIVACY.md` and `SECURITY.md`**, with each factual claim naming the file that proves it. | repo root |
+| 2.13 | **Muted text contrast raised to 4.5:1** in both stylesheets, measured rather than eyeballed. | `app/theme.css`, `app/styles.css`, `assets/landing.css` |
 
 What is left of the quick-win tier:
 
@@ -71,6 +74,7 @@ What is left of the quick-win tier:
 | 2.8 | **Photo pipeline upgrade.** Try `createImageBitmap` with `imageOrientation: 'from-image'`, encode to WebP when the browser supports it, and store the smaller of WebP/JPEG. | Roughly 30% smaller archives and correct orientation for phone photos, which currently can land sideways. | `app/app.js` | M |
 | 2.9 | **Accessibility pass with axe.** Run axe-core in the headless script, fix the violations it reports, and add the check to CI. | A one-off audit that turns into a permanent guarantee. | `tools/`, `.github/workflows/` | M |
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 2.15 | **Finish the contrast sweep.** About forty distinct small-text colours in `app/styles.css` still measure 2.5:1–4.4:1 — chip labels, one-off captions, the achievement status text. Fixing them means choosing new values per component, not one token, which is why it is here and not in the quick wins. Start with `grep -o 'color: *#[0-9a-f]\{6\}' app/styles.css \| sort \| uniq -c` and a contrast checker. | Legibility for everyone, and the difference between an audit that reports and an audit that fixes. | `app/styles.css` | M |
 | 2.12 | **A shareable postcard.** Render the current skyline to a 1200×630 PNG on a canvas and download it with the city's level and count. | The city is the most shareable thing in the app and there is currently no way to show anyone without a screenshot. | `app/app.js` | M |
 
 ---

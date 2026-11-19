@@ -2469,7 +2469,7 @@ select:focus {
 .achievement-count {
   font: 500 11px var(--font-body);
   letter-spacing: .04em;
-  color: #8d968f;
+  color: #66726c;
   background: #f4f2e9;
   border-radius: 99px;
   padding: 4px 10px;
@@ -2526,7 +2526,7 @@ select:focus {
 .achievement-copy span {
   font-size: 11px;
   line-height: 1.4;
-  color: #8d968f;
+  color: #66726c;
 }
 .achievement-progress {
   height: 4px;
@@ -2546,7 +2546,7 @@ select:focus {
   margin-left: auto;
   font: 600 10.5px var(--font-body);
   letter-spacing: .03em;
-  color: #a6aea6;
+  color: #66726c;
   white-space: nowrap;
 }
 .achievement-card.is-earned .achievement-status {
@@ -2658,7 +2658,7 @@ select:focus {
   gap: 8px;
   align-items: center;
   font: 500 12px var(--font-mono);
-  color: #8d968f;
+  color: #66726c;
 }
 .help-links a { color: #477d70; text-decoration: underline; text-underline-offset: 3px; }
 
@@ -2719,7 +2719,7 @@ select:focus {
   padding: 11px 38px 11px 13px;
   transition: border-color .18s ease, background .18s ease;
 }
-.timeline-search input::placeholder { color: #a6aea6; }
+.timeline-search input::placeholder { color: #66726c; }
 /* Chrome draws its own clear button inside type="search"; ours is the one
    with the label, so the native one goes. */
 .timeline-search input::-webkit-search-cancel-button,
@@ -2752,7 +2752,7 @@ select:focus {
   padding: 6px 22px 0;
   font: 500 11px var(--font-mono);
   letter-spacing: .05em;
-  color: #8d968f;
+  color: #66726c;
   min-height: 0;
 }
 .timeline-search-status:empty { display: none; }
@@ -2780,7 +2780,7 @@ mark {
   margin-top: 10px;
   font: 400 11.5px var(--font-body);
   line-height: 1.6;
-  color: #8d968f;
+  color: #66726c;
   max-width: 34em;
   margin-inline: auto;
 }

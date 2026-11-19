@@ -12,9 +12,9 @@
  * cache is deleted on activate, and the new files are fetched with cache:reload
  * during install so a stale copy cannot win.
  */
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const CACHE_NAME = `cobble-${CACHE_VERSION}`;
-const ASSET_VERSION = '1.5.0';
+const ASSET_VERSION = '1.6.0';
 
 const PRECACHE = [
   './',
@@ -47,12 +47,6 @@ const PRECACHE = [
   './icons/apple-touch-icon.png'
 ];
 
-/* Versioned URLs used by the pages. Kept apart so the bare names above are not
-   cached twice under two keys. */
-const VERSIONED = PRECACHE
-  .filter(path => /\.(css|js)$/.test(path))
-  .map(path => `${path}?v=${ASSET_VERSION}`);
-
 const OPTIONAL = [
   './screenshots/landing.png',
   './screenshots/city.png'
@@ -69,7 +63,7 @@ self.addEventListener('install', event => {
         /* One missing file must never abort the install. */
       }
     };
-    await Promise.all([...PRECACHE, ...VERSIONED].map(add));
+    await Promise.all(PRECACHE.map(add));
     await Promise.all(OPTIONAL.map(add));
     await self.skipWaiting();
   })());

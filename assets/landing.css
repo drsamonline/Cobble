@@ -8,12 +8,13 @@
   --paper-2: #efece4;
   --ink: #22302b;
   --ink-soft: #3d4b45;
-  --muted: #7b8781;
+  --muted: #66726c;
   --line: #dcd9cf;
   --line-soft: #e7e4da;
   --primary: #477d70;
   --primary-deep: #35655a;
   --accent: #e2a66f;
+  --accent-ink: #8f6130;   /* the apricot, darkened until it can carry text */
   --accent-soft: #f3e2cd;
   --sky-1: #dfe9e4;
   --sky-2: #f2efe6;
@@ -38,6 +39,7 @@ html[data-time="night"] {
   --primary: #7fb3a4;
   --primary-deep: #a8d3c6;
   --accent: #e9b782;
+  --accent-ink: #e9b782;
   --accent-soft: #33291f;
   --sky-1: #1b2a30;
   --sky-2: #0c1214;
@@ -297,7 +299,7 @@ html[data-time="night"] .stars {
 .section-head { max-width: 62ch; margin-bottom: 2.8rem; }
 .sec-num {
   display: inline-block; font-family: var(--font-mono); font-size: .72rem;
-  letter-spacing: .18em; color: var(--accent); margin-bottom: .9rem;
+  letter-spacing: .18em; color: var(--accent-ink); margin-bottom: .9rem;
   border-bottom: 1px solid currentColor; padding-bottom: .2rem;
 }
 .section-head h2 { font-size: clamp(1.75rem, 3.4vw, 2.6rem); }

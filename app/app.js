@@ -693,6 +693,7 @@
 
   function closeEntry() {
     $('#entry-modal').classList.add('hidden');
+    editingId = null;
   }
 
   function openShare() {
@@ -971,6 +972,7 @@
       const importance = $('input[name="importance"]:checked').value;
       if (editingId) {
         const existing = entries.find(entry => String(entry.id) === editingId);
+        if (!existing) editingId = null;
         if (existing) {
           Object.assign(existing, { text, date, category, importance, photo: photoData });
           editingId = null;
