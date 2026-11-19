@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.15.0 — 2026-11-19
+
+### Added
+
+- **A year heatmap**, in Discoveries: one square per day for the last twelve months, weeks running down the columns, shaded by how many moments that day held (0, 1, 2–3, 4+). Days with moments are buttons — click one and it opens that day in the drawer; days without are inert spans with a title. Every square carries an `aria-label` like "20 November 2025 — 1 moment". Month labels are spaced so they cannot collide, and the whole strip scrolls sideways on a narrow screen.
+- The panel hides itself when the archive is empty, like the "on this day" strip.
+
+### Verified
+
+- 369 cells over a seeded year, 14 of them clickable, all four shade levels present, month labels running Nov → Nov, and a click opening the right day (*Thursday, November 20, 2025*).
+- First attempt had "NovDec" overlapping where two months started in adjacent weeks; labels now need four columns of room and skip the ones that would collide.
+
 ## 1.14.0 — 2026-11-19
 
 A correction, and it matters more than a feature.

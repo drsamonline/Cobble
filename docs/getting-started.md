@@ -68,6 +68,10 @@ Two mechanisms, for two different jobs.
 
 **Import** (`Open a city file` in the share dialog) reads a `.cobble` file, asks for its PIN, validates every field, skips moments whose ids already exist, and reports how many were added.
 
+## Seeing the year
+
+Discoveries carries a heatmap: one square per day for the last twelve months, shaded by how many moments that day held. It is not a streak and nothing breaks if it goes quiet — it is just the shape of the year, in one glance. Click any square with moments in it to open that day.
+
 ## Coming back to a day
 
 Under the city there is an **On this day** strip: moments you saved on this calendar date in earlier years, with how long ago each one was. Click any of them to open that day. It only appears when there is something to show, so a new archive never sees an empty panel.

@@ -3025,3 +3025,72 @@ html[data-shell="dark"] .storage-warning button { background: #4a3a1c; border-co
 html[data-shell="dark"] .archive-storage-icon { background: #1d2a2f; color: #a8d3c6; }
 html[data-shell="dark"] .status-spark,
 html[data-shell="dark"] .insight-spark { color: #a8d3c6; }
+
+/* ── Year heatmap ─────────────────────────────────────────────────
+   A square per day for the last twelve months, shaded by how many moments
+   that day held. Weeks run down the columns, as in a calendar. */
+.heatmap-panel { margin-top: 4px; }
+.heatmap-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 500 10px var(--font-mono);
+  color: #5f6d66;
+}
+.heatmap-legend i {
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+  background: #eceade;
+}
+.heatmap-legend i[data-level="1"] { background: #cfe0c8; }
+.heatmap-legend i[data-level="2"] { background: #9dc08f; }
+.heatmap-legend i[data-level="3"] { background: #5f8f6a; }
+
+.heatmap-scroll {
+  overflow-x: auto;
+  padding: 2px 20px 18px;
+}
+.heatmap-months {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 3px;
+  margin-bottom: 4px;
+  font: 500 9px var(--font-mono);
+  color: #5f6d66;
+  white-space: nowrap;
+}
+.heatmap-months span { overflow: visible; white-space: nowrap; }
+.heatmap-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 11px);
+  gap: 3px;
+  width: max-content;
+}
+.heatmap-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  border: 0;
+  padding: 0;
+  background: #eceade;
+}
+.heatmap-cell[data-level="1"] { background: #cfe0c8; }
+.heatmap-cell[data-level="2"] { background: #9dc08f; }
+.heatmap-cell[data-level="3"] { background: #5f8f6a; }
+.heatmap-cell.is-future { background: transparent; }
+button.heatmap-cell { cursor: pointer; }
+button.heatmap-cell:hover { outline: 2px solid #477d70; outline-offset: 1px; }
+.heatmap-cell:focus-visible { outline: 2px solid #477d70; outline-offset: 1px; }
+html[data-shell="dark"] .heatmap-cell { background: #22302f; }
+html[data-shell="dark"] .heatmap-cell[data-level="1"] { background: #33503f; }
+html[data-shell="dark"] .heatmap-cell[data-level="2"] { background: #4b7a5b; }
+html[data-shell="dark"] .heatmap-cell[data-level="3"] { background: #7fb3a4; }
+html[data-shell="dark"] .heatmap-cell.is-future { background: transparent; }
+html[data-shell="dark"] .heatmap-legend i { background: #22302f; }
+html[data-shell="dark"] .heatmap-legend i[data-level="1"] { background: #33503f; }
+html[data-shell="dark"] .heatmap-legend i[data-level="2"] { background: #4b7a5b; }
+html[data-shell="dark"] .heatmap-legend i[data-level="3"] { background: #7fb3a4; }
+html[data-shell="dark"] .heatmap-legend,
+html[data-shell="dark"] .heatmap-months { color: #9aa7a1; }

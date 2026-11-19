@@ -11,7 +11,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 **Status: v1.5.0 — shipped, offline, editable, searchable, and tested.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.14.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.15.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -59,6 +59,10 @@ The name: *to cobble* is to make a thing from whatever is at hand, and a cobble 
 | On this day | Dark interface |
 |---|---|
 | ![The same date a year earlier, under the city](screenshots/on-this-day.webp) | ![The app with the dark interface](screenshots/dark.webp) |
+
+| A year in squares |
+|---|
+| ![The year heatmap on the Discoveries view](screenshots/year-heatmap.webp) |
 
 | The city at night |
 |---|
@@ -113,6 +117,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 - **Six milestones**, each with a progress bar rather than a broken streak: first light, a little neighbourhood, city taking shape, days remembered, many sides of you, a landmark moment.
 - **Observations in words, not predictions.** Your busiest district; the day that held the most; the shortest moment you kept, and what its length might mean. All computed from your own words, on your own device.
 - **A district bar chart** so you can see which part of your attention is winning.
+- **A year heatmap** — one square per day for the last twelve months, shaded by how many moments it held. Click a day and it opens.
 
 **Sharing and keeping**
 

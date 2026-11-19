@@ -673,6 +673,63 @@
     }));
   }
 
+  /* A square per day for the last twelve months. Weeks run down the columns,
+     so the shape of a year is readable without a single number. */
+  function renderHeatmap() {
+    const panel = $('#heatmap-panel');
+    const grid = $('#heatmap-grid');
+    const months = $('#heatmap-months');
+    if (!panel || !grid) return;
+
+    const days = groupDays();
+    const today = new Date();
+    today.setHours(12, 0, 0, 0);
+    const start = new Date(today);
+    start.setDate(start.getDate() - 364);
+    start.setDate(start.getDate() - start.getDay()); // back to Sunday
+
+    const cells = [];
+    const labels = [];
+    let week = 0;
+    let lastMonth = -1;
+    let lastLabelWeek = -99;
+    for (const d = new Date(start); d <= today; d.setDate(d.getDate() + 1)) {
+      const iso = localDate(d);
+      const count = (days[iso] || []).length;
+      const level = count === 0 ? 0 : count === 1 ? 1 : count <= 3 ? 2 : 3;
+      const weekday = d.getDay();
+      if (weekday === 0) week += 1;
+      if (d.getMonth() !== lastMonth) {
+        lastMonth = d.getMonth();
+        /* A label needs about four columns of room; skip the ones that would collide. */
+        if (week - lastLabelWeek >= 4) {
+          labels.push({ week, text: d.toLocaleDateString(undefined, { month: 'short' }) });
+          lastLabelWeek = week;
+        }
+      }
+      const label = `${d.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })} — ${count} ${count === 1 ? 'moment' : 'moments'}`;
+      cells.push(count
+        ? `<button type="button" class="heatmap-cell" data-level="${level}" data-heat-date="${iso}" aria-label="${escapeHTML(label)}" title="${escapeHTML(label)}"></button>`
+        : `<span class="heatmap-cell" data-level="0" aria-hidden="true" title="${escapeHTML(label)}"></span>`);
+    }
+
+    grid.innerHTML = cells.join('');
+    if (months) {
+      const columns = week + 1;
+      const track = new Array(columns).fill('');
+      for (const { week: w, text } of labels) {
+        if (w < columns && !track[w]) track[w] = text;
+      }
+      months.innerHTML = track.map(text => `<span>${escapeHTML(text)}</span>`).join('');
+      months.style.gridTemplateColumns = `repeat(${columns}, 11px)`;
+    }
+    panel.classList.toggle('hidden', entries.length === 0);
+    $$('[data-heat-date]', grid).forEach(button => button.addEventListener('click', () => {
+      setView('timeline');
+      openDay(button.dataset.heatDate);
+    }));
+  }
+
   function renderInsights() {
     const total = entries.length;
     const activeDays = Object.keys(groupDays()).length;
@@ -710,6 +767,7 @@
     renderCity();
     renderTimeline();
     renderOnThisDay();
+    renderHeatmap();
     renderInsights();
   }
 
