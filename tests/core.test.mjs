@@ -185,6 +185,45 @@ test('a vault that is not a vault is refused', async () => {
   await assert.rejects(() => core.decryptVault(null, 'a long enough passphrase'), /not a Cobble vault/);
 });
 
+/* ── merging one city into another ───────────────────────────────── */
+
+const localCity = [
+  { id: 'm1', date: '2026-03-01', text: 'The bakery at four fifteen.', category: 'everyday', importance: 2, repeatCount: 1, photo: '', createdAt: '2026-03-01T10:00:00.000Z' }
+];
+
+test('an identical moment is not imported twice', () => {
+  const { added, variants } = core.mergeEntries(localCity, [{ ...localCity[0] }]);
+  assert.equal(added.length, 0);
+  assert.equal(variants, 0);
+});
+
+test('a moment edited elsewhere is kept alongside, under a new id', () => {
+  const edited = { ...localCity[0], text: 'The bakery, but I have changed my mind about the time.' };
+  const { added, variants } = core.mergeEntries(localCity, [edited]);
+  assert.equal(added.length, 1);
+  assert.equal(variants, 1);
+  assert.notEqual(added[0].id, 'm1');
+  assert.match(added[0].id, /^m1-v-/);
+});
+
+test('importing the same file twice adds nothing the second time', () => {
+  const edited = { ...localCity[0], text: 'The bakery, but I have changed my mind about the time.' };
+  const fresh = { id: 'm9', date: '2026-03-09', text: 'A brand new moment.', category: 'joy', importance: 1, repeatCount: 1, photo: '', createdAt: '2026-03-09T10:00:00.000Z' };
+  const first = core.mergeEntries(localCity, [edited, fresh]);
+  assert.equal(first.added.length, 2);
+  const second = core.mergeEntries([...localCity, ...first.added], [edited, fresh]);
+  assert.equal(second.added.length, 0);
+  assert.equal(second.variants, 0);
+});
+
+test('merging still refuses malformed moments', () => {
+  const { added } = core.mergeEntries(localCity, [
+    { id: 'bad', date: '2026-02-31', text: 'impossible date', category: 'joy', importance: 1 },
+    { id: 'bad2', date: '2026-03-01', text: 'unknown district', category: 'nonsense', importance: 1 }
+  ]);
+  assert.equal(added.length, 0);
+});
+
 test('an imported city keeps the good moments and drops the rest', async () => {
   const good = moment();
   const hostile = [

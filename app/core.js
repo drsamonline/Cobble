@@ -177,6 +177,45 @@
     return Array.isArray(parsed) ? parsed : [];
   }
 
+  /* Merging one city into another. Pure: it takes two arrays and returns the
+     additions plus a count of variants, so the rule can be tested without a
+     browser. An incoming moment is skipped only when the id *and* the content
+     match; an id that matches but says something different is kept alongside
+     under an id derived from its content, so importing twice adds nothing. */
+  function contentHash(entry) {
+    const text = [entry.id, entry.date, entry.category, entry.importance, entry.text, entry.photo || ''].join('\u0001');
+    let hash = 5381;
+    for (let i = 0; i < text.length; i += 1) hash = ((hash * 33) ^ text.charCodeAt(i)) >>> 0;
+    return hash.toString(36);
+  }
+
+  function mergeEntries(localEntries, incomingEntries) {
+    const known = new Set(localEntries.map(entry => String(entry.id)));
+    const local = new Map(localEntries.map(entry => [String(entry.id), entry]));
+    const added = [];
+    let variants = 0;
+    for (const raw of incomingEntries) {
+      if (!raw || typeof raw !== 'object') continue;
+      const existing = local.get(String(raw.id));
+      let candidate = raw;
+      if (existing) {
+        const same = existing.text === raw.text
+          && existing.date === raw.date
+          && existing.category === raw.category
+          && String(existing.importance) === String(raw.importance)
+          && (existing.photo || '') === (raw.photo || '');
+        if (same) continue;
+        candidate = { ...raw, id: `${raw.id}-v-${contentHash(raw)}` };
+      }
+      const clean = normaliseEntry(candidate, known);
+      if (!clean) continue;
+      if (existing) variants += 1;
+      known.add(clean.id);
+      added.push(clean);
+    }
+    return { added, variants };
+  }
+
   const api = {
     FORMAT,
     VERSION,
@@ -194,7 +233,8 @@
     VAULT_FORMAT,
     VAULT_VERSION,
     encryptVault,
-    decryptVault
+    decryptVault,
+    mergeEntries
   };
 
   globalThis.CobbleCore = api;

@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.21.0 — 2026-11-19
+
+### Changed
+
+- **Importing a city merges instead of dropping.** The old rule was skip-by-id, which meant a moment you had edited on one machine silently lost its other version. Now an incoming moment is skipped only when the id *and* the content match; an id that matches but says something different is kept alongside under an id derived from its content, and the toast says how many: *"3 moments merged, 1 kept as a second version."*
+- The rule moved to `app/core.js` as `mergeEntries()`, so it is tested without a browser — four new unit tests, including one that imports the same file twice and asserts the second import adds nothing.
+
+### Verified
+
+- A file carrying an identical moment, a new one, and an edit of an existing one: first import took the city from 1 to 4 moments and said *"3 moments merged, 1 kept as a second version."*; importing the same file again said *"Nothing to merge. Every moment in that file is already here, word for word."* and left it at 4.
+- The first attempt re-ided the variant with a timestamp, so repeated imports kept adding copies. The id is now derived from the content.
+
 ## 1.20.0 — 2026-11-19
 
 The last honest gap in the privacy page, closed.

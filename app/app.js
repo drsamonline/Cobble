@@ -1175,15 +1175,9 @@
        const pin = getSharePin();
        const bundle = JSON.parse(await file.text());
        const shared = await core.decryptBundle(bundle, pin);
-       const known = new Set(entries.map(entry => String(entry.id)));
-       const imported = [];
-       for (const entry of shared) {
-         const clean = core.normaliseEntry(entry, known);
-         if (!clean) continue;
-         known.add(clean.id);
-         imported.push(clean);
-       }
-      if (!imported.length) throw new Error('No new moments found. You may have already added this city.');
+       /* The rule lives in core.js so it can be tested without a browser. */
+       const { added: imported, variants: secondVersions } = core.mergeEntries(entries, shared);
+      if (!imported.length) throw new Error('Nothing to merge. Every moment in that file is already here, word for word.');
       entries = [...entries, ...imported];
       save();
       render();
@@ -1195,7 +1189,7 @@
         render();
         toast('Import undone.');
       });
-      toast(`${imported.length} ${imported.length === 1 ? 'moment added' : 'moments added'} to your city.`);
+      toast(`${imported.length} ${imported.length === 1 ? 'moment' : 'moments'} merged${secondVersions ? `, ${secondVersions} kept as a second version` : ''}.`);
     } catch (error) {
       $('#share-status').textContent = error.name === 'OperationError' ? 'That PIN did not unlock this city file. Try again.' : (error.message || 'Could not open this city file.');
     }

@@ -24,6 +24,10 @@ Notes that matter in practice:
 - **`id` is generated client-side** and is the only key used for de-duplication on import.
 - **Unknown fields are dropped** on import rather than stored. The importer is a whitelist, not a passthrough.
 
+## Merging two cities
+
+Import never overwrites. A moment is skipped when the incoming id **and** its content match one already here. When the id matches but the text, date, district, weight or photo differ — the same moment edited on another machine — the incoming version is added under an id derived from its content (`<id>-v-<hash>`), so importing the same file twice adds nothing the second time. The rule is `mergeEntries()` in `app/core.js`.
+
 ## The vault
 
 When the archive is locked, the `moments` record is deleted and one `vault` record takes its place:
