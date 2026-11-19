@@ -155,6 +155,7 @@
     $('#time-control').setAttribute('aria-label', atmosphere.night ? 'Switch to day' : 'Switch to night');
     $('#city-mood').textContent = `${atmosphere.mood[0].toUpperCase()}${atmosphere.mood.slice(1)} ${atmosphere.night ? 'after dark' : 'in the city'}`;
     if (!demoMode) saveAtmosphere();
+    window.dispatchEvent(new CustomEvent('cobble-night', { detail: { night: atmosphere.night } }));
   }
 
   function openDatabase() {

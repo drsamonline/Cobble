@@ -2,6 +2,32 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.28.0 — 2026-11-19
+
+The 3D city is back, rebuilt rather than repaired — and it works this time.
+
+### Added
+
+- **A real 3D town.** Buildings sit on a lit ground, in their district colours, in a spiral that fills from the middle outward; roofs catch the light, windows glow, two roads cross a plaza, and a ring of trees holds the edge. Seven birds drift across a sky gradient, and the camera breathes a few units a second so the view is alive without moving under your eye.
+- **A toggle in the city's control deck** — *3D city* / *Flat city* — remembered per browser. It starts on when the browser has WebGL and the person has not turned it off, and the illustrated city stays underneath as the fallback.
+- Night reaches the 3D view: the ground darkens, the lights dim to moonlight, the windows stay lit.
+
+### What was wrong the first time, and what fixed it
+
+The old scene drew a white floor with the buildings floating above it. Four things were wrong, and each is a line in the new file:
+
+| Fault | Fix |
+|---|---|
+| An orthographic frustum of 16×13 regardless of viewport shape | The frustum is computed from the viewport's aspect and recomputed on resize |
+| A 590 KB library and a scene with no ground plane receiving light | A `PlaneGeometry` with a `MeshLambertMaterial` and a canvas grass texture |
+| Hemisphere light at 1.65 and a directional at 2.1 — everything blown to white | 0.85 and 0.95, with a night state that dims both |
+| No horizon, so the ground filled the frame | A sky plane behind, a camera pulled back to 10.5 × 24, and fog |
+
+### Verified
+
+- Rendered in headless Chrome with SwiftShader and inspected: buildings on ground, roofs, windows, roads, trees, birds, sky. Night toggled and inspected. No page errors.
+- Screenshots `city-3d.webp` and `city-3d-night.webp` are in the repository and in the README gallery.
+
 ## 1.27.0 — 2026-11-19
 
 ### Added

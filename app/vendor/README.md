@@ -5,6 +5,7 @@ Two files, copied here so the app makes no request to a third-party CDN.
 | File | Version | Licence | Upstream |
 |---|---|---|---|
 | `jszip.min.js` | 3.10.1 | MIT or GPL-3.0 (dual, at your option) | <https://github.com/Stuk/jszip> |
+| `three.min.js` | r128 | MIT | <https://github.com/mrdoob/three.js> |
 
 Both are unmodified. The licence header inside each file is intact.
 

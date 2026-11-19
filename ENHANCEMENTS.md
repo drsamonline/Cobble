@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.27.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.28.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -122,7 +122,15 @@ Written down so they stop being suggested.
 
 ---
 
-## 6. The 3D layer — removed
+## 6. The 3D layer — rebuilt in 1.28.0
+
+Removed in 1.23.0 because it did not render; rebuilt from scratch in 1.28.0 and verified in a headless browser before shipping. The four faults and their fixes are in the changelog. What remains open here:
+
+- **Real shadows.** Everything is lit, nothing casts. A shadow map on the directional light would ground the buildings further.
+- **A building per moment, not per district.** The scene caps at fourteen per district; past that, a real city needs instancing.
+- **Audio.** Wind, rain and a distant street would make the town feel inhabited. Nothing is generated yet.
+
+## What was there before
 
 The experimental Three.js view rendered a white floor with the buildings floating above it, on every machine it was tried on. It was gated behind `?3d=1` in 1.1.0 so it could not reach anyone by accident, and removed in 1.23.0 along with its 590 KB of vendor code.
 

@@ -12,9 +12,9 @@
  * cache is deleted on activate, and the new files are fetched with cache:reload
  * during install so a stale copy cannot win.
  */
-const CACHE_VERSION = 'v24';
+const CACHE_VERSION = 'v25';
 const CACHE_NAME = `cobble-${CACHE_VERSION}`;
-const ASSET_VERSION = '1.27.0';
+const ASSET_VERSION = '1.28.0';
 
 const PRECACHE = [
   './',
@@ -25,6 +25,7 @@ const PRECACHE = [
   './app/styles.css',
   './app/app.js',
   './app/core.js',
+  './app/scene3d.js',
   './app/vendor/jszip.min.js',
   './assets/landing.css',
   './assets/landing.js',
@@ -51,7 +52,8 @@ const OPTIONAL = [
   './screenshots/city.webp',
   './screenshots/dark.webp',
   './screenshots/year-heatmap.webp',
-  './screenshots/year-review.webp'
+  './screenshots/year-review.webp',
+  './screenshots/city-3d.webp'
 ];
 
 self.addEventListener('install', event => {

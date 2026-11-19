@@ -22,7 +22,7 @@ The CSS coverage figure is worth stating plainly, because it is unusual: **every
 - **Screenshots are WebP.** Fourteen images went from 2,406 KB to 502 KB — a 79% cut — and they are the heaviest thing on the landing page.
 - **Fonts are self-hosted and preloaded.** Manrope and DM Sans are each a single variable file; both are preloaded on both pages, so the hero text paints in its real typeface rather than swapping into it.
 - **The app's scripts are deferred.** `core.js` and `app.js` carry `defer`, so parsing is never blocked behind them.
-- **The vendor folder is not on the critical path.** JSZip (95 KB) is fetched only when someone presses "Download app package". The experimental Three.js layer that used to sit here was removed in 1.23.0 — 590 KB and a feature that did not work.
+- **The vendor folder is not on the critical path.** JSZip (95 KB) is fetched only when someone presses "Download app package", and Three.js (590 KB) only when the 3D city starts — which needs WebGL and a visitor who has not turned it off. Neither is precached.
 
 ## Layout shift: corrected
 

@@ -3232,3 +3232,21 @@ html[data-shell="dark"] .review-figure { background: #1a2429; border-color: #263
 html[data-shell="dark"] .review-figure b { color: #eef2ec; }
 html[data-shell="dark"] .review-lines li,
 html[data-shell="dark"] .review-resurfaced article { color: #dfe7e2; }
+
+/* ── The 3D city ──────────────────────────────────────────────────
+   The canvas sits inside the viewport, over the illustrated city, which stays
+   underneath as the fallback. Nothing here is visible unless WebGL started. */
+.city-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  z-index: 2;
+}
+body.scene-3d .city-canvas { opacity: 1; }
+body.scene-3d #city-pan { opacity: 0; pointer-events: none; }
+#city-viewport.has-3d { background: linear-gradient(180deg, #dfe9e4 0%, #eaf1e6 60%, #dfe9e4 100%); }
+#city-viewport.has-3d.is-night { background: linear-gradient(180deg, #121a1d 0%, #182426 70%, #121a1d 100%); }
+body.scene-3d .scene-control:not(#scene-toggle) { opacity: .55; }
