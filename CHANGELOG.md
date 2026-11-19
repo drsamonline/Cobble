@@ -2,6 +2,20 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.30.0 — 2026-11-19
+
+### Fixed
+
+- **A moment saved while the archive was still loading could vanish.** `loadArchive()` ran after the first render, and it replaced the in-memory entries with whatever was on disk — so a moment added in the first second was written and then thrown away by the load that followed it. Saves now wait for the archive to be readable, and a load merges with anything already in memory instead of overwriting it. Found by a test that added a moment 1.3 seconds after load; every earlier test had waited longer, which is why it had never shown up.
+
+### Attempted and reverted
+
+- **Multiple cities.** A switcher in the sidebar, one pair of storage records per city, a create prompt and a delete. It worked in pieces and failed as a whole: a save queued in one city wrote into the next one, because the record name was read when the queue drained rather than when the save was made; and switching was slow enough that the interface disagreed with itself for a second. Reverting it took ten minutes and removed a feature that could have silently mixed two archives — the worst kind of bug this app can have. It is recorded in `ENHANCEMENTS.md` with both failure modes, because the design was sound and the implementation was not.
+
+### Changed
+
+- The browser check focuses the page before pressing `N`. Headless Chrome sometimes delivers key events to a page that has not been focused, which made that step flip between runs.
+
 ## 1.29.0 — 2026-11-19
 
 ### Added

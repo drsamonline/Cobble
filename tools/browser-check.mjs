@@ -173,6 +173,8 @@ const main = async () => {
   note(await page.evaluate(() => document.getElementById('timeline-total').textContent.startsWith('2')), 'two moments load from storage');
 
   await page.waitForFunction(() => (document.getElementById('timeline-total')?.textContent || '').trim().length > 0, { timeout: 10000 });
+  await page.bringToFront();
+  await page.focus('body');
   await page.keyboard.press('n');
   await wait(600);
   note(await page.evaluate(() => !document.getElementById('entry-modal').classList.contains('hidden')), 'N opens the entry form');

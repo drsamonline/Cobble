@@ -3255,3 +3255,61 @@ body.scene-3d .scene-control:not(#scene-toggle) { opacity: .55; }
    brightening its glyph rather than by growing a longer label. */
 #ambience-toggle[aria-pressed="false"] .scene-control-icon { opacity: .4; }
 #ambience-toggle[aria-pressed="true"] .scene-control-icon { opacity: 1; color: #ffe1a1; }
+
+/* ── More than one city ───────────────────────────────────────────
+   A switcher under YOUR WORLD. Each city is its own pair of storage
+   records, so nothing about a moment changes. */
+.city-switcher { position: relative; margin: 2px 0 8px; }
+.city-switcher-current {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #e6e4d9;
+  border-radius: 10px;
+  background: #fbfaf4;
+  font: 600 12px var(--font-body);
+  color: #3a4740;
+  cursor: pointer;
+  text-align: left;
+}
+.city-switcher-current:hover { border-color: #cfdcc4; background: #f4f8ef; }
+.city-switcher-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.city-switcher-caret { font-size: 10px; color: var(--text-muted); }
+.city-switcher-list {
+  position: absolute;
+  z-index: 30;
+  left: 0; right: 0;
+  margin-top: 4px;
+  padding: 5px;
+  border: 1px solid #e6e4d9;
+  border-radius: 11px;
+  background: #fffefa;
+  box-shadow: 0 12px 30px #1b2a2420;
+  display: grid;
+  gap: 2px;
+}
+.city-switcher-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font: 500 12px var(--font-body);
+  color: #3a4740;
+  cursor: pointer;
+  text-align: left;
+}
+.city-switcher-item:hover { background: #f1f6ec; }
+.city-switcher-item[aria-current="true"] { background: #e9f1e3; font-weight: 700; }
+.city-switcher-item small { margin-left: auto; color: var(--text-muted); font-weight: 500; }
+.city-switcher-item.is-new { color: #477d70; }
+html[data-shell="dark"] .city-switcher-current,
+html[data-shell="dark"] .city-switcher-list { background: #162024; border-color: #26333a; color: #eef2ec; }
+html[data-shell="dark"] .city-switcher-item { color: #dfe7e2; }
+html[data-shell="dark"] .city-switcher-item:hover { background: #1d2a2f; }
+html[data-shell="dark"] .city-switcher-item[aria-current="true"] { background: #22303a; }

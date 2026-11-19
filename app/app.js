@@ -254,6 +254,9 @@
     }));
   }
 
+  let markArchiveReady = () => {};
+  const archiveReady = new Promise(resolve => { markArchiveReady = resolve; });
+
   async function loadArchive() {
     try {
       const vault = await readVault().catch(() => null);
@@ -279,7 +282,16 @@
          try { localStorage.removeItem(STORE); } catch {}
        } else if (stored) {
          const parsed = JSON.parse(stored);
-         if (Array.isArray(parsed)) entries = parsed;
+         if (Array.isArray(parsed)) {
+           /* If something was added while the archive was still loading, keep
+              it: overwriting here is how a first moment used to disappear. */
+           if (entries.length) {
+             const known = new Set(parsed.map(entry => String(entry.id)));
+             entries = [...parsed, ...entries.filter(entry => !known.has(String(entry.id)))];
+           } else {
+             entries = parsed;
+           }
+         }
               }
        const photos = await readPhotos().catch(() => null);
        if (photos) {
@@ -295,6 +307,7 @@
      }
      personalEntries = entries;
      try { navigator.storage?.persist?.(); } catch {}
+     markArchiveReady();
    }
 
    function save() {
@@ -312,7 +325,11 @@
     const serialized = JSON.stringify(entries);
          if (databaseReady) {
        // Serialize writes so a slower earlier save can never overwrite a newer archive.
-       saveQueue = saveQueue.catch(() => {}).then(() => saveArchive(entries));
+       /* the city is captured now, not when the queue drains: switching city
+          while a save is pending used to write one city's moments into the
+          other's record */
+       const snapshot = entries;
+       saveQueue = saveQueue.catch(() => {}).then(() => archiveReady).then(() => saveArchive(snapshot));
        saveQueue.then(() => {
          try { localStorage.removeItem(STORE); } catch {}
          scheduleStorageInfo();
