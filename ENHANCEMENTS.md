@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.28.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.29.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -128,7 +128,7 @@ Removed in 1.23.0 because it did not render; rebuilt from scratch in 1.28.0 and 
 
 - **Real shadows.** Everything is lit, nothing casts. A shadow map on the directional light would ground the buildings further.
 - **A building per moment, not per district.** The scene caps at fourteen per district; past that, a real city needs instancing.
-- **Audio.** Wind, rain and a distant street would make the town feel inhabited. Nothing is generated yet.
+- **Audio.** Done in 1.29.0: wind, rain and birds synthesised in WebAudio. What is still open is per-district sound (a market, a park), and a volume slider rather than one fixed level.
 
 ## What was there before
 

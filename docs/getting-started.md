@@ -108,6 +108,10 @@ Open `/selftest.html`. It loads every file the service worker is supposed to kee
 
 Discoveries → **Lock this city** asks for a passphrase of at least eight characters and seals the archive. From then on the app opens with an unlock screen, and every save re-encrypts before it reaches the disk. There is no recovery: if you forget the passphrase the city is gone, and the app says so before it locks. **Start a new city instead** wipes the sealed archive if you would rather begin again.
 
+## Sound
+
+The city's control deck has a **Sound** control: wind, rain and the occasional bird, generated in the browser rather than downloaded, and off until you press it. It is remembered between visits, though browsers only start audio after a gesture, so a stored preference waits for your first click. Night lowers it.
+
 ## Light or dark
 
 The ☾ button in the top bar flips the interface between light and dark, and the choice is remembered. If you never touch it, the app follows your system's setting — a dark-mode system gets a dark app on the first visit. This is the interface only: the city keeps its own palette, and its own **Night** control sits in the city's control deck.

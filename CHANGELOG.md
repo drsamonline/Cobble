@@ -2,6 +2,19 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.29.0 — 2026-11-19
+
+### Added
+
+- **The sound of the place.** A *Sound* control in the city's deck starts a WebAudio graph built from a brown-noise buffer: wind through a lowpass filter that gusts on a 0.06 Hz LFO, rain through a bandpass, and a bird every four to thirteen seconds from a small oscillator envelope. Nothing is downloaded — no audio files, no CDN, no network — and it is off until asked, because a page that makes noise on arrival is a page people close. Night lowers the wind and the master.
+- The choice is remembered, but a stored preference still waits for a gesture, since browsers will not start audio without one.
+- `app/ambience.js`, precached, with the graph documented at the top of the file.
+
+### Verified
+
+- In headless Chrome: the toggle starts the context (`state: "running"`), flips `aria-pressed`, mirrors its label, and stores the preference; a second click closes the context and stores `off`. No page errors.
+- The deck now carries six controls; the sound one shows its state by brightening its glyph rather than by growing a longer label, which had pushed the row out of shape.
+
 ## 1.28.0 — 2026-11-19
 
 The 3D city is back, rebuilt rather than repaired — and it works this time.
