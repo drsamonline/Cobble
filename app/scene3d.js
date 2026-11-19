@@ -322,7 +322,10 @@
     const paint = () => {
       const on = document.body.classList.contains('scene-3d');
       button.setAttribute('aria-pressed', String(on));
-      button.querySelector('.scene-toggle-label').textContent = on ? '3D city' : 'Flat city';
+      const label = on ? '3D city' : 'Flat city';
+      button.querySelector('.scene-toggle-label').textContent = label;
+      /* the accessible name must contain the visible words */
+      button.setAttribute('aria-label', label);
     };
     button.addEventListener('click', () => {
       const on = document.body.classList.contains('scene-3d');

@@ -26,6 +26,7 @@ The old scene drew a white floor with the buildings floating above it. Four thin
 ### Verified
 
 - Rendered in headless Chrome with SwiftShader and inspected: buildings on ground, roofs, windows, roads, trees, birds, sky. Night toggled and inspected. No page errors.
+- CI found what my local run missed: the new toggle's `aria-label` ("Switch between the flat and 3D city") did not contain its visible text ("Flat city"), which is the same label-content-name-mismatch this project has now fixed four times. The name is set from the visible label and mirrored when the state changes.
 - Screenshots `city-3d.webp` and `city-3d-night.webp` are in the repository and in the README gallery.
 
 ## 1.27.0 — 2026-11-19

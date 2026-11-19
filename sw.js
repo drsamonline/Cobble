@@ -12,7 +12,7 @@
  * cache is deleted on activate, and the new files are fetched with cache:reload
  * during install so a stale copy cannot win.
  */
-const CACHE_VERSION = 'v25';
+const CACHE_VERSION = 'v26';
 const CACHE_NAME = `cobble-${CACHE_VERSION}`;
 const ASSET_VERSION = '1.28.0';
 
