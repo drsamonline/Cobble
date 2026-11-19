@@ -13,7 +13,8 @@ const KB = 1024;
 
 const BUDGETS = [
   { label: 'app shell (html + css + js)', files: ['app/index.html', 'app/theme.css', 'app/styles.css', 'app/core.js', 'app/scene3d.js', 'app/ambience.js', 'app/app.js'], limit: 245 * KB },
-  { label: 'landing page', files: ['index.html', 'assets/landing.css', 'assets/landing.js'], limit: 60 * KB },
+  { label: 'Hindi landing page', files: ['hi.html'], limit: 40 * KB },
+    { label: 'landing page', files: ['index.html', 'assets/landing.css', 'assets/landing.js'], limit: 60 * KB },
   { label: 'fonts (self-hosted)', files: ['fonts/Manrope.woff2', 'fonts/DMSans.woff2', 'fonts/IBMPlexMono-400.woff2', 'fonts/IBMPlexMono-500.woff2'], limit: 160 * KB },
   { label: 'vendor (jszip + three)', files: ['app/vendor/jszip.min.js', 'app/vendor/three.min.js'], limit: 720 * KB }
 ];

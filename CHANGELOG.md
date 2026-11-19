@@ -2,6 +2,23 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.31.0 — 2026-11-19
+
+### Added
+
+- **The landing page in Hindi.** `hi.html` is a full translation of the page — nav, hero, the three rules, all six districts, the screenshots section, privacy, support and the footer — with `lang="hi"`, a translated title, and `hreflang` alternates. A two-link switcher (EN · हिं) sits in the header of both pages, with `aria-current` on the one you are reading. No script: the Hindi page is a file, so it works offline and prints.
+- `hi.html` is precached, so a Hindi reader gets the page offline like everyone else.
+
+### About the translation, plainly
+
+- It is **written by hand, not machine-translated**, and it needs a native-speaker review before anyone treats it as final. `translate_text` was tried first and returned segments that did not line up one-to-one with the source — a batch of seventeen strings came back as eighteen — and misaligned substitution is how a page ends up with the wrong sentence under the wrong heading. The dictionary is keyed by the English string itself, so a missing entry fails loudly instead of silently.
+- The app's own interface is still English. This is the page that explains the app, not the app.
+
+### Verified
+
+- Rendered at 1440×1000 and at 390×844: no horizontal overflow at either width, switcher intact, `lang="hi"` set, title translated, no page errors.
+- Two defects caught by looking at the render: adjacent text nodes ran together because the substitution dropped the whitespace around each match, and the switcher appeared twice because the rebuild started from the already-switched English page.
+
 ## 1.30.0 — 2026-11-19
 
 ### Fixed

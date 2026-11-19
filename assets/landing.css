@@ -492,3 +492,29 @@ a.method:hover { border-color: var(--primary); background: color-mix(in srgb, va
 /* The footer sits on --paper-2, which is darker than the page, so its small
    text needs its own value to clear 4.5:1 there. */
 .foot-brand small, .foot-brand small a, .foot-label, .foot-base span, .foot-base a { color: #5c6862; }
+
+/* ── Language switch ──────────────────────────────────────────────
+   Two links, no script: the Hindi page is a file, not a translation at
+   runtime, so it works offline and prints. */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line, #e6e4d9);
+  border-radius: 99px;
+  background: #fbfaf4;
+}
+.lang-switch a {
+  padding: 3px 9px;
+  border-radius: 99px;
+  font: 600 11.5px/1 var(--font-body, system-ui);
+  color: var(--ink-soft, #5f6b64);
+  text-decoration: none;
+}
+.lang-switch a[aria-current="true"] { background: #22302b; color: #f6f4ef; }
+.lang-switch a:hover { text-decoration: none; color: #22302b; }
+.lang-switch a[aria-current="true"]:hover { color: #f6f4ef; }
+html[data-time="night"] .lang-switch { background: #1a2429; border-color: #2b3a41; }
+html[data-time="night"] .lang-switch a { color: #b9c6c0; }
+html[data-time="night"] .lang-switch a[aria-current="true"] { background: #e8efe9; color: #16211d; }

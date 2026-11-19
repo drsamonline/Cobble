@@ -18,6 +18,8 @@
 <link rel="preload" href="fonts/DMSans.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="fonts/fonts.css" />
 <link rel="stylesheet" href="assets/landing.css" />
+  <link rel="alternate" hreflang="en" href="index.html">
+  <link rel="alternate" hreflang="hi" href="hi.html">
 </head>
 <body>
 
@@ -38,6 +40,10 @@
       <a href="docs/">Docs</a>
     </nav>
     <div class="topbar-actions">
+      <nav class="lang-switch" aria-label="Language">
+        <a href="index.html" aria-current="true" hreflang="en" lang="en">EN</a>
+        <a href="hi.html" hreflang="hi" lang="hi">हिं</a>
+      </nav>
       <button class="time-toggle" id="time-toggle" type="button" aria-pressed="false">
         <span class="time-icon" aria-hidden="true">☀</span><span class="time-label">Night</span>
       </button>
