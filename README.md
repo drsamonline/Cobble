@@ -11,7 +11,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 **Status: v1.5.0 — shipped, offline, editable, searchable, and tested.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.22.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.23.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -97,7 +97,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 - **Day and night.** Night relights the windows, darkens the hills and quiets the palette. Day and night are a button, not a clock.
 - **Streets with traffic.** Cars pass, a person walks, a bird or a cat turns up, streetlamps come on at night, and a little theatre appears every ninth district — click it to open your photo gallery.
 - **Districts you can wander.** Drag, scroll or use the arrow keys and the city pans sideways through neighbouring districts, redrawing each one from the same seed as you arrive.
-- **An optional 3D layer.** `city3d.js` adds a Three.js model of the neighbourhood when WebGL is available and steps aside silently when it is not.
+- **No 3D layer, on purpose.** There was an experimental Three.js view of the neighbourhood. It rendered a white floor with the buildings floating above it, so it was gated behind `?3d=1` and then removed in 1.23.0 rather than shipped broken. The illustrated city is the city.
 - **Immersive mode.** Hide every control and look at the city alone.
 
 **The archive**
@@ -134,7 +134,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 
 - **A service worker that keeps the whole site.** The first visit caches the landing page, the app, the fonts, the icons and the docs hub; after that it opens with the network off. Navigations try the network first and fall back to the cache, so a new deploy is picked up on the next online visit.
 - **Installable.** `manifest.json` with a proper icon set (including a maskable one) and two shortcuts: "My city" and "Sample city". Install it from the address bar, or from the browser's menu on a phone.
-- **No CDN at runtime.** The three families are self-hosted as woff2, and the only two libraries are vendored: JSZip, loaded when you press "Download app package", and Three.js, loaded only if you ask for the experimental 3D layer. A page load makes no request to anyone else.
+- **No CDN at runtime.** The three families are self-hosted as woff2 and the only library is vendored: JSZip, fetched when you press "Download app package". A page load makes no request to anyone else.
 - **`selftest.html`** loads every file the worker is supposed to keep and tells you, file by file, whether it came from the cache or the network. Run it online, then with the network off.
 
 **Built to survive a boring browser**

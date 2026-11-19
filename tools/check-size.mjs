@@ -12,10 +12,10 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const KB = 1024;
 
 const BUDGETS = [
-  { label: 'app shell (html + css + js)', files: ['app/index.html', 'app/theme.css', 'app/styles.css', 'app/core.js', 'app/app.js', 'app/city3d.js'], limit: 220 * KB },
+  { label: 'app shell (html + css + js)', files: ['app/index.html', 'app/theme.css', 'app/styles.css', 'app/core.js', 'app/app.js'], limit: 220 * KB },
   { label: 'landing page', files: ['index.html', 'assets/landing.css', 'assets/landing.js'], limit: 60 * KB },
   { label: 'fonts (self-hosted)', files: ['fonts/Manrope.woff2', 'fonts/DMSans.woff2', 'fonts/IBMPlexMono-400.woff2', 'fonts/IBMPlexMono-500.woff2'], limit: 160 * KB },
-  { label: 'vendor (three + jszip)', files: ['app/vendor/three.min.js', 'app/vendor/jszip.min.js'], limit: 720 * KB }
+  { label: 'vendor (jszip)', files: ['app/vendor/jszip.min.js'], limit: 120 * KB }
 ];
 
 let failed = false;

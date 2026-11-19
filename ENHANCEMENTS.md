@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.22.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.23.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -32,7 +32,7 @@ These were the top of this list. They are done, verified and in the repository, 
 |---|---|---|
 | 1.1 | **Vendored Tailwind out of existence.** Two utility classes became two lines of CSS. | `app/theme.css`, `app/index.html` |
 | 1.2 | **Self-hosted the fonts.** Manrope, DM Sans and IBM Plex Mono as woff2, latin subset, 118 KB; the variable files are declared once each instead of five times. | `fonts/`, `app/index.html`, `index.html` |
-| 1.3 | **Vendored Three.js and JSZip.** Neither is fetched from a CDN, and Three.js is not downloaded at all unless the 3D layer is asked for. | `app/vendor/` |
+| 1.3 | **Vendored JSZip.** Not fetched from a CDN. (Three.js was vendored here too, then removed in 1.23.0 with the 3D layer.) | `app/vendor/` |
 | 1.4 | **Manifest and service worker.** Versioned cache, network-first navigations, cache-first assets, old caches deleted on activate. The site installs and works offline. | `manifest.json`, `sw.js` |
 | 1.15 | **The checks ship with the repository.** A dependency-free link check that also guards the precache list and forbids CDN references, a size budget, and a workflow that runs both. | `tools/`, `.github/workflows/check.yml` |
 | 1.11 | **Icons, favicon, manifest colours.** A full icon set from the site's own mark, including a maskable one. | `icons/`, `favicon.svg` |
@@ -65,6 +65,7 @@ What is left of the quick-win tier:
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 6.1 | **The 3D layer removed** — 590 KB of vendor code and 400 lines that never rendered correctly. Code kept in git history at v1.22.0. | `app/city3d.js`, `app/vendor/` |
 | 3.3 | **The vault's key is derived once per unlock**, not per save — measured 285 ms → 91 ms on a 205 KB archive. | `app/core.js`, `app/app.js` |
 | 3.4 | **Merge on import** — skip only when id *and* content match; keep an edited version alongside under a content-derived id; rule lives in `core.js` with four tests. | `app/core.js`, `app/app.js` |
 | 3.6 | **A locked archive** — one passphrase, AES-256-GCM at rest, plaintext record deleted, unlock screen, no recovery and told so. | `app/core.js`, `app/app.js` |
@@ -120,27 +121,11 @@ Written down so they stop being suggested.
 
 ---
 
-## 6. The 3D layer
+## 6. The 3D layer — removed
 
-`app/city3d.js` is 400 lines of Three.js that draws a low-poly neighbourhood over the illustrated city. It is switched off by default because it does not look right yet, and shipping it on would have made a broken view the default for everyone with a GPU.
+The experimental Three.js view rendered a white floor with the buildings floating above it, on every machine it was tried on. It was gated behind `?3d=1` in 1.1.0 so it could not reach anyone by accident, and removed in 1.23.0 along with its 590 KB of vendor code.
 
-| # | What | Detail | Effort |
-|---|---|---|---|
-| 6.1 | **Repair the scene.** On the machines this was tested on the floor plane renders near-white and the buildings float above it, detached from the ground. The camera now corrects for viewport aspect (it never did), which fixed the stretching but not the floor. Needs a pass on real hardware with the light rig, the floor material and the building Y-offsets in view. | `app/city3d.js` | M |
-| 6.2 | **Then ship it on by default**, with a control in the deck next to Theme / Mood / Weather / Night, and `prefers-reduced-motion` respected. | `app/city3d.js`, `app/app.js`, `app/index.html` | M |
-| 6.3 | **Draw the real city, not a seeded one.** One building per moment, placed by district, height by weight — the metaphor made literal. This is the expensive version, and the one worth doing only after 6.1. | `app/city3d.js` | XL |
-| 6.4 | **A quality switch.** Cap pixel ratio, drop the layer on `saveData`, and fall back silently — the CSS city is already good enough that the 3D layer should never be a cost. | `app/city3d.js` | S |
-
-## A decision, not a task: the name
-
-A search on 19 November 2026 found at least three live products called Cobble: a funded group-planning app at [trycobble.com](https://www.trycobble.com/), an audio walking-tour app from Cobble Media Limited ([cobble.london](https://cobble.london/)), and a Pebble smartwatch app. None is a journalling tool.
-
-| Option | What it costs | What it buys |
-|---|---|---|
-| **Keep Cobble** | Search results will mix the three; someone will eventually ask if this is the London audio app | Nothing to redo. The name is already on the repo, the site, the icon and the docs |
-| **Rename now** | A new repository, a new Pages URL, and about an hour of mechanical work — the storage keys, the `.cobble` extension and every URL changed once already in 1.2.0, so the pattern is known | An uncommon name in the category, no confusion, and a clean App Store search if a mobile build ever happens |
-
-If it renames, the candidates worth checking first are short, unusual and architectural: *Quoin*, *Twitten*, *Mullion*, *Ashlar*. Each needs the same search before it is adopted — this list is not a recommendation, it is a starting point.
+What it would take to bring back, if anyone wants it: a real scene graph with a ground plane that receives light properly, a camera that respects the viewport aspect, and a check on a real GPU rather than a software rasteriser. That is a project, not a patch. The code is in the git history at `v1.22.0`.
 
 ## What the rest of the collection already solved
 

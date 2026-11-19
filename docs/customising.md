@@ -86,7 +86,7 @@ Two rules if you edit it: keep the dates relative (`daysAgo(n)`, not fixed dates
 The app no longer asks a CDN for anything, so there is nothing to remove. What you may want to change instead:
 
 - **Fonts** live in `fonts/` as four woff2 files (Manrope and DM Sans are served by Google as one variable file each, so one file covers the whole weight range) plus `fonts/fonts.css`. To swap a family, replace the file, keep the name or update `fonts.css`, and bump `ASSET_VERSION` in `sw.js` so the cache is refilled.
-- **Vendor files** are `app/vendor/jszip.min.js` and `app/vendor/three.min.js`, unmodified, with their licences intact. See `app/vendor/README.md` before you replace either.
+- **The vendor file** is `app/vendor/jszip.min.js`, unmodified, with its licence intact. See `app/vendor/README.md` before you replace it.
 - **The service worker** precaches an explicit list. If you add a file that the app needs at load time, add it to `PRECACHE` in `sw.js` and to the list in `selftest.html`, or the offline copy will be missing it. `tools/check-links.mjs` fails the build if a precache path does not exist.
 - **The icon set** is generated from the same three-bar mark as the site: `icons/icon-192.png`, `icon-512.png`, `icon-maskable-512.png` (extra padding, for Android's mask) and `apple-touch-icon.png`. Replace all four together.
 - **Colours in the manifest and the theme.** `manifest.json` carries `background_color` and `theme_color`; `app/theme.css` and `assets/landing.css` carry the same values. Three places, one palette.

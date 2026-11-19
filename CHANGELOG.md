@@ -2,6 +2,22 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.23.0 — 2026-11-19
+
+### Removed
+
+- **The experimental 3D layer.** `app/city3d.js` and the vendored Three.js r128 build are gone: 590 KB of vendor code and 400 lines of scene-building that rendered a white floor with the buildings floating above it on every machine it was tried on. It had been gated behind `?3d=1` since 1.1.0 so it could not reach anyone by accident; that gate was a promise to fix it, and this is the honest alternative.
+
+  A broken opt-in feature is worse than no feature: it costs 590 KB in the repository, an entry in every precache list, a paragraph in five documents, and the reader's trust when they try it. The code is in the git history at `v1.22.0`, and `ENHANCEMENTS.md` records what a real one would need.
+
+- With it went: the `?3d=1` flag, the `cobble-data` event the 3D layer listened for, the `city3d.js` entry in the precache list and the self-test, the Three.js row in the vendor notices, and every mention in the README, the architecture guide, the privacy page, the customising guide and the performance page.
+
+### Result
+
+- App shell **191.0 KB** of a 220 KB budget, down from 209 KB.
+- Vendor budget **95.3 KB** of 120 KB, down from 685 KB of 720 KB.
+- One fewer script on every page load, and one fewer thing that does not work.
+
 ## 1.22.0 — 2026-11-19
 
 ### Changed

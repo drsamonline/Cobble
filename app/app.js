@@ -358,7 +358,7 @@
     });
     try {
       const JSZip = await loadZipLibrary();
-      const files = ['index.html', 'theme.css', 'styles.css', 'app.js', 'city3d.js'];
+      const files = ['index.html', 'theme.css', 'styles.css', 'app.js'];
       const zip = new JSZip();
       const results = await Promise.all(files.map(async name => {
         const response = await fetch(name, { cache: 'no-store' });
@@ -368,7 +368,6 @@
           content = content
             .replaceAll('href="/theme.css"', 'href="theme.css"')
             .replaceAll('href="/styles.css"', 'href="styles.css"')
-            .replaceAll('src="/city3d.js"', 'src="city3d.js"')
             .replaceAll('src="/app.js"', 'src="app.js"');
         }
         return [name, content];
@@ -383,7 +382,7 @@
         'Opening index.html directly as a file may prevent browser storage and encrypted sharing from working correctly.',
         '',
         'The app source package does not include your personal moments or photos. Use Share city inside the app to export those separately in an encrypted city file.',
-        'Google Fonts, Tailwind CSS, JSZip (for this download), and optional Three.js are loaded from public CDNs and need an internet connection.'
+        'Everything this app needs is in this folder. Nothing is fetched from a CDN.'
       ].join('\n'));
       const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
       const url = URL.createObjectURL(blob);

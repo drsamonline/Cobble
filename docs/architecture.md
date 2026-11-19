@@ -27,8 +27,7 @@ cobble/
 │   ├── styles.css        ~2,600 lines: layout, the city, the panels
 │   ├── core.js           the share format, key derivation and import validator — no DOM
 │   ├── app.js            ~950 lines: state, storage, render, wiring
-│   ├── city3d.js         experimental WebGL layer, off unless ?3d=1
-│   └── vendor/           jszip 3.10.1 and three r128, unmodified
+│   └── vendor/           jszip 3.10.1, unmodified
 ├── fonts/                Manrope, DM Sans, IBM Plex Mono — woff2, latin subset
 ├── icons/               192, 512, maskable, apple-touch
 ├── docs/                 these guides
@@ -101,9 +100,6 @@ init()
 
 ## The optional 3D layer
 
-`city3d.js` is deliberately separate and deliberately deferential:
-
-- it injects a Three.js `<script>` from cdnjs asynchronously;
 - if the script fails, or WebGL is missing, it returns silently and the CSS city stays;
 - if it succeeds, it appends a canvas over the illustrated city and draws a low-poly neighbourhood from the same category counts;
 - it exposes `window.cobbleCity3D.setPan()` and `.setAtmosphere()`, which `app.js` calls only if the object exists.
