@@ -28,6 +28,10 @@ Notes that matter in practice:
 
 Import never overwrites. A moment is skipped when the incoming id **and** its content match one already here. When the id matches but the text, date, district, weight or photo differ — the same moment edited on another machine — the incoming version is added under an id derived from its content (`<id>-v-<hash>`), so importing the same file twice adds nothing the second time. The rule is `mergeEntries()` in `app/core.js`.
 
+## Where photos live
+
+In memory, a photo is a `photo` field on the moment. On disk it is not: the `moments` record holds the text with `photo: ''`, and a second record, `photos`, maps moment id to data URL. The two are re-joined when the archive loads, and the `photos` record is only rewritten when the set of photos changes. Exports and imports still carry photos inside each moment, because a file has to be self-contained.
+
 ## The vault
 
 When the archive is locked, the `moments` record is deleted and one `vault` record takes its place:

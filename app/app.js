@@ -198,6 +198,51 @@
     }));
   }
 
+  /* Photos live in their own record so the moments record stays small. Every
+     save used to rewrite every photo's bytes inside one JSON string; now the
+     entries are written as text and the photo map is only rewritten when the
+     set of photos actually changes. */
+  let lastPhotoKeys = '';
+
+  function splitArchive(list) {
+    const photos = {};
+    const entries_ = list.map(entry => {
+      if (entry.photo) { photos[String(entry.id)] = entry.photo; return { ...entry, photo: '' }; }
+      return entry;
+    });
+    return { entries: entries_, photos };
+  }
+
+  function joinArchive(list, photos) {
+    if (!photos) return list;
+    return list.map(entry => (photos[String(entry.id)] ? { ...entry, photo: photos[String(entry.id)] } : entry));
+  }
+
+  function saveArchive(list) {
+    const { entries: plain, photos } = splitArchive(list);
+    const keys = Object.keys(photos).sort().join(',');
+    return openDatabase().then(db => new Promise((resolve, reject) => {
+      const transaction = db.transaction('archive', 'readwrite');
+      const store = transaction.objectStore('archive');
+      store.put({ id: 'moments', value: JSON.stringify(plain) });
+      if (keys !== lastPhotoKeys) {
+        store.put({ id: 'photos', value: photos });
+        lastPhotoKeys = keys;
+      }
+      transaction.oncomplete = resolve;
+      transaction.onerror = () => reject(transaction.error || new Error('Could not save archive'));
+      transaction.onabort = () => reject(transaction.error || new Error('Archive save was interrupted'));
+    }));
+  }
+
+  function readPhotos() {
+    return openDatabase().then(db => new Promise((resolve, reject) => {
+      const request = db.transaction('archive', 'readonly').objectStore('archive').get('photos');
+      request.onsuccess = () => resolve(request.result?.value || null);
+      request.onerror = () => reject(request.error);
+    }));
+  }
+
   function saveToDatabase(serialized) {
     return openDatabase().then(db => new Promise((resolve, reject) => {
       const transaction = db.transaction('archive', 'readwrite');
@@ -235,6 +280,11 @@
          const parsed = JSON.parse(stored);
          if (Array.isArray(parsed)) entries = parsed;
               }
+       const photos = await readPhotos().catch(() => null);
+       if (photos) {
+         entries = joinArchive(entries, photos);
+         lastPhotoKeys = Object.keys(photos).sort().join(',');
+       }
        personalEntries = entries;
       databaseReady = true;
          } catch {
@@ -261,10 +311,10 @@
     const serialized = JSON.stringify(entries);
          if (databaseReady) {
        // Serialize writes so a slower earlier save can never overwrite a newer archive.
-       saveQueue = saveQueue.catch(() => {}).then(() => saveToDatabase(serialized));
+       saveQueue = saveQueue.catch(() => {}).then(() => saveArchive(entries));
        saveQueue.then(() => {
          try { localStorage.removeItem(STORE); } catch {}
-         updateStorageInfo();
+         scheduleStorageInfo();
        }).catch(() => {
          try {
            localStorage.setItem(STORE, serialized);
@@ -306,6 +356,15 @@
       ? `This browser is ${percent}% full for this site. New moments may not save. Export a backup now.`
       : `This browser is ${percent}% full for this site. Export a backup, or remove a few photos.`;
     banner.classList.remove('hidden');
+  }
+
+  /* `navigator.storage.estimate()` is slow — measured at about 1.8 s in one
+     browser — so it must not sit on the save path. Throttled to at most once
+     every few seconds, and never awaited by a save. */
+  let storageInfoTimer = null;
+  function scheduleStorageInfo(delay = 400) {
+    clearTimeout(storageInfoTimer);
+    storageInfoTimer = setTimeout(() => { updateStorageInfo(); }, delay);
   }
 
   async function updateStorageInfo() {

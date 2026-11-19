@@ -2,6 +2,21 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.26.0 — 2026-11-19
+
+### Changed
+
+- **Photos live in their own record.** Every save used to rewrite every photo's bytes inside one JSON string. Now the `moments` record holds text and the `photos` record holds the images, written only when the set of photos changes. Measured against IndexedDB with a 421 KB archive (60 moments, 20 photos of 21 KB): one 421 KB record took **813 ms**, the text record alone takes **11 ms** — a repeat save is 74× cheaper. The first save after adding photos still writes the map (228 ms), which is the honest cost of storing them.
+- **`navigator.storage.estimate()` is off the save path.** It measured about **1.8 s** in one browser and was awaited on every save; it is now throttled to at most one call every few seconds and never blocks a save.
+
+### Verified
+
+- Add a moment with a photo → the store holds two records, `moments` with no photo bytes and `photos` with one key; reload re-joins the photo and renders it; editing that moment keeps the photo reference and updates the text. A text-only edit writes 194 bytes where it used to write the whole archive.
+
+### A correction about my own measurements
+
+Two earlier numbers on this project came from harnesses that were measuring the wrong thing, and both are replaced here: the "~2 s per save" I saw was `storage.estimate()`, and the "0 entries after an edit" was a bug in my test helper, not in the app — the record was correct all along.
+
 ## 1.25.0 — 2026-11-19
 
 ### Fixed

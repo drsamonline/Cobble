@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.25.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.26.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -65,6 +65,7 @@ What is left of the quick-win tier:
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 3.2 | **Photos in their own record** — repeat saves write 10 KB instead of 421 KB: 813 ms → 11 ms. `storage.estimate()` off the save path. | `app/app.js` |
 | 3.1 | **A bounded render while narrowing** — sixty day rows at a time instead of every matching day: 598 ms → 74 ms at 5,000 moments. | `app/app.js` |
 | 4.2 | **A year in review** — figures, four sentences from the archive, three resurfaced moments, and a postcard. | `app/app.js`, `app/index.html` |
 | 6.1 | **The 3D layer removed** — 590 KB of vendor code and 400 lines that never rendered correctly. Code kept in git history at v1.22.0. | `app/city3d.js`, `app/vendor/` |
@@ -91,7 +92,6 @@ What is left of the quick-win tier:
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
 | 3.1b | **Virtualise the timeline properly.** The bounded render fixed the measured cost (598 ms → 74 ms at 5,000). What remains is reusing rows while scrolling, which only matters past about ten thousand moments. | `app/app.js` | L |
-| 3.2 | **Move photos out of the JSON blob.** One IndexedDB store per photo, keyed by moment id, with the entry holding only a key. | The single-record design rewrites every photo on every save. Splitting them makes saving O(1) instead of O(archive). | `app/app.js` | L |
 | 3.5 | **Import from other journals.** Day One JSON, Journey, plain markdown with `YYYY-MM-DD` headings. | Everyone who would love this app already has a decade of entries somewhere else. | `tools/importers/` | L |
 | 3.7 | **Multiple cities.** Named archives with a switcher, each in its own IndexedDB database. | One city for the diary, one for the clinic, one for the children. Also the cleanest way to start fresh without deleting. | `app/app.js` | L |
 

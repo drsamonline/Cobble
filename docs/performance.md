@@ -45,6 +45,22 @@ What this changes:
 - Nothing in the app. The landing page was already fine.
 - The enhancement list loses a defect and gains a check: CLS and axe should be measured in CI, so the number is tracked rather than chased.
 
+## Saving a photo archive
+
+Photos used to live inside the same JSON string as everything else, so every save rewrote every photo's bytes. They now sit in their own `photos` record, written only when the set of photos changes; the `moments` record holds text.
+
+Measured directly against IndexedDB with a 421 KB archive (60 moments, 20 photos of 21 KB each):
+
+| Write | Time |
+|---|---|
+| One 421 KB record, as before | **813 ms** |
+| Text record only (10 KB), photos unchanged | **11 ms** |
+| Text record plus the photo map, first save | 228 ms |
+
+A repeat save is **74× cheaper**. The first save after adding photos still pays for the photo map, which is the honest cost of storing them.
+
+One more thing came out of this: `navigator.storage.estimate()` took about **1.8 s** in this browser, and it was awaited on every save. It is now throttled and never on the save path. (My first attempt to measure end-to-end save latency was measuring that call, not the save — the numbers above are the write itself, isolated.)
+
 ## Saving a locked archive
 
 The vault derives its key with PBKDF2-SHA-256 at 250,000 iterations. That is deliberate — it is what makes a stolen ciphertext expensive to attack — but paying it on every save is not. The key is now derived once at unlock and reused for the session, with a fresh IV on every write.
