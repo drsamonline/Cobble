@@ -71,6 +71,10 @@
   let databasePromise;
   let databaseReady = false;
   let visibleTimelineDays = 50;
+  /* How many matching days are drawn while a filter or a search is narrowing
+     the list. Every matching day is still *counted*; this only bounds what is
+     built, because 600 day rows at 5,000 moments took half a second. */
+  let narrowedDays = 60;
   let demoMode = false;
   let cityCenterIndex = 0;
   let saveQueue = Promise.resolve();
@@ -504,8 +508,10 @@
     const dates = Object.keys(days).sort((a, b) => b.localeCompare(a));
     const cards = (date, items, full = false) => `<button class="${full ? 'full-day' : 'mini-day'}" data-date="${date}"><span class="${full ? 'full-date' : 'mini-date'}">${escapeHTML(formatDate(date, full ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' }))}<small>${items.length} ${items.length === 1 ? 'moment' : 'moments'}</small></span><span class="${full ? 'full-day-entries' : 'mini-day-entries'}">${items.slice(0, full ? 4 : 2).map(entry => `<span class="entry-card"><i class="entry-swatch ${Number(entry.importance) >= 3 ? 'important' : ''}" style="background:${(categories[entry.category] || categories.everyday).color}"></i>${entry.photo ? `<img class="entry-thumb" src="${entry.photo}" alt="">` : ''}<span class="entry-card-text">${highlight(entry.text)}</span></span>`).join('')}${items.length > (full ? 4 : 2) ? `<span class="more-moments">+ ${items.length - (full ? 4 : 2)} more moments</span>` : ''}</span><span class="day-arrow">↗</span></button>`;
     $('#timeline-content').innerHTML = dates.length ? dates.slice(0, 3).map(date => cards(date, days[date])).join('') : `<div class="empty-state"><span class="empty-symbol">☼</span><strong>Your story starts with a small thing.</strong><p>Save one detail from today. Your city will grow around it.</p><button class="text-button" data-open-entry>Save your first moment →</button><p class="empty-hint">Your city lives in this browser only. Moving to another machine, or clearing site data? Use <b>Share city → Export readable backup</b> first.</p></div>`;
-    const shownDates = narrowing ? dates : dates.slice(0, visibleTimelineDays);
-    $('#full-timeline-content').innerHTML = dates.length ? `${shownDates.map(date => cards(date, days[date], true)).join('')}${!narrowing && dates.length > visibleTimelineDays ? `<button class="timeline-load-more" type="button" data-load-older>Show 50 older days <span>↓</span></button>` : ''}` : narrowing
+    const shownDates = narrowing
+      ? dates.slice(0, narrowedDays)
+      : dates.slice(0, visibleTimelineDays);
+    $('#full-timeline-content').innerHTML = dates.length ? `${shownDates.map(date => cards(date, days[date], true)).join('')}${dates.length > shownDates.length ? `<button class="timeline-load-more" type="button" data-load-older>Show ${Math.min(50, dates.length - shownDates.length)} older days <span>↓</span></button>` : ''}` : narrowing
       ? `<div class="no-search-results"><strong>Nothing matches ${searchQuery.trim() ? `“${escapeHTML(searchQuery.trim())}”` : 'those filters'}.</strong>${searchQuery.trim() ? 'Try a shorter word — the search looks at what you wrote, the district and the date.' : 'Clear a filter to see more.'}</div>`
       : `<div class="empty-full"><strong>No days in the archive yet.</strong>One tiny detail is all it takes to begin.</div>`;
     const status = $('#timeline-search-status');
@@ -515,7 +521,7 @@
       if (searchQuery.trim()) bits.push(`matching “${searchQuery.trim()}”`);
       if (filtersActive()) bits.push(describeFilters());
       status.textContent = narrowing
-        ? `${found.toLocaleString()} ${found === 1 ? 'moment' : 'moments'} in ${dates.length.toLocaleString()} ${dates.length === 1 ? 'day' : 'days'}${bits.length ? ` — ${bits.join(' · ')}` : ''}`
+        ? `${found.toLocaleString()} ${found === 1 ? 'moment' : 'moments'} in ${dates.length.toLocaleString()} ${dates.length === 1 ? 'day' : 'days'}${dates.length > shownDates.length ? ` (showing ${shownDates.length})` : ''}${bits.length ? ` — ${bits.join(' · ')}` : ''}`
         : '';
     }
     $('#timeline-query-clear')?.classList.toggle('hidden', !searchQuery.trim());
@@ -524,7 +530,8 @@
       ? `${dates.reduce((sum, date) => sum + days[date].length, 0).toLocaleString()} found`
       : `${entries.length.toLocaleString()} ${entries.length === 1 ? 'moment' : 'moments'} · ${dates.length.toLocaleString()} days`;
     $$('[data-load-older]').forEach(button => button.addEventListener('click', () => {
-      visibleTimelineDays += 50;
+      if (narrowing) narrowedDays += 60;
+      else visibleTimelineDays += 50;
       renderTimeline();
     }));
     $$('[data-date]').forEach(button => button.addEventListener('click', () => openDay(button.dataset.date)));

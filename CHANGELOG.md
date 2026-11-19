@@ -2,6 +2,23 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.25.0 — 2026-11-19
+
+### Fixed
+
+- **A filter change at 5,000 moments took 598 ms.** Not because the filter pass was slow — because while narrowing, *every* matching day was built into the DOM: six hundred day rows with four preview moments each. The list is still counted in full and the status line still says how many days matched; it now builds sixty at a time, with *Show older days* adding sixty more, and `(showing 60)` in the status line when there is more.
+
+### Measured
+
+| Moments | Filter change, before | after |
+|---|---|---|
+| 100 | 9 ms | 11 ms |
+| 500 | 35 ms | 36 ms |
+| 2,000 | 130 ms | **73 ms** |
+| 5,000 | **598 ms** | **74 ms** |
+
+Flat, because the work no longer depends on how many days matched. Full virtualisation stays on the list — reusing rows while scrolling — but the measured pain is gone, and `docs/performance.md` records both sets of numbers.
+
 ## 1.24.0 — 2026-11-19
 
 ### Added

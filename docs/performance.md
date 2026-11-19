@@ -68,14 +68,18 @@ The alternative — minifying — is deliberately not done: this repository ship
 
 The timeline renders fifty days at a time, so the cost of a filter change is the pass over the archive, not the size of the page. Measured by clicking a district chip and timing the synchronous render, on archives seeded at four sizes:
 
-| Moments | Load | Filter change | Reset |
+| Moments | Load | Filter change, before | Filter change, now |
 |---|---|---|---|
-| 100 | 2,585 ms | 9 ms | 12 ms |
-| 500 | 2,098 ms | 35 ms | 37 ms |
-| 2,000 | 1,935 ms | 130 ms | 46 ms |
-| 5,000 | 2,116 ms | **598 ms** | 70 ms |
+| 100 | 2,666 ms | 9 ms | 11 ms |
+| 500 | 2,493 ms | 35 ms | 36 ms |
+| 2,000 | 2,377 ms | 130 ms | 73 ms |
+| 5,000 | 2,468 ms | **598 ms** | **74 ms** |
 
-Load time is flat because it is dominated by the page and the fonts, not the archive. A filter change grows roughly linearly: fine to about two thousand moments, visibly janky at five thousand. That is the measured basis for the virtualisation item, and it says the threshold is **2,000 moments**, not the ten thousand a guess would have picked.
+Load time is flat because it is dominated by the page and the fonts, not the archive.
+
+The 598 ms at five thousand moments was not the filter pass — it was the DOM. While a filter or a search narrowed the list, *every* matching day was built, and at five thousand moments that was six hundred day rows with four preview moments each. The list is still counted in full and still says how many days matched; it now builds sixty at a time, with a *Show older days* button that adds sixty more. The status line says `(showing 60)` when there is more.
+
+That took a filter change at five thousand moments from **598 ms to 74 ms**, and at two thousand from 130 ms to 73 ms — flat, because the work no longer depends on how many days matched. Full virtualisation (reusing rows while scrolling) is still the item, but the measured pain is gone.
 
 ## How to reproduce
 
