@@ -488,3 +488,7 @@ a.method:hover { border-color: var(--primary); background: color-mix(in srgb, va
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* The footer sits on --paper-2, which is darker than the page, so its small
+   text needs its own value to clear 4.5:1 there. */
+.foot-brand small, .foot-brand small a, .foot-label, .foot-base span, .foot-base a { color: #5c6862; }

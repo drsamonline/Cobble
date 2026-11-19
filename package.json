@@ -1,0 +1,16 @@
+{
+  "name": "cobble",
+  "version": "1.18.0",
+  "private": true,
+  "description": "A private city built from the small things you notice.",
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "test": "node --test tests/",
+    "check": "node tools/check-links.mjs && node tools/check-size.mjs && node tools/check-version.mjs && node --test tests/",
+    "check:browser": "node tools/browser-check.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "^4.10.2",
+    "puppeteer-core": "^23.11.1"
+  }
+}

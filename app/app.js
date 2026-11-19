@@ -366,7 +366,7 @@
     const hidden = document.body.classList.toggle('city-immersive');
     const button = $('#hud-toggle');
     button.setAttribute('aria-pressed', String(hidden));
-    button.setAttribute('aria-label', hidden ? 'Show city controls' : 'Hide city controls');
+    button.setAttribute('aria-label', `${hidden ? 'Show' : 'Hide'} controls`);
     $('.hud-toggle-label', button).textContent = hidden ? 'Show controls' : 'Hide controls';
     $('.hud-toggle-icon', button).textContent = hidden ? '⤡' : '⤢';
   }
@@ -375,7 +375,7 @@
     document.body.classList.remove('city-immersive');
     document.body.classList.toggle('city-view-active', name === 'city');
     $('#hud-toggle').setAttribute('aria-pressed', 'false');
-    $('#hud-toggle').setAttribute('aria-label', 'Hide city controls');
+    $('#hud-toggle').setAttribute('aria-label', 'Hide controls');
     $('.hud-toggle-label', $('#hud-toggle')).textContent = 'Hide controls';
     $('.hud-toggle-icon', $('#hud-toggle')).textContent = '⤢';
     $$('.view-section').forEach(view => view.classList.toggle('hidden', view.id !== `${name}-view`));
@@ -1161,7 +1161,8 @@
     }
     if (mobileButton) {
       $('.mobile-demo-label', mobileButton).textContent = demoMode ? 'Back to my city' : 'Sample city';
-      mobileButton.setAttribute('aria-label', demoMode ? 'Exit sample city and return to my city' : 'Explore a sample city');
+      /* The accessible name has to contain the visible words, so it is set from them. */
+      mobileButton.setAttribute('aria-label', demoMode ? 'Back to my city' : 'Sample city: explore an example city');
       mobileButton.setAttribute('aria-pressed', String(demoMode));
     }
     $('#demo-note').classList.toggle('hidden', !demoMode);

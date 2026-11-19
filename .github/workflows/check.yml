@@ -34,3 +34,26 @@ jobs:
           node --check app/app.js
           node --check app/city3d.js
           node --check assets/landing.js
+
+  browser:
+    name: browser check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        id: chrome
+
+      - name: axe, layout shift and a smoke test
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tools/browser-check.mjs

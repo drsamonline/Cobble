@@ -2,6 +2,22 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.18.0 — 2026-11-19
+
+The instrument, and the five defects it found on its first run.
+
+### Added
+
+- **`tools/browser-check.mjs`** — serves the repository locally, drives it in headless Chrome, and fails the build on any of: an axe accessibility violation at serious or critical, a layout shift over 0.1, or a behaviour regression. It runs on every push, in its own CI job with Chrome installed.
+- The smoke test inside it: two moments load from storage, `N` opens the form, a save lands, an edit is undone, a delete is undone, search narrows, a filter chip applies, the app reloads with the network off, and no page errors occur.
+
+### Fixed — all found by that check, none by eye
+
+- **Seven footer links and labels on the landing page sat at 4.24:1**, because the footer's paper is darker than the page and the muted token was tuned for the page.
+- **Six labels in the app sat between 4.35:1 and 4.47:1** on the sidebar and top-bar tints — the same mistake one surface further in.
+- **Three buttons had accessible names that did not contain their visible text.** `#share-button` announced "Share or import a city" while reading "Share city"; the HUD toggle announced "Hide city controls" while reading "Hide controls"; the sample-city toggle announced "Exit sample city and return to my city" while reading "Back to my city".
+- The check itself had a bug on its first run: it seeded storage and then reloaded the *sample-city* URL, so the seeded moments were never read. That is the difference between a test that passes and a test that means something.
+
 ## 1.17.0 — 2026-11-19
 
 ### Added

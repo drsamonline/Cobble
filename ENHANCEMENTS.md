@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.17.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.18.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -64,8 +64,8 @@ What is left of the quick-win tier:
 
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
-| 2.9 | **Accessibility pass with axe.** Run axe-core in the headless script, fix the violations it reports, and add the check to CI. | A one-off audit that turns into a permanent guarantee. | `tools/`, `.github/workflows/` | M |
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 2.9 | **axe in CI**, plus layout shift and a behaviour smoke test — one script, its own job, five defects found on the first run. | `tools/browser-check.mjs`, `.github/workflows/check.yml` |
 | 2.12 | **A postcard export** — the skyline as a 1200×630 PNG, no personal content in it. | `app/app.js`, `app/index.html` |
 | 2.2 | **Timeline filters** — six districts, landmarks, photos, composing with search, `aria-pressed` chips and a Clear button. | `app/app.js`, `app/index.html`, `app/styles.css` |
 | 2.4 | **A year heatmap** in Discoveries — a square per day for twelve months, shaded by count, clickable, labelled for screen readers. | `app/app.js`, `app/styles.css` |
@@ -77,7 +77,6 @@ What is left of the quick-win tier:
 | 2.5 | **On this day** — same calendar date in earlier years, under the city, hidden when empty. | `app/app.js`, `app/styles.css` |
 | 2.8 | **Photo pipeline** — EXIF orientation honoured, WebP encoding with a JPEG fallback, smaller of the two kept. | `app/app.js` |
 | 2.17 | **Collapse the 71 fixed text colours into tokens.** The values are compliant now; the stylesheet still carries 71 hand-picked hexes where three or four semantic ones belong (`--text-secondary`, `--text-muted`, `--text-faint`, `--text-warm`). Doing this makes the dark theme maintainable instead of a list of overrides. | `app/theme.css`, `app/styles.css` | M |
-| 2.16 | **Measure CLS and axe in CI.** The layout-shift defect this item described was retracted — 14 measurements put CLS at 0.008–0.010, and the 0.186 sample never reproduced. The useful version of the item is the instrument: a headless run that records CLS and runs axe on every push, so the numbers are tracked instead of chased. Needs puppeteer in CI, which is the same prerequisite as 2.9. | `.github/workflows/`, `tools/` | M |
 
 ---
 

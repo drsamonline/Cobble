@@ -25,7 +25,7 @@
       <button class="nav-item active" data-view="city"><span class="nav-icon">⌂</span> My city <span class="nav-dot"></span></button>
       <button class="nav-item" data-view="timeline"><span class="nav-icon">◷</span> Timeline</button>
       <button class="nav-item" data-view="insights"><span class="nav-icon">✳</span> Discoveries</button>
-      <button class="nav-item mobile-demo-nav" id="mobile-demo-toggle" type="button"><span class="nav-icon">✦</span><span class="mobile-demo-label">Sample city</span></button>
+      <button class="nav-item mobile-demo-nav" id="mobile-demo-toggle" type="button"><span class="nav-icon" aria-hidden="true">✦</span><span class="mobile-demo-label">Sample city</span></button>
       <div class="side-spacer"></div>
       <div class="offline-card"><span class="offline-indicator"></span>
         <div><strong>Yours, always</strong><small>Saved on this device</small></div><span class="lock-icon">⌑</span>
@@ -40,7 +40,7 @@
       <header class="topbar">
         <div class="breadcrumb">Your world <span>/</span> <strong id="header-section">My city</strong></div>
         <div class="top-actions">
-          <div class="today-pill"><span class="sun-dot"></span><span id="today-label"></span></div><button class="share-button" id="share-button" aria-label="Share or import a city" title="Share or import a city">↗ <span>Share city</span></button><button class="icon-button" id="shell-theme" aria-label="Switch to dark interface" title="Light or dark interface">☾</button><button class="icon-button" id="help-button" aria-label="About Cobble" title="About Cobble">?</button><button class="add-button" id="add-entry"><span>+</span> Add a moment</button>
+          <div class="today-pill"><span class="sun-dot"></span><span id="today-label"></span></div><button class="share-button" id="share-button" aria-label="Share city, or open a city file" title="Share city, or open a city file">↗ <span>Share city</span></button><button class="icon-button" id="shell-theme" aria-label="Switch to dark interface" title="Light or dark interface">☾</button><button class="icon-button" id="help-button" aria-label="About Cobble" title="About Cobble">?</button><button class="add-button" id="add-entry"><span>+</span> Add a moment</button>
         </div>
       </header>
 
@@ -84,7 +84,7 @@
               <button class="scene-control" id="weather-control" type="button" aria-label="Change weather" title="Change weather"><span aria-hidden="true">☁</span><small>Weather</small></button>
               <button class="scene-control" id="time-control" type="button" aria-label="Switch to night" title="Switch day and night"><span aria-hidden="true" id="time-icon">☾</span><small id="time-label">Night</small></button>
             </div>
-            <button class="hud-toggle" id="hud-toggle" type="button" aria-pressed="false" aria-label="Hide city controls"><span class="hud-toggle-icon" aria-hidden="true">⤢</span><span class="hud-toggle-label">Hide controls</span></button>
+            <button class="hud-toggle" id="hud-toggle" type="button" aria-pressed="false"><span class="hud-toggle-icon" aria-hidden="true">⤢</span><span class="hud-toggle-label">Hide controls</span></button>
           </div>
         </div>
 

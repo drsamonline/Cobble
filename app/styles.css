@@ -94,7 +94,7 @@ button {
   font-size: 10px;
   letter-spacing: 1.55px;
   font-weight: 700;
-  color: #687068;
+  color: #5f6b64;
 }
 
 .side-label {
@@ -108,7 +108,7 @@ button {
   gap: 13px;
   border: 0;
   background: transparent;
-  color: #667069;
+  color: #5f6b64;
   border-radius: 10px;
   padding: 12px 13px;
   text-align: left;
@@ -162,7 +162,7 @@ button {
 .profile small {
   display: block;
   font-size: 10px;
-  color: #6a7068;
+  color: #5f6b64;
   margin-top: 3px;
 }
 
@@ -249,7 +249,7 @@ button {
   gap: 8px;
   align-items: center;
   font-size: 11px;
-  color: #677169;
+  color: #5f6b64;
   padding: 8px 11px;
   background: #eeeee8;
   border-radius: 20px;
@@ -275,7 +275,7 @@ button {
 
 .share-button {
   background: #e8ede7;
-  color: #557262;
+  color: #4e6a5c;
 }
 
 .icon-button {
@@ -922,7 +922,7 @@ button {
   gap: 8px;
   min-width: 0;
   font-size: 10px;
-  color: #677169
+  color: #5f6b64
 }
 
 .entry-swatch {
@@ -968,7 +968,7 @@ button {
 .no-insights {
   padding: 24px 8px;
   text-align: center;
-  color: #687068;
+  color: #5f6b64;
   font-size: 11px
 }
 
@@ -1558,7 +1558,7 @@ select:focus {
 
 .drawer-lede {
   font-size: 11px;
-  color: #687068;
+  color: #5f6b64;
   margin: 0 0 22px
 }
 
@@ -2469,7 +2469,7 @@ select:focus {
 .achievement-count {
   font: 500 11px var(--font-body);
   letter-spacing: .04em;
-  color: #66726c;
+  color: #5f6b64;
   background: #f4f2e9;
   border-radius: 99px;
   padding: 4px 10px;
@@ -2797,7 +2797,7 @@ mark {
 .onthisday-count {
   font: 500 11px var(--font-body);
   letter-spacing: .04em;
-  color: #66726c;
+  color: #5f6b64;
   background: #f4f2e9;
   border-radius: 99px;
   padding: 4px 10px;
