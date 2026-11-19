@@ -2789,3 +2789,64 @@ mark {
   .timeline-search-clear { right: 24px; }
   .timeline-search-status { padding-inline: 16px; }
 }
+
+/* ── On this day ──────────────────────────────────────────────────
+   A strip of the same calendar date in earlier years. Hidden entirely when
+   there is nothing to show, so a new city never sees an empty panel. */
+.onthisday-panel { margin-top: 14px; }
+.onthisday-count {
+  font: 500 11px var(--font-body);
+  letter-spacing: .04em;
+  color: #66726c;
+  background: #f4f2e9;
+  border-radius: 99px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+.onthisday-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+  padding: 2px 20px 18px;
+}
+.onthisday-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+  padding: 11px 12px;
+  border: 1px solid #eceade;
+  border-radius: 12px;
+  background: #fdfcf7;
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease;
+}
+.onthisday-item:hover { border-color: #cfdcc4; background: #f8faf2; }
+.onthisday-years {
+  flex: none;
+  font: 600 11px var(--font-mono);
+  letter-spacing: .04em;
+  color: #477d70;
+  background: #eef4ee;
+  border-radius: 7px;
+  padding: 3px 7px;
+  margin-top: 1px;
+}
+.onthisday-text {
+  font: 400 13px/1.5 var(--font-body);
+  color: #3a4740;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.onthisday-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+@media (max-width: 640px) {
+  .onthisday-list { grid-template-columns: 1fr; padding: 2px 14px 16px; }
+}

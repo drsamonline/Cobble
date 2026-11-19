@@ -48,13 +48,17 @@ The name: *to cobble* is to make a thing from whatever is at hand, and a cobble 
 
 ## Screenshots
 
-| My city | After dark |
-|---|---|
-| ![The city view with districts, streets and weather](screenshots/city.webp) | ![The same city at night, with lit windows](screenshots/city-night.webp) |
+| My city |
+|---|
+| ![The city view with districts, streets and weather](screenshots/city.webp) |
 
 | Timeline | Search |
 |---|---|
 | ![The timeline view, one row per day](screenshots/timeline.webp) | ![One search result, with the match marked](screenshots/search.webp) |
+
+| On this day | The city at night |
+|---|---|
+| ![The same date a year earlier, under the city](screenshots/on-this-day.webp) | ![The city after dark](screenshots/city-night.webp) |
 
 | Discoveries | Milestones |
 |---|---|
@@ -91,8 +95,9 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 - **Six kinds of moment.** Everyday detail, people and connection, outside and nature, thoughts and ideas, small joys, something meaningful — each with its own colour and glyph.
 - **Three weights.** A detail, something that mattered, a landmark. Weight becomes height.
 - **Repetition.** Say that you noticed the same thing again; the block widens and the windows multiply.
-- **One photo per moment**, resized on the device to a 76%-quality JPEG before it is ever stored. Nothing is uploaded.
+- **One photo per moment**, resized on the device to at most 1280 px and encoded as WebP where the browser allows it, JPEG otherwise, whichever is smaller. EXIF orientation is honoured, so a photo taken sideways is stored upright. Nothing is uploaded.
 - **A day drawer** that opens any date as a short chapter, with its photos and its order in the day.
+- **On this day.** Moments from the same calendar date in earlier years, under the city, with how long ago each was. The panel hides itself when there is nothing to show.
 - **Edit and delete.** Any moment in the drawer can be changed or removed; a delete leaves an Undo strip for twenty seconds, and `Ctrl`/`Cmd`+`Z` works after that.
 - **A full timeline** of every day you have saved, newest first, one click from the same drawer.
 - **Search over the whole archive.** One box in the timeline: what you wrote, the district name, or a date. Case and accents are folded (`cafe` finds `café`), the match is marked in place, and results keep their day grouping.

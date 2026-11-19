@@ -581,6 +581,49 @@
     }).join('');
   }
 
+  /* The same calendar date in earlier years — the one thing a list cannot do
+     and a city can: put you back in the same day of a different year. */
+  function renderOnThisDay() {
+    const panel = $('#onthisday-panel');
+    const list = $('#onthisday-list');
+    const count = $('#onthisday-count');
+    if (!panel || !list) return;
+
+    const today = localDate();
+    const monthDay = today.slice(5);
+    const matches = entries
+      .filter(entry => entry.date !== today && entry.date.slice(5) === monthDay)
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, 6);
+
+    if (!matches.length) {
+      panel.classList.add('hidden');
+      list.innerHTML = '';
+      if (count) count.textContent = '';
+      return;
+    }
+
+    panel.classList.remove('hidden');
+    if (count) {
+      count.textContent = `${matches.length} ${matches.length === 1 ? 'memory' : 'memories'}`;
+    }
+    list.innerHTML = matches.map(entry => {
+      const category = categories[entry.category] || categories.everyday;
+      const years = new Date(`${entry.date}T12:00:00`).getFullYear();
+      const thisYear = new Date(`${today}T12:00:00`).getFullYear();
+      const ago = thisYear - years;
+      return `<button type="button" class="onthisday-item" data-onthisday="${escapeHTML(entry.date)}">
+        <span class="onthisday-years">${ago === 1 ? '1 yr' : `${ago} yrs`}</span>
+        <span class="onthisday-text"><span class="onthisday-dot" style="background:${category.color}"></span>${escapeHTML(entry.text)}</span>
+      </button>`;
+    }).join('');
+
+    $$('[data-onthisday]', list).forEach(button => button.addEventListener('click', () => {
+      setView('timeline');
+      openDay(button.dataset.onthisday);
+    }));
+  }
+
   function renderInsights() {
     const total = entries.length;
     const activeDays = Object.keys(groupDays()).length;
@@ -617,6 +660,7 @@
   function render() {
     renderCity();
     renderTimeline();
+    renderOnThisDay();
     renderInsights();
   }
 
@@ -838,7 +882,7 @@
       [48, 'nature', 'Sat outside without checking the time. The clouds did a better job of keeping it.', 1, 1, 'photo-1500530855697-b586d89ba3ee'],
       [60, 'ideas', 'Some things keep returning because they are asking to be noticed.', 3, 1, '']
     ];
-    return examples.map(([ago, category, text, importance, repeatCount, image], index) => ({
+    const built = examples.map(([ago, category, text, importance, repeatCount, image], index) => ({
       id: `sample-${index}`,
       date: daysAgo(ago),
       category,
@@ -848,6 +892,22 @@
       photo: image ? photo(image) : '',
       createdAt: new Date(`${daysAgo(ago)}T12:00:00`).toISOString()
     }));
+    /* One moment from the same calendar date last year, so the sample city can
+       show what "on this day" is for. Exact, rather than 365 days ago, so it
+       lands on the same month and day. */
+    const lastYear = new Date();
+    lastYear.setFullYear(lastYear.getFullYear() - 1);
+    built.push({
+      id: 'sample-last-year',
+      date: localDate(lastYear),
+      category: 'milestone',
+      text: 'A year ago today I wrote that the neighbourhood was starting to feel like mine.',
+      importance: 3,
+      repeatCount: 1,
+      photo: '',
+      createdAt: new Date(`${localDate(lastYear)}T12:00:00`).toISOString()
+    });
+    return built;
   }
 
   function updateDemoButtons() {
@@ -1016,14 +1076,22 @@
       }
       try {
         if (!file.type.startsWith('image/')) throw new Error('Choose an image file.');
-        const bitmap = await createImageBitmap(file);
+        /* `from-image` honours the EXIF orientation, so a photo taken sideways
+           on a phone is stored the way it was meant to be seen. */
+        const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
+          .catch(() => createImageBitmap(file));
         const scale = Math.min(1, 1280 / Math.max(bitmap.width, bitmap.height));
         const canvas = document.createElement('canvas');
         canvas.width = Math.max(1, Math.round(bitmap.width * scale));
         canvas.height = Math.max(1, Math.round(bitmap.height * scale));
         canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
         bitmap.close();
-        photoData = canvas.toDataURL('image/jpeg', 0.76);
+        /* WebP first, JPEG as the fallback, and keep whichever is smaller.
+           A browser that cannot encode WebP returns a PNG data URL, which the
+           prefix check rejects. */
+        const webp = canvas.toDataURL('image/webp', 0.76);
+        const jpeg = canvas.toDataURL('image/jpeg', 0.76);
+        photoData = webp.startsWith('data:image/webp') && webp.length < jpeg.length ? webp : jpeg;
         $('#photo-preview').innerHTML = `<img src="${photoData}" alt="Photo preview">`;
         $('#photo-preview').classList.remove('hidden');
         $('#photo-label').textContent = `${file.name} · resized`;

@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.6.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.10.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -68,12 +68,12 @@ What is left of the quick-win tier:
 | 2.2 | **Filters on the timeline.** By district, by weight, by date range. | With two years of moments the timeline is a wall. Six chips and a date picker fix it. | `app/app.js` | M |
 | 2.3 | **Dark mode for the app shell.** `prefers-color-scheme: dark` plus a manual override, driven by the same tokens in `theme.css`. The city already has a night state to borrow from. | Half the app's users open it at 11 pm. A white page at 11 pm is a reason not to open it. | `app/theme.css`, `app/styles.css` | M |
 | 2.4 | **A year heatmap.** 53 × 7 cells, one per day, shaded by how many moments it held; click a cell to open the day. | The one view that answers "have I been keeping up?" without a streak or a scold. | `app/app.js`, `app/styles.css` | M |
-| 2.5 | **On this day.** A quiet strip in the city view: what you saved on this date one month, one year, three years ago. | The cheapest possible version of the thing people actually want from a journal — being reminded of a day they had forgotten. | `app/app.js` | M |
 | 2.6 | **Undo for everything.** A general undo stack for save, delete, import and edit, with `Ctrl/Cmd+Z`. | Deletes and imports are the only irreversible actions in the app; both deserve a way back. | `app/app.js` | M |
 | 2.7 | **Storage guard.** Warn at 80% of the origin quota, refuse photos beyond a threshold, and offer a one-click "export and clear old photos". | The current failure mode is a toast saying the save failed. That is one moment too late. | `app/app.js` | M |
-| 2.8 | **Photo pipeline upgrade.** Try `createImageBitmap` with `imageOrientation: 'from-image'`, encode to WebP when the browser supports it, and store the smaller of WebP/JPEG. | Roughly 30% smaller archives and correct orientation for phone photos, which currently can land sideways. | `app/app.js` | M |
 | 2.9 | **Accessibility pass with axe.** Run axe-core in the headless script, fix the violations it reports, and add the check to CI. | A one-off audit that turns into a permanent guarantee. | `tools/`, `.github/workflows/` | M |
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 2.5 | **On this day** — same calendar date in earlier years, under the city, hidden when empty. | `app/app.js`, `app/styles.css` |
+| 2.8 | **Photo pipeline** — EXIF orientation honoured, WebP encoding with a JPEG fallback, smaller of the two kept. | `app/app.js` |
 | 2.16 | **Fix the landing page's layout shift.** It measures 0.186 cold, 0.018 warm, against a 0.1 threshold. Six experiments are recorded in `docs/performance.md`; the two known fixes are `font-display: optional` (costs the first-paint typeface) and metric-matched fallbacks via `size-adjust`/`ascent-override` (needs the metrics read out of the woff2 files). Do not guess — reproduce it first. | `fonts/fonts.css`, `assets/landing.css` | M |
 | 2.15 | **Finish the contrast sweep.** About forty distinct small-text colours in `app/styles.css` still measure 2.5:1–4.4:1 — chip labels, one-off captions, the achievement status text. Fixing them means choosing new values per component, not one token, which is why it is here and not in the quick wins. Start with `grep -o 'color: *#[0-9a-f]\{6\}' app/styles.css \| sort \| uniq -c` and a contrast checker. | Legibility for everyone, and the difference between an audit that reports and an audit that fixes. | `app/styles.css` | M |
 | 2.12 | **A shareable postcard.** Render the current skyline to a 1200×630 PNG on a canvas and download it with the city's level and count. | The city is the most shareable thing in the app and there is currently no way to show anyone without a screenshot. | `app/app.js` | M |

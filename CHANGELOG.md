@@ -2,6 +2,19 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.10.0 — 2026-11-19
+
+Two items off the short list.
+
+### Added
+
+- **On this day.** A strip under the city that shows moments from the same calendar date in earlier years, newest first, with a "1 yr" / "3 yrs" badge and the district's colour. Click one and it opens that day in the drawer. The panel hides itself entirely when there is nothing to show, so a new city never meets an empty box.
+- The sample city now includes one moment dated exactly a year ago today, so the strip has something to show on a first visit. Exact date arithmetic, not "365 days", so it lands on the same month and day across leap years.
+
+### Changed
+
+- **Photos are encoded as WebP when the browser can, and JPEG when it cannot**, keeping whichever is smaller. A 400×200 test JPEG with EXIF orientation 6 now stores as `data:image/webp` at 200×400 — the rotation is applied, so a photo taken sideways on a phone is stored the way it was meant to be seen. The import validator already accepted WebP; nothing else changed.
+
 ## 1.9.0 — 2026-11-19
 
 A performance pass, with the numbers written down.

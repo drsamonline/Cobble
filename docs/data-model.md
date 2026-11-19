@@ -20,7 +20,7 @@ Everything Cobble knows about you is one array of objects. This guide is the exa
 Notes that matter in practice:
 
 - **`date` is a string, not a Date.** It is a calendar date in your local time, computed by `localDate()`, so a moment saved at 23:50 on the 18th stays on the 18th even if you fly somewhere. Every render parses it as `new Date(date + 'T12:00:00')` — noon, to stay clear of DST edges.
-- **`photo` is a data URL**, not a Blob and not a filename. Photos are downscaled to at most 1280 px on the long edge, drawn to a canvas, and re-encoded as `image/jpeg` at quality 0.76. A 12 MB input usually lands between 80 KB and 250 KB. This is why the archive is one self-contained JSON document and why the export needs no extra files.
+- **`photo` is a data URL**, not a Blob and not a filename. Photos are downscaled to at most 1280 px on the long edge, drawn to a canvas, and re-encoded as WebP where the browser supports it and JPEG otherwise — whichever is smaller — at quality 0.76. EXIF orientation is applied first, so an upright file is stored for a sideways photo. A 12 MB input usually lands between 80 KB and 250 KB. This is why the archive is one self-contained JSON document and why the export needs no extra files.
 - **`id` is generated client-side** and is the only key used for de-duplication on import.
 - **Unknown fields are dropped** on import rather than stored. The importer is a whitelist, not a passthrough.
 
