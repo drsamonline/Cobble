@@ -2879,3 +2879,149 @@ mark {
   margin-left: auto;
 }
 .storage-warning button:hover { background: #efd8b4; }
+
+/* ── Dark interface ───────────────────────────────────────────────
+   A shell theme, not a redesign: the sidebar, top bar, panels, dialogs and
+   text flip; the city keeps its own illustration palette, which already has
+   a Night control of its own. Set by `data-shell="dark"` on <html>, which
+   follows the system preference until someone chooses. */
+html[data-shell="dark"] {
+  --color-bg: #10171a;
+  --color-surface: #162024;
+  --color-text: #eef2ec;
+  --color-muted: #9aa7a1;
+  --color-line: #26333a;
+  --color-soft: #1b262b;
+  --color-primary: #7fb3a4;
+  --color-primary-contrast: #0d1417;
+  --color-accent: #e9b782;
+  color-scheme: dark;
+}
+
+html[data-shell="dark"] body { background: #10171a; color: #eef2ec; }
+html[data-shell="dark"] .sidebar { background: #141d21; border-right-color: #26333a; }
+html[data-shell="dark"] .topbar { background: #141d21; border-bottom-color: #26333a; }
+html[data-shell="dark"] .brand,
+html[data-shell="dark"] .breadcrumb,
+html[data-shell="dark"] .breadcrumb strong { color: #eef2ec; }
+html[data-shell="dark"] .side-label,
+html[data-shell="dark"] .card-kicker,
+html[data-shell="dark"] .eyebrow { color: #9aa7a1; }
+html[data-shell="dark"] .nav-item { color: #cdd7d1; }
+html[data-shell="dark"] .nav-item.active { background: #1d2a2f; color: #a8d3c6; }
+html[data-shell="dark"] .panel,
+html[data-shell="dark"] .city-card,
+html[data-shell="dark"] .archive-storage-panel,
+html[data-shell="dark"] .achievements-panel,
+html[data-shell="dark"] .discoveries-panel,
+html[data-shell="dark"] .category-panel,
+html[data-shell="dark"] .full-timeline-panel { background: #162024; border-color: #26333a; box-shadow: none; }
+html[data-shell="dark"] .panel h3,
+html[data-shell="dark"] .city-card-head h2,
+html[data-shell="dark"] .drawer-title,
+html[data-shell="dark"] h1,
+html[data-shell="dark"] h2,
+html[data-shell="dark"] h3 { color: #eef2ec; }
+html[data-shell="dark"] .city-card-head h2 span { color: #a8d3c6; }
+html[data-shell="dark"] .intro-copy,
+html[data-shell="dark"] .panel p,
+html[data-shell="dark"] .insight-content p,
+html[data-shell="dark"] .archive-storage-copy small { color: #b6c2bc; }
+html[data-shell="dark"] .mini-day,
+html[data-shell="dark"] .full-day { background: #1a2429; border-color: #26333a; }
+html[data-shell="dark"] .mini-day:hover,
+html[data-shell="dark"] .full-day:hover { background: #1f2c31; }
+html[data-shell="dark"] .entry-card-text,
+html[data-shell="dark"] .mini-date,
+html[data-shell="dark"] .full-date { color: #dfe7e2; }
+html[data-shell="dark"] .stat-card,
+html[data-shell="dark"] .achievement-card,
+html[data-shell="dark"] .onthisday-item,
+html[data-shell="dark"] .discovery-item { background: #1a2429; border-color: #26333a; }
+html[data-shell="dark"] .stat-value { color: #eef2ec; }
+html[data-shell="dark"] .stat-label,
+html[data-shell="dark"] .achievement-copy span,
+html[data-shell="dark"] .stat-card small { color: #9aa7a1; }
+html[data-shell="dark"] .achievement-copy strong,
+html[data-shell="dark"] .onthisday-text { color: #dfe7e2; }
+html[data-shell="dark"] .onthisday-years { background: #1d2a2f; color: #a8d3c6; }
+html[data-shell="dark"] .timeline-search input { background: #1a2429; border-color: #2b3a41; color: #eef2ec; }
+html[data-shell="dark"] .timeline-search input::placeholder { color: #8d9a94; }
+html[data-shell="dark"] .timeline-search-clear { background: #26333a; color: #cdd7d1; }
+html[data-shell="dark"] .entry-modal,
+html[data-shell="dark"] .share-dialog,
+html[data-shell="dark"] .help-card,
+html[data-shell="dark"] .day-drawer { background: #162024; border-color: #26333a; }
+html[data-shell="dark"] .story-card { background: #1a2429; border-color: #26333a; }
+html[data-shell="dark"] .story-card p { color: #dfe7e2; }
+html[data-shell="dark"] .field-label,
+html[data-shell="dark"] .form-field label { color: #b6c2bc; }
+html[data-shell="dark"] #entry-text,
+html[data-shell="dark"] #entry-date,
+html[data-shell="dark"] #entry-category,
+html[data-shell="dark"] .share-pin-input {
+  background: #1a2429; border-color: #2b3a41; color: #eef2ec;
+}
+html[data-shell="dark"] .cancel-button { background: #1d2a2f; border-color: #2b3a41; color: #cdd7d1; }
+html[data-shell="dark"] .add-button { background: #7fb3a4; color: #0d1417; }
+html[data-shell="dark"] .toast { background: #eef2ec; color: #10171a; }
+html[data-shell="dark"] .page-footer { color: #8d9a94; border-top-color: #26333a; }
+html[data-shell="dark"] .offline-card { background: #1a2429; border-color: #26333a; color: #b6c2bc; }
+html[data-shell="dark"] .profile strong { color: #eef2ec; }
+html[data-shell="dark"] .archive-storage-badge { background: #1d2a2f; color: #a8d3c6; }
+html[data-shell="dark"] mark { background: #4a3a1c; color: #f6e3c4; }
+
+/* Surfaces the shell theme must cover beyond the panels themselves. */
+html[data-shell="dark"] .app-shell,
+html[data-shell="dark"] .main-area { background: #10171a; }
+html[data-shell="dark"] .stat-card { background: #162024; border-color: #26333a; }
+html[data-shell="dark"] .day-drawer { background: #131c20; }
+html[data-shell="dark"] .drawer-lede,
+html[data-shell="dark"] .drawer-title { color: #eef2ec; }
+html[data-shell="dark"] .demo-note { background: #1d2a2f; border-color: #2b3a41; color: #cdd7d1; }
+html[data-shell="dark"] .demo-note strong { color: #dfe7e2; }
+html[data-shell="dark"] .today-pill { background: #1d2a2f; color: #cdd7d1; border-color: #2b3a41; }
+html[data-shell="dark"] .share-button,
+html[data-shell="dark"] .icon-button {
+  background: #1d2a2f; border-color: #2b3a41; color: #cdd7d1;
+}
+html[data-shell="dark"] .share-button:hover,
+html[data-shell="dark"] .icon-button:hover { background: #24343a; color: #eef2ec; }
+html[data-shell="dark"] .city-status { background: #1a2429; border-color: #26333a; }
+html[data-shell="dark"] .city-status strong { color: #eef2ec; }
+html[data-shell="dark"] .city-status small { color: #9aa7a1; }
+html[data-shell="dark"] .page-intro h1,
+html[data-shell="dark"] .compact-intro h1 { color: #eef2ec; }
+html[data-shell="dark"] .page-intro h1 em,
+html[data-shell="dark"] .compact-intro h1 em { color: #a8d3c6; }
+html[data-shell="dark"] .city-card-head { background: #162024; }
+html[data-shell="dark"] .text-button { color: #a8d3c6; }
+html[data-shell="dark"] .insight-quote { color: #dfe7e2; }
+html[data-shell="dark"] .privacy-note { background: #1a2429; border-color: #26333a; color: #b6c2bc; }
+html[data-shell="dark"] .privacy-note strong { color: #eef2ec; }
+html[data-shell="dark"] .achievement-count,
+html[data-shell="dark"] .onthisday-count,
+html[data-shell="dark"] .entry-total { background: #1d2a2f; color: #a8d3c6; }
+html[data-shell="dark"] .achievement-icon { background: #1d2a2f; color: #a8d3c6; }
+html[data-shell="dark"] .achievement-progress { background: #26333a; }
+html[data-shell="dark"] .bar-track { background: #26333a; }
+html[data-shell="dark"] .photo-picker { background: #1a2429; border-color: #2b3a41; color: #b6c2bc; }
+html[data-shell="dark"] .story-foot { color: #9aa7a1; }
+html[data-shell="dark"] .help-links { color: #9aa7a1; }
+html[data-shell="dark"] .help-links a { color: #a8d3c6; }
+html[data-shell="dark"] .empty-state,
+html[data-shell="dark"] .empty-full,
+html[data-shell="dark"] .no-search-results { color: #9aa7a1; }
+html[data-shell="dark"] .empty-state strong,
+html[data-shell="dark"] .empty-full strong,
+html[data-shell="dark"] .no-search-results strong { color: #eef2ec; }
+html[data-shell="dark"] .timeline-search-status { color: #9aa7a1; }
+html[data-shell="dark"] .full-day,
+html[data-shell="dark"] .mini-day { background: #1a2429; }
+html[data-shell="dark"] .offline-indicator { background: #7fb3a4; }
+html[data-shell="dark"] .insight-top-note { background: #1d2a2f; color: #a8d3c6; }
+html[data-shell="dark"] .storage-warning { background: #2a2418; border-color: #4a3a1c; color: #e9d3a8; }
+html[data-shell="dark"] .storage-warning button { background: #4a3a1c; border-color: #6a5228; color: #f6e3c4; }
+html[data-shell="dark"] .archive-storage-icon { background: #1d2a2f; color: #a8d3c6; }
+html[data-shell="dark"] .status-spark,
+html[data-shell="dark"] .insight-spark { color: #a8d3c6; }

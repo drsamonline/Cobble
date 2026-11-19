@@ -85,7 +85,35 @@
     return choices[Math.floor(Math.random() * choices.length)];
   };
 
+  const SHELL_KEY = 'cobble-shell-theme';
   const ATMOSPHERE_KEY = 'cobble-atmosphere-v1';
+
+  /* The interface theme: light, dark, or whatever the system says until
+     someone chooses. Separate from the city's own Night control. */
+  function applyShellTheme(mode) {
+    const resolved = mode || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.dataset.shell = resolved;
+    const button = $('#shell-theme');
+    if (button) {
+      button.textContent = resolved === 'dark' ? '☀' : '☾';
+      button.setAttribute('aria-label', resolved === 'dark' ? 'Switch to light interface' : 'Switch to dark interface');
+      button.setAttribute('aria-pressed', String(resolved === 'dark'));
+    }
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', resolved === 'dark' ? '#10171a' : '#f6f4ef');
+  }
+
+  function restoreShellTheme() {
+    let stored = null;
+    try { stored = localStorage.getItem(SHELL_KEY); } catch {}
+    applyShellTheme(stored === 'dark' || stored === 'light' ? stored : null);
+  }
+
+  function toggleShellTheme() {
+    const next = document.documentElement.dataset.shell === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem(SHELL_KEY, next); } catch {}
+    applyShellTheme(next);
+    toast(next === 'dark' ? 'Dark interface.' : 'Light interface.');
+  }
 
   function saveAtmosphere() {
     try {
@@ -991,6 +1019,7 @@
        month: 'short',
        day: 'numeric'
      });
+     restoreShellTheme();
      restoreAtmosphere();
      render();
      startCityMotion();
@@ -1202,6 +1231,7 @@
 
     $('#undo-button')?.addEventListener('click', runUndo);
     $('#export-json')?.addEventListener('click', exportJSON);
+    $('#shell-theme')?.addEventListener('click', toggleShellTheme);
     $('#storage-export')?.addEventListener('click', () => {
       setView('insights');
       exportJSON();

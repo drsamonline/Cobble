@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.12.0 — 2026-11-19
+
+### Added
+
+- **A dark interface, and a light one.** A ☾ button in the top bar flips the shell — sidebar, top bar, panels, cards, dialogs, inputs and the drawer — and the choice is remembered in `cobble-shell-theme`. With no choice made, it follows `prefers-color-scheme`, so a dark-mode system gets a dark app on the first visit. The city keeps its own palette and its own Night control; this is the interface around it, not a filter over it.
+- **`tools/check-version.mjs`** — fails the build when `sw.js`, the README badge and the newest `CHANGELOG.md` heading disagree. It found one on its first run: the badge had been stuck at 1.5.0 for seven releases.
+
+### Verified
+
+- Contrast measured in the dark palette: body text 16.0:1, panel text 14.65:1, secondary 9.03:1, muted 6.65:1, links 11.04:1, placeholder 5.41:1 — every pair above 4.5:1.
+- Driven in headless Chrome across all three views, with the theme following the system preference, toggling by hand, and surviving a reload.
+
 ## 1.11.0 — 2026-11-19
 
 Two more off the short list.

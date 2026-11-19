@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.11.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.12.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -58,7 +58,6 @@ What is left of the quick-win tier:
 
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
-| 1.18 | **Bump the cache on deploy.** Wire `CACHE_VERSION` to the commit, or add a release step that reminds you. | A stale cache is the one failure mode a worker introduces. Bumped by hand in 1.3.0. | `sw.js`, `.github/workflows/` | S |
 | 1.19 | **A "your city is in another browser" hint.** On an empty archive, offer one line about exports and how to bring a city across. | The most common support question in the [FAQ](docs/faq.md) is "my city is gone" when it is only in another browser profile. | `app/app.js` | S |
 
 ## 2. An afternoon each
@@ -66,10 +65,11 @@ What is left of the quick-win tier:
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
 | 2.2 | **Filters on the timeline.** By district, by weight, by date range. | With two years of moments the timeline is a wall. Six chips and a date picker fix it. | `app/app.js` | M |
-| 2.3 | **Dark mode for the app shell.** `prefers-color-scheme: dark` plus a manual override, driven by the same tokens in `theme.css`. The city already has a night state to borrow from. | Half the app's users open it at 11 pm. A white page at 11 pm is a reason not to open it. | `app/theme.css`, `app/styles.css` | M |
 | 2.4 | **A year heatmap.** 53 × 7 cells, one per day, shaded by how many moments it held; click a cell to open the day. | The one view that answers "have I been keeping up?" without a streak or a scold. | `app/app.js`, `app/styles.css` | M |
 | 2.9 | **Accessibility pass with axe.** Run axe-core in the headless script, fix the violations it reports, and add the check to CI. | A one-off audit that turns into a permanent guarantee. | `tools/`, `.github/workflows/` | M |
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 2.3 | **A dark interface** for the shell — toggle in the top bar, remembered, follows `prefers-color-scheme` by default, contrast measured in the dark palette. | `app/styles.css`, `app/app.js` |
+| 1.18 | **Version agreement in CI** — `sw.js`, the README badge and the changelog must match. It caught a badge stuck at 1.5.0. | `tools/check-version.mjs` |
 | 2.6 | **Undo for edit and import**, not just delete — one slot, one action, named in the bar. | `app/app.js` |
 | 2.7 | **A storage guard** at 80% of quota, with a one-click backup, and a photo refusal past 97%. | `app/app.js`, `app/styles.css` |
 | 2.5 | **On this day** — same calendar date in earlier years, under the city, hidden when empty. | `app/app.js`, `app/styles.css` |

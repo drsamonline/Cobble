@@ -11,7 +11,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 **Status: v1.5.0 — shipped, offline, editable, searchable, and tested.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.5.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.12.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -56,9 +56,13 @@ The name: *to cobble* is to make a thing from whatever is at hand, and a cobble 
 |---|---|
 | ![The timeline view, one row per day](screenshots/timeline.webp) | ![One search result, with the match marked](screenshots/search.webp) |
 
-| On this day | The city at night |
+| On this day | Dark interface |
 |---|---|
-| ![The same date a year earlier, under the city](screenshots/on-this-day.webp) | ![The city after dark](screenshots/city-night.webp) |
+| ![The same date a year earlier, under the city](screenshots/on-this-day.webp) | ![The app with the dark interface](screenshots/dark.webp) |
+
+| The city at night |
+|---|
+| ![The city after dark](screenshots/city-night.webp) |
 
 | Discoveries | Milestones |
 |---|---|
@@ -83,6 +87,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 **The city**
 
 - **A skyline made of your days.** Six district colours, six building shapes, rooftops, windows that scale with how often something has recurred, and a crown on any block that holds more than two moments.
+- **A light interface and a dark one.** The ☾ button in the top bar flips the shell and remembers the choice; with no choice made it follows the system. The city keeps its own palette and its own Night control.
 - **Five atmospheres and four weathers.** Meadow, coastal, amber, lavender and midnight; clear, cloudy, rain and snow. All drawn in CSS, none of them photographs.
 - **Day and night.** Night relights the windows, darkens the hills and quiets the palette. Day and night are a button, not a clock.
 - **Streets with traffic.** Cars pass, a person walks, a bird or a cat turns up, streetlamps come on at night, and a little theatre appears every ninth district — click it to open your photo gallery.
