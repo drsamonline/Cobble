@@ -2,6 +2,22 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.34.0 — 2026-11-19
+
+### Changed
+
+- **The sample-city banner and the city's intro line are translated too**, along with the top-bar buttons. What is left in English is deliberate and listed below.
+
+### Attempted and reverted, again — multiple cities
+
+Second attempt, second revert. This time the city was threaded explicitly into `loadArchive`, `saveArchive`, `readPhotos` and `saveToDatabase` rather than read from a module-level variable at drain time — which fixed the first attempt's bug — and it still mixed archives: a switch mid-save left the interface showing one city's moments under another's name, and a reload lost the first city entirely. Reverting took four minutes; the archive is intact.
+
+Two attempts is enough to conclude the shape is wrong, not the details. The next attempt needs `app.js` split so that a city is an object holding its entries, its records and its render, instead of four module-level variables (`entries`, `personalEntries`, `lastPhotoKeys`, `activeCity`) that every function reaches into. Recorded in `ENHANCEMENTS.md`.
+
+### Still English, on purpose
+
+The sentences Cobble writes about your archive — toasts, the observations in Discoveries, the year-in-review lines — and two labels set by JavaScript at runtime (*Sound*, *3D city*). Templates with numbers inside them need more than a dictionary.
+
 ## 1.33.0 — 2026-11-19
 
 ### Added
