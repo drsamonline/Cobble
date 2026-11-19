@@ -24,6 +24,22 @@ Notes that matter in practice:
 - **`id` is generated client-side** and is the only key used for de-duplication on import.
 - **Unknown fields are dropped** on import rather than stored. The importer is a whitelist, not a passthrough.
 
+## The vault
+
+When the archive is locked, the `moments` record is deleted and one `vault` record takes its place:
+
+```js
+{
+  format: 'cobble-vault',
+  version: 1,
+  salt: [...16 bytes],
+  iv: [...12 bytes],
+  data: [...ciphertext of JSON.stringify(entries)]
+}
+```
+
+The key comes from the passphrase by PBKDF2-SHA-256, 250,000 iterations, and the ciphertext is AES-256-GCM — the same primitives as the share file, with a different purpose: this one never leaves the device.
+
 ## Where it lives
 
 ### IndexedDB (primary)

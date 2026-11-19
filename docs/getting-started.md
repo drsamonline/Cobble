@@ -96,6 +96,10 @@ The photographs in the sample come from Unsplash and are loaded from Unsplash's 
 
 Open `/selftest.html`. It loads every file the service worker is supposed to keep and reports, per file, whether it came from the cache or the network. Run it once online — everything should say `cached` — then turn the network off and run it again. A row that fails with the network off is a file the worker is not keeping, which is a bug worth reporting.
 
+## Locking your city
+
+Discoveries → **Lock this city** asks for a passphrase of at least eight characters and seals the archive. From then on the app opens with an unlock screen, and every save re-encrypts before it reaches the disk. There is no recovery: if you forget the passphrase the city is gone, and the app says so before it locks. **Start a new city instead** wipes the sealed archive if you would rather begin again.
+
 ## Light or dark
 
 The ☾ button in the top bar flips the interface between light and dark, and the choice is remembered. If you never touch it, the app follows your system's setting — a dark-mode system gets a dark app on the first visit. This is the interface only: the city keeps its own palette, and its own **Night** control sits in the city's control deck.

@@ -143,6 +143,48 @@ test('accepts every district the app offers', () => {
 
 /* ── end to end: what a hostile file can and cannot do ──────────── */
 
+/* ── the vault ───────────────────────────────────────────────────── */
+
+test('a vault round-trips and keeps the moments intact', async () => {
+  const rows = [
+    { id: 'a', date: '2026-01-02', text: 'Locked away.', category: 'joy', importance: 2, repeatCount: 1, photo: '', createdAt: '2026-01-02T10:00:00.000Z' }
+  ];
+  const vault = await core.encryptVault(rows, 'a long enough passphrase');
+  assert.equal(vault.format, 'cobble-vault');
+  assert.equal(vault.version, 1);
+  assert.equal(vault.salt.length, 16);
+  assert.equal(vault.iv.length, 12);
+  const back = await core.decryptVault(vault, 'a long enough passphrase');
+  assert.deepEqual(back, rows);
+});
+
+test('a vault does not contain its own plaintext', async () => {
+  const vault = await core.encryptVault(
+    [{ id: 'a', date: '2026-01-02', text: 'marmalade on toast', category: 'joy', importance: 1, repeatCount: 1, photo: '', createdAt: '2026-01-02T10:00:00.000Z' }],
+    'a long enough passphrase'
+  );
+  assert.equal(JSON.stringify(vault).includes('marmalade'), false);
+});
+
+test('a vault refuses a wrong passphrase and a short one', async () => {
+  const vault = await core.encryptVault([], 'a long enough passphrase');
+  await assert.rejects(() => core.decryptVault(vault, 'not the passphrase'), /did not open/);
+  await assert.rejects(() => core.encryptVault([], 'short'), /at least eight/);
+});
+
+test('two vaults of the same archive differ', async () => {
+  const rows = [{ id: 'a', date: '2026-01-02', text: 'x', category: 'joy', importance: 1, repeatCount: 1, photo: '', createdAt: '2026-01-02T10:00:00.000Z' }];
+  const first = await core.encryptVault(rows, 'a long enough passphrase');
+  const second = await core.encryptVault(rows, 'a long enough passphrase');
+  assert.notDeepEqual(first.salt, second.salt);
+  assert.notDeepEqual(first.data, second.data);
+});
+
+test('a vault that is not a vault is refused', async () => {
+  await assert.rejects(() => core.decryptVault({ format: 'cobble-pincode' }, 'a long enough passphrase'), /not a Cobble vault/);
+  await assert.rejects(() => core.decryptVault(null, 'a long enough passphrase'), /not a Cobble vault/);
+});
+
 test('an imported city keeps the good moments and drops the rest', async () => {
   const good = moment();
   const hostile = [

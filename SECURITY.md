@@ -28,7 +28,7 @@ The published site tracks `main`. Only the current minor version (1.5.x at the t
 
 - Someone with physical access to an unlocked device, or with the browser profile. The archive is not encrypted at rest; that is a documented gap, and [ENHANCEMENTS.md](ENHANCEMENTS.md) tracks it.
 - Browser extensions with permission to read pages.
-- The PIN being brute-forced from a `.cobble` file. A six-digit PIN is deliberately weak against an offline attacker with hardware; the docs say so, and the fix is a longer PIN.
+- A passphrase being brute-forced from a locked vault, or from a `.cobble` file. A six-digit PIN is deliberately weak against an offline attacker with hardware; the docs say so, and the fix is a longer PIN.
 - Denial of service by filling your own storage quota.
 - Anything in GitHub Pages' hosting, TLS or CDN behaviour.
 - The experimental 3D layer, which is off by default and behind `?3d=1`.
@@ -39,7 +39,7 @@ The app protects your moments from: other websites (same-origin policy), a perso
 
 ## Known limitations, listed rather than buried
 
-- **No encryption at rest.** Moments sit in IndexedDB as readable JSON. The encrypted format exists and is used for export; wrapping the live archive is on the enhancement list.
+- **Encryption at rest is opt-in.** Locked cities store a single encrypted `vault` record and no plaintext; unlocked cities store readable JSON, because that is what makes a forgotten passphrase survivable. The choice is yours and the app states the trade-off before locking.
 - **No Content-Security-Policy header.** The app has no inline scripts and no third-party origins left, so a strict policy is now feasible — `docs/deploying.md` has a draft — but the published copy does not send one. A meta-tag CSP is a small next step.
 - **No `X-Frame-Options` / `frame-ancestors`.** The page could be framed by another site. Nothing in the app is clickjackable in a harmful way, but it is not asserted either.
 - **Six-digit PINs are guessable offline** given a GPU and patience. Use twelve.

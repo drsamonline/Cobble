@@ -3150,3 +3150,15 @@ html[data-shell="dark"] .filter-chip { background: #1a2429; border-color: #2b3a4
 html[data-shell="dark"] .filter-chip:hover { background: #22303a; }
 html[data-shell="dark"] .filter-chip[aria-pressed="true"] { background: #7fb3a4; border-color: #7fb3a4; color: #0d1417; }
 html[data-shell="dark"] .filter-chip-reset { background: #2a2418; border-color: #4a3a1c; color: #e9d3a8; }
+
+/* ── Locked archive ───────────────────────────────────────────────
+   The unlock screen is a dialog with no close button: while the archive is
+   sealed there is nothing behind it to go back to. */
+.lock-card { width: min(440px, 100%); }
+.lock-card .drawer-title { margin: 2px 0 6px; }
+.lock-card .field-label { display: block; margin: 14px 0 5px; }
+.lock-card .share-pin-input { width: 100%; }
+.lock-card .share-actions { justify-content: flex-end; margin-top: 12px; }
+.lock-card .share-footnote .text-button { display: inline; margin: 0; padding: 0; text-decoration: underline; }
+#lock-badge { margin-left: auto; }
+#lock-city { margin-left: 10px; }

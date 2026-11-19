@@ -11,7 +11,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 **Status: v1.5.0 — shipped, offline, editable, searchable, and tested.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.19.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.20.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -42,6 +42,7 @@ Every saved moment becomes a block in a city. Six districts sort the blocks by k
 The name: *to cobble* is to make a thing from whatever is at hand, and a cobble is the stone underfoot on a street that was laid one stone at a time. Both halves are the app.
 
 - **No account.** There is no Cobble server, so there is nothing to sign in to.
+- **Lock it if you want to.** One passphrase seals the archive: the plaintext record is deleted, a single AES-256-GCM record replaces it, and the app tells you plainly that a forgotten passphrase means a lost city.
 - **No tracking.** No analytics, no cookies, no third-party scripts reading your words.
 - **No subscription.** Noncommercial use is free, forever, under a licence that says so.
 - **No lock-in.** Your archive exports as a file you own, encrypted with a PIN you choose.

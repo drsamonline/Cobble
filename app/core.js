@@ -135,6 +135,48 @@
     };
   }
 
+  /* ── the vault ────────────────────────────────────────────────────
+     The archive at rest. Same primitives as the share file, a different
+     purpose: this one never leaves the device, and it exists so that a
+     stolen browser profile yields ciphertext rather than a diary. */
+  const VAULT_FORMAT = 'cobble-vault';
+  const VAULT_VERSION = 1;
+
+  async function encryptVault(entries, passphrase) {
+    if (typeof passphrase !== 'string' || passphrase.length < 8) {
+      throw new Error('Use at least eight characters for the passphrase.');
+    }
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const key = await deriveKey(passphrase, salt);
+    const plaintext = new TextEncoder().encode(JSON.stringify(entries));
+    const data = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, plaintext);
+    return {
+      format: VAULT_FORMAT,
+      version: VAULT_VERSION,
+      salt: [...salt],
+      iv: [...iv],
+      data: [...new Uint8Array(data)]
+    };
+  }
+
+  async function decryptVault(vault, passphrase) {
+    if (!vault || vault.format !== VAULT_FORMAT || vault.version !== VAULT_VERSION) {
+      throw new Error('That is not a Cobble vault.');
+    }
+    const salt = new Uint8Array(vault.salt);
+    const iv = new Uint8Array(vault.iv);
+    const key = await deriveKey(passphrase, salt);
+    let plaintext;
+    try {
+      plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, new Uint8Array(vault.data));
+    } catch {
+      throw new Error('That passphrase did not open this city.');
+    }
+    const parsed = JSON.parse(new TextDecoder().decode(plaintext));
+    return Array.isArray(parsed) ? parsed : [];
+  }
+
   const api = {
     FORMAT,
     VERSION,
@@ -148,7 +190,11 @@
     deriveKey,
     encryptEntries,
     decryptBundle,
-    normaliseEntry
+    normaliseEntry,
+    VAULT_FORMAT,
+    VAULT_VERSION,
+    encryptVault,
+    decryptVault
   };
 
   globalThis.CobbleCore = api;

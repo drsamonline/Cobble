@@ -2,6 +2,24 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.20.0 — 2026-11-19
+
+The last honest gap in the privacy page, closed.
+
+### Added
+
+- **Lock this city.** One passphrase seals the archive: the plaintext `moments` record is deleted in the same transaction that writes a single `cobble-vault` record — AES-256-GCM, key derived by PBKDF2-SHA-256 at 250,000 iterations, fresh salt and IV on every save. From then on the app opens with an unlock screen, and every save re-encrypts before it reaches the disk.
+- **No recovery, stated before it locks.** The confirm text says so, the unlock screen says so, and *Start a new city instead* is offered for the case where the passphrase is gone.
+- Five unit tests for the vault: round-trip, no plaintext in the ciphertext, wrong passphrase refused, short passphrase refused, two vaults of the same archive differ.
+
+### Verified
+
+- Locked a real archive in headless Chrome: afterwards the object store held **one record, `vault`**, with no `moments` record and no readable text inside the ciphertext. Reload showed the unlock screen at "0 moments"; a wrong passphrase was refused with *"That passphrase did not open this city."*; the right one restored the moment. Adding a moment while unlocked and reloading again gave two moments, both present after the second unlock.
+
+### Changed
+
+- `PRIVACY.md` and `SECURITY.md` said plainly that the archive was not encrypted at rest. They now describe what the vault does, and what it does not protect against.
+
 ## 1.19.0 — 2026-11-19
 
 ### Changed

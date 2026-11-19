@@ -166,6 +166,31 @@
     return databasePromise;
   }
 
+  /* The vault: when set, the archive is written encrypted under this key and
+     no plaintext moments record is kept. */
+  let vaultKey = null;
+  let vaultPassphrase = null;
+
+  function saveVault(vault) {
+    return openDatabase().then(db => new Promise((resolve, reject) => {
+      const transaction = db.transaction('archive', 'readwrite');
+      const store = transaction.objectStore('archive');
+      store.put({ id: 'vault', value: vault });
+      store.delete('moments');
+      transaction.oncomplete = resolve;
+      transaction.onerror = () => reject(transaction.error || new Error('Could not save the vault'));
+      transaction.onabort = () => reject(transaction.error || new Error('Vault save was interrupted'));
+    }));
+  }
+
+  function readVault() {
+    return openDatabase().then(db => new Promise((resolve, reject) => {
+      const request = db.transaction('archive', 'readonly').objectStore('archive').get('vault');
+      request.onsuccess = () => resolve(request.result?.value || null);
+      request.onerror = () => reject(request.error);
+    }));
+  }
+
   function saveToDatabase(serialized) {
     return openDatabase().then(db => new Promise((resolve, reject) => {
       const transaction = db.transaction('archive', 'readwrite');
@@ -177,6 +202,16 @@
   }
 
   async function loadArchive() {
+    try {
+      const vault = await readVault().catch(() => null);
+      if (vault) {
+        entries = [];
+        personalEntries = [];
+        databaseReady = true;
+        showLockScreen();
+        return;
+      }
+    } catch {}
     try {
       const db = await openDatabase();
       const stored = await new Promise((resolve, reject) => {
@@ -207,6 +242,15 @@
    function save() {
     if (demoMode) return;
     personalEntries = entries;
+    if (vaultKey && vaultPassphrase) {
+      /* Encrypt before anything touches the disk; the plaintext record is
+         deleted in the same transaction. */
+      window.CobbleCore.encryptVault(entries, vaultPassphrase)
+        .then(vault => saveVault(vault))
+        .then(() => updateStorageInfo())
+        .catch(() => toast('Could not write the locked archive. Your changes are in memory only.'));
+      return;
+    }
     const serialized = JSON.stringify(entries);
          if (databaseReady) {
        // Serialize writes so a slower earlier save can never overwrite a newer archive.
@@ -866,6 +910,81 @@
     });
   }
 
+  /* ── locking the archive ─────────────────────────────────────────── */
+  function showLockScreen() {
+    const modal = $('#lock-modal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    $('#lock-status').textContent = '';
+    $('#lock-passphrase').value = '';
+    setTimeout(() => $('#lock-passphrase').focus(), 60);
+  }
+
+  function hideLockScreen() {
+    $('#lock-modal')?.classList.add('hidden');
+  }
+
+  async function lockCity() {
+    if (demoMode) exitDemo();
+    if (!entries.length) { toast('Nothing to lock yet.'); return; }
+    const passphrase = prompt('Choose a passphrase of at least eight characters.\n\nThere is no recovery: if you forget it, the archive cannot be read again.');
+    if (passphrase === null) return;
+    if (passphrase.length < 8) { toast('Use at least eight characters.'); return; }
+    try {
+      const vault = await window.CobbleCore.encryptVault(entries, passphrase);
+      await saveVault(vault);
+      vaultKey = 'set';
+      vaultPassphrase = passphrase;
+      const badge = $('#lock-badge');
+      if (badge) badge.textContent = 'SEALED';
+      toast('This city is sealed. Enter the passphrase next time you open it.');
+    } catch (error) {
+      toast(error.message || 'Could not lock the archive.');
+    }
+  }
+
+  async function unlockCity() {
+    const passphrase = $('#lock-passphrase').value;
+    const status = $('#lock-status');
+    if (!passphrase) { status.textContent = 'Enter the passphrase.'; return; }
+    try {
+      const vault = await readVault();
+      const decrypted = await window.CobbleCore.decryptVault(vault, passphrase);
+      entries = decrypted;
+      personalEntries = decrypted;
+      vaultKey = 'set';
+      vaultPassphrase = passphrase;
+      hideLockScreen();
+      render();
+      updateStorageInfo();
+      toast(`Unlocked — ${entries.length} ${entries.length === 1 ? 'moment' : 'moments'}.`);
+    } catch (error) {
+      status.textContent = error.message || 'That passphrase did not open this city.';
+    }
+  }
+
+  async function forgetVault() {
+    if (!confirm('Start a new city? The sealed archive will be deleted, and there is no way back.')) return;
+    try {
+      const db = await openDatabase();
+      await new Promise((resolve, reject) => {
+        const transaction = db.transaction('archive', 'readwrite');
+        transaction.objectStore('archive').delete('vault');
+        transaction.oncomplete = resolve;
+        transaction.onerror = () => reject(transaction.error);
+      });
+      vaultKey = null;
+      vaultPassphrase = null;
+      entries = [];
+      personalEntries = [];
+      hideLockScreen();
+      render();
+      toast('A new city. The sealed archive is gone.');
+    } catch {
+      toast('Could not clear the sealed archive.');
+    }
+  }
+
   function showUndo() {
     const bar = $('#undo-bar');
     if (!bar) return;
@@ -1434,6 +1553,12 @@
     $('#undo-button')?.addEventListener('click', runUndo);
     $('#export-json')?.addEventListener('click', exportJSON);
     $('#shell-theme')?.addEventListener('click', toggleShellTheme);
+    $('#lock-city')?.addEventListener('click', lockCity);
+    $('#unlock-button')?.addEventListener('click', unlockCity);
+    $('#lock-passphrase')?.addEventListener('keydown', event => {
+      if (event.key === 'Enter') { event.preventDefault(); unlockCity(); }
+    });
+    $('#lock-forget')?.addEventListener('click', forgetVault);
     $('#storage-export')?.addEventListener('click', () => {
       setView('insights');
       exportJSON();

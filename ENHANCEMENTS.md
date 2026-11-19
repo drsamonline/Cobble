@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.19.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.20.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -65,6 +65,7 @@ What is left of the quick-win tier:
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 3.6 | **A locked archive** — one passphrase, AES-256-GCM at rest, plaintext record deleted, unlock screen, no recovery and told so. | `app/core.js`, `app/app.js` |
 | 2.17 | **Three text tokens replace 48 near-grey colours** — 71 declarations, no visual change, dark theme now overrides three values. | `app/theme.css`, `app/styles.css` |
 | 2.9 | **axe in CI**, plus layout shift and a behaviour smoke test — one script, its own job, five defects found on the first run. | `tools/browser-check.mjs`, `.github/workflows/check.yml` |
 | 2.12 | **A postcard export** — the skyline as a 1200×630 PNG, no personal content in it. | `app/app.js`, `app/index.html` |
@@ -89,7 +90,6 @@ What is left of the quick-win tier:
 | 3.3 | **Incremental saves.** Diff against the last saved snapshot and write only what changed. | Same motivation as 3.2, one level up. | `app/app.js` | L |
 | 3.4 | **Merge on import.** Instead of skipping duplicates by id, offer to merge: newest text wins, photos combine, category conflicts are listed for a decision. | Re-importing after editing on another device currently loses one side of the edit. | `app/app.js` | L |
 | 3.5 | **Import from other journals.** Day One JSON, Journey, plain markdown with `YYYY-MM-DD` headings. | Everyone who would love this app already has a decade of entries somewhere else. | `tools/importers/` | L |
-| 3.6 | **Encryption at rest.** Wrap the whole archive with the same AES-GCM construction already used for sharing, unlocked by a passphrase at load. | The share format proves the crypto works. This closes the last honest gap in the privacy page. | `app/app.js` | L |
 | 3.7 | **Multiple cities.** Named archives with a switcher, each in its own IndexedDB database. | One city for the diary, one for the clinic, one for the children. Also the cleanest way to start fresh without deleting. | `app/app.js` | L |
 
 ---

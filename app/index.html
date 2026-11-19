@@ -189,7 +189,8 @@
             <span id="storage-warning-text"></span>
             <button type="button" class="text-button" id="storage-export">Export a backup</button>
           </div>
-          <span class="archive-storage-badge">ON THIS DEVICE</span>
+          <span class="archive-storage-badge" id="lock-badge">ON THIS DEVICE</span>
+          <button type="button" class="text-button" id="lock-city">Lock this city</button>
         </section>
         <section class="panel achievements-panel">
           <div class="panel-heading">
@@ -271,6 +272,19 @@
     </section>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div class="modal-backdrop hidden" id="lock-modal" role="dialog" aria-modal="true" aria-labelledby="lock-title">
+    <div class="entry-modal lock-card">
+      <p class="eyebrow">LOCKED ARCHIVE</p>
+      <h2 class="drawer-title" id="lock-title">This city is <em>sealed.</em></h2>
+      <p class="drawer-lede" id="lock-lede">Enter the passphrase to open it. It never leaves this device.</p>
+      <label class="field-label" for="lock-passphrase">Passphrase</label>
+      <input class="share-pin-input" id="lock-passphrase" type="password" autocomplete="current-password" placeholder="Your passphrase">
+      <div class="share-actions"><button type="button" class="add-button" id="unlock-button">Unlock <span>→</span></button></div>
+      <p class="share-status" id="lock-status" aria-live="polite"></p>
+      <p class="share-footnote">Forgotten it? There is no recovery — the ciphertext is the only copy. <button type="button" class="text-button" id="lock-forget">Start a new city instead</button></p>
+    </div>
+  </div>
+
   <div class="undo-bar hidden" id="undo-bar"><span id="undo-text">A moment was removed.</span><button type="button" id="undo-button">Undo</button></div>
   <div class="day-drawer-backdrop hidden" id="day-backdrop" role="dialog" aria-modal="true" aria-label="A day in your city">
     <aside class="day-drawer" id="day-drawer"><button class="drawer-close" id="drawer-close" aria-label="Close day">×</button>

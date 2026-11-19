@@ -10,7 +10,7 @@ Cobble is a static web app. There is no Cobble server, no account and no databas
 
 | Stored | Where | File that proves it |
 |---|---|---|
-| Your moments: the text you wrote, the date, the district, the weight, the repetition count, and a photo if you attached one | Your browser's IndexedDB, database `cobble-archive`, object store `archive`, single record `moments` | `app/app.js`, `openDatabase()` / `saveToDatabase()` |
+| Your moments: the text you wrote, the date, the district, the weight, the repetition count, and a photo if you attached one | Your browser's IndexedDB, database `cobble-archive`, object store `archive`, single record `moments` — **or, if you have locked the city, a single encrypted record `vault` instead** | `app/app.js`, `saveToDatabase()` / `saveVault()` |
 | The same archive, when IndexedDB is unavailable or full | `localStorage`, key `cobble-moments-v1` | `app/app.js`, `save()` |
 | Your choice of city theme, mood, weather and day/night | `localStorage`, key `cobble-atmosphere-v1` | `app/app.js`, `saveAtmosphere()` |
 
@@ -33,6 +33,12 @@ grep -rn "fetch(\|sendBeacon\|XMLHttpRequest\|WebSocket" app/*.js sw.js selftest
 ```
 
 The only hits are the app reading its own source files to build the download zip, the service worker caching its own origin, and the self-test page checking that cache.
+
+## Locking the city
+
+You can seal the archive with a passphrase. When you do, the plaintext record is deleted and replaced by one encrypted record: AES-256-GCM under a key derived from your passphrase by PBKDF2-SHA-256 at 250,000 iterations, with a fresh 16-byte salt and 12-byte IV on every save. The passphrase is held in memory for the session and written nowhere.
+
+What this protects: someone who copies your browser profile, or opens your laptop and reads the browser's storage, gets ciphertext. What it does not protect: someone who knows the passphrase, a keylogger, or a machine already compromised while the app is unlocked. There is no recovery — the ciphertext is the only copy, and the app says so before it locks.
 
 ## Cookies
 
