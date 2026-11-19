@@ -2,6 +2,16 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.17.0 — 2026-11-19
+
+### Added
+
+- **Save a postcard.** A button in the page footer draws the skyline to a 1200×630 PNG and downloads it: the wordmark, the city's level, `19 moments · 19 days · 6 districts`, the districts' colours as bars with windows, and the line *your life, taking shape*. No text from any moment, no dates, no photos — nothing personal leaves the device in a picture someone might post.
+
+### Verified
+
+- Downloaded in headless Chrome: `cobble-postcard-2026-11-19.png`, 123 KB, valid PNG, 1200×630, and inspected by eye — bars, windows, wordmark and level all render.
+
 ## 1.16.0 — 2026-11-19
 
 ### Added

@@ -62,6 +62,8 @@ Two mechanisms, for two different jobs.
 
 **Share city** (`Share city` in the top bar) writes an encrypted `.cobble` file. Choose which moments to include, set a PIN of 6–12 digits, and the app writes AES-256-GCM ciphertext with a key derived from your PIN. This is the format for sending a city to another person. It is also a perfectly good backup format — write the PIN on the same piece of paper as the filename, not in the same file.
 
+**Save a postcard** draws the skyline to a 1200×630 PNG and downloads it — the wordmark, the city's level and the counts, with no text from any moment and no photos in it. Safe to post.
+
 **Download app package** (`↓ Download app package`, in the app's help panel) writes a zip of the five source files, so you can keep running the app even if the repository disappears. It deliberately does not include your moments: those are personal, and a "backup" that quietly bundles your diary into a zip is a bad default.
 
 **Export readable backup** (also in the share dialog) writes plain, unencrypted JSON — `cobble-backup-YYYY-MM-DD.json`. It is the copy you keep, not the one you send: anyone who opens it can read it. Use it before clearing a browser, moving machines, or handing a laptop to someone else.

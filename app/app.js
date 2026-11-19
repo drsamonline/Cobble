@@ -937,6 +937,96 @@
     }
     button.blur();
   }
+  /* A picture of the city, drawn on a canvas — no photos, no dates, just the
+     skyline, the level and the count. 1200x630, the size a link preview wants. */
+  async function savePostcard() {
+    const W = 1200, H = 630;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    const paper = ctx.createLinearGradient(0, 0, 0, H);
+    paper.addColorStop(0, '#f6f4ef');
+    paper.addColorStop(1, '#efece4');
+    ctx.fillStyle = paper;
+    ctx.fillRect(0, 0, W, H);
+
+    const counts = Object.fromEntries(Object.keys(categories).map(key => [key, 0]));
+    for (const entry of entries) if (counts[entry.category] !== undefined) counts[entry.category] += 1;
+    const palette = ['#758e87', '#8a9c86', '#bf9878', '#7d8799', '#a88791', '#b0a174'];
+
+    /* skyline: one bar per moment, capped, tallest for the busiest districts */
+    const order = Object.entries(counts).sort((a, b) => b[1] - a[1]).filter(([, n]) => n);
+    const bars = [];
+    for (const [key, count] of order) {
+      const shown = Math.min(count, 14);
+      for (let i = 0; i < shown; i++) bars.push({ key, count });
+    }
+    const groundY = 470;
+    const gap = 6;
+    const barW = bars.length ? Math.min(46, (W - 240) / bars.length - gap) : 0;
+    const totalW = bars.length * (barW + gap) - gap;
+    let x = (W - totalW) / 2;
+    const seedRand = (i => () => {
+      i = (Math.imul(i, 1664525) + 1013904223) >>> 0;
+      return i / 4294967296;
+    })(20261119);
+    ctx.fillStyle = 'rgba(71,125,112,.12)';
+    ctx.fillRect(0, groundY, W, H - groundY);
+    for (const bar of bars) {
+      const height = 70 + seedRand() * 220;
+      const colour = palette[Object.keys(categories).indexOf(bar.key) % palette.length];
+      ctx.fillStyle = colour;
+      const y = groundY - height;
+      ctx.beginPath();
+      ctx.roundRect(x, y, barW, height, [4, 4, 0, 0]);
+      ctx.fill();
+      /* windows */
+      ctx.fillStyle = 'rgba(255,255,255,.55)';
+      const cols = Math.max(2, Math.floor(barW / 12));
+      const rows = Math.max(2, Math.floor(height / 22));
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          if (seedRand() > 0.55) {
+            ctx.fillRect(x + 6 + c * ((barW - 12) / cols), y + 10 + r * ((height - 18) / rows), 4, 6);
+          }
+        }
+      }
+      x += barW + gap;
+    }
+    ctx.strokeStyle = 'rgba(34,48,43,.25)';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, groundY + 1); ctx.lineTo(W, groundY + 1); ctx.stroke();
+
+    /* wordmark and the numbers */
+    const level = $('#city-level')?.textContent || 'A new little town';
+    const days = Object.keys(groupDays()).length;
+    ctx.fillStyle = '#22302b';
+    ctx.font = '700 44px Manrope, sans-serif';
+    ctx.fillText('cobble.', 72, 108);
+    ctx.fillStyle = '#477d70';
+    ctx.font = '600 30px Manrope, sans-serif';
+    ctx.fillText(level, 72, 166);
+    ctx.fillStyle = '#5f6d66';
+    ctx.font = '400 22px "DM Sans", sans-serif';
+    ctx.fillText(`${entries.length.toLocaleString()} ${entries.length === 1 ? 'moment' : 'moments'} · ${days.toLocaleString()} ${days === 1 ? 'day' : 'days'} · ${order.length} ${order.length === 1 ? 'district' : 'districts'}`, 72, 208);
+    ctx.fillStyle = '#8d968f';
+    ctx.font = '400 18px "IBM Plex Mono", monospace';
+    ctx.fillText('your life, taking shape', 72, H - 56);
+
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    if (!blob) { toast('The postcard could not be drawn in this browser.'); return; }
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `cobble-postcard-${localDate()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+    toast('Postcard saved — 1200×630, your skyline, nothing personal.');
+  }
+
   function exportJSON() {
     const payload = JSON.stringify({
       app: 'Cobble',
@@ -1305,6 +1395,7 @@
     $('.more-button').addEventListener('click', () => $('#help-modal').classList.remove('hidden'));
          $('#share-button').addEventListener('click', openShare);
      $$('.download-package').forEach(button => button.addEventListener('click', () => downloadAppPackage(button)));
+    $$('#postcard').forEach(button => button.addEventListener('click', savePostcard));
      $('#share-close').addEventListener('click', closeShare);
     $('#share-modal').addEventListener('click', event => {
       if (event.target === event.currentTarget) closeShare();

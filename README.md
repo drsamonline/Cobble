@@ -11,7 +11,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 **Status: v1.5.0 — shipped, offline, editable, searchable, and tested.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.16.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.17.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -125,6 +125,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 - **Encrypted city files.** Choose any subset of moments, set a 6–12 digit PIN, and Cobble writes a `.cobble` file: AES-256-GCM, key derived with PBKDF2-SHA-256 at 250,000 iterations, random 16-byte salt and 12-byte IV per export.
 - **Import with validation.** Every field of every imported moment is checked against a schema before it touches your archive; duplicates are skipped; a damaged file is refused with a reason.
 - **A readable backup too.** Beside the encrypted file there is "Export readable backup" — plain JSON, with a note inside saying it is not encrypted. Lose the PIN, keep the city.
+- **Save a postcard.** One click draws the skyline to a 1200×630 PNG — wordmark, level, counts, district colours — with no text from any moment and no photos in it.
 - **Download the whole app** as a zip, straight from the app, with a README inside.
 - **Honest storage reporting, and a guard.** IndexedDB with a localStorage fallback, the size of your archive in KB, how much room the browser will still give you — and a warning at 80% of quota with a one-click backup, before a save has a chance to fail.
 
