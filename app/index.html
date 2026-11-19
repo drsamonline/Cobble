@@ -169,6 +169,8 @@
         </div>
         <div class="stats-grid" id="stats-grid"></div>
 
+        <button type="button" class="review-open" id="open-review">Your year, on one page <span aria-hidden="true">→</span></button>
+
         <section class="panel heatmap-panel hidden" id="heatmap-panel" aria-labelledby="heatmap-title">
           <div class="panel-heading">
             <div><span class="card-kicker">THE LAST TWELVE MONTHS</span>
@@ -272,6 +274,19 @@
     </section>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div class="modal-backdrop hidden" id="review-modal" role="dialog" aria-modal="true" aria-labelledby="review-title">
+    <div class="entry-modal review-card">
+      <button class="modal-close" id="close-review" aria-label="Close">×</button>
+      <p class="eyebrow">THE LAST TWELVE MONTHS</p>
+      <h2 class="drawer-title" id="review-title">Your year, <em>in one page.</em></h2>
+      <div id="review-body"></div>
+      <div class="share-actions">
+        <button type="button" class="cancel-button" id="review-close-button">Close</button>
+        <button type="button" class="add-button" id="review-postcard">Save as a postcard <span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-backdrop hidden" id="lock-modal" role="dialog" aria-modal="true" aria-labelledby="lock-title">
     <div class="entry-modal lock-card">
       <p class="eyebrow">LOCKED ARCHIVE</p>

@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.23.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.24.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -65,6 +65,7 @@ What is left of the quick-win tier:
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 4.2 | **A year in review** — figures, four sentences from the archive, three resurfaced moments, and a postcard. | `app/app.js`, `app/index.html` |
 | 6.1 | **The 3D layer removed** — 590 KB of vendor code and 400 lines that never rendered correctly. Code kept in git history at v1.22.0. | `app/city3d.js`, `app/vendor/` |
 | 3.3 | **The vault's key is derived once per unlock**, not per save — measured 285 ms → 91 ms on a 205 KB archive. | `app/core.js`, `app/app.js` |
 | 3.4 | **Merge on import** — skip only when id *and* content match; keep an edited version alongside under a content-derived id; rule lives in `core.js` with four tests. | `app/core.js`, `app/app.js` |
@@ -100,7 +101,6 @@ What is left of the quick-win tier:
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
 | 4.1 | **Hindi and Gujarati.** Every string into a `strings` object with three locales, a language switch in help, and `lang` attributes updated. The author writes in both, and the audience for a reflective app in India is not monolingual. | `app/i18n/`, all render functions | XL |
-| 4.2 | **A year in review.** A single scrolling page: the skyline of the year, the districts that grew, the days that held the most, the returning themes — printable and shareable as a PDF. | The payoff for a year of small entries, and the thing that makes someone start a second year. | `app/`, `tools/` | XL |
 | 4.3 | **A real 3D city.** Replace the ambient Three.js scene with the actual skyline: one building per moment, placed by district, height by weight. | It would make the metaphor literal. It is also the most expensive thing on this list per unit of value, which is why it sits here. | `app/city3d.js` | XL |
 | 4.4 | **Desktop and Android builds.** One portable Windows executable and one Android WebView APK, using the author's own [`app-builder`](https://github.com/drsamonline/app-builder). | A journal that lives in a browser tab is a journal you forget. An icon is a habit. | `build/` | L |
 | 4.5 | **Optional local model.** A small on-device model that proposes a district and a weight as you type, with a switch that is off by default and a hard rule that nothing leaves the device. | Genuinely useful, genuinely risky for a private app. Only worth doing if 1.1–1.3 are done and the network surface is provably zero. | `app/` | XL |

@@ -3162,3 +3162,73 @@ html[data-shell="dark"] .filter-chip-reset { background: #2a2418; border-color: 
 .lock-card .share-footnote .text-button { display: inline; margin: 0; padding: 0; text-decoration: underline; }
 #lock-badge { margin-left: auto; }
 #lock-city { margin-left: 10px; }
+
+/* ── Year in review ───────────────────────────────────────────────
+   One page, opened from Discoveries. Reads the archive, says what the
+   year held, and hands the skyline back as a postcard. */
+.review-open {
+  margin: 0 0 12px;
+  font: 600 12.5px var(--font-body);
+  color: var(--text-green, #4e6a5c);
+  background: #eef4ee;
+  border: 1px solid #cfdcc4;
+  border-radius: 99px;
+  padding: 8px 16px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.review-open:hover { background: #e4eee2; }
+.review-card { width: min(620px, 100%); max-height: 86vh; overflow: auto; }
+.review-figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin: 16px 0 14px;
+}
+.review-figure {
+  background: #fbfaf4;
+  border: 1px solid #eceade;
+  border-radius: 12px;
+  padding: 12px 13px;
+}
+.review-figure b {
+  display: block;
+  font: 700 24px var(--font-heading);
+  color: #22302b;
+  letter-spacing: -.5px;
+}
+.review-figure span { font: 400 11.5px var(--font-body); color: var(--text-muted); }
+.review-lines { display: grid; gap: 8px; margin: 0 0 16px; padding: 0; list-style: none; }
+.review-lines li {
+  font: 400 13.5px/1.55 var(--font-body);
+  color: #3a4740;
+  padding-left: 16px;
+  position: relative;
+}
+.review-lines li::before {
+  content: '';
+  position: absolute;
+  left: 2px; top: 8px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #9dc08f;
+}
+.review-resurfaced { display: grid; gap: 7px; }
+.review-resurfaced article {
+  border-left: 3px solid #cfdcc4;
+  padding: 6px 0 6px 12px;
+  font: 400 13px/1.5 var(--font-body);
+  color: #3a4740;
+}
+.review-resurfaced small {
+  display: block;
+  font: 500 10.5px var(--font-mono);
+  color: var(--text-muted);
+  letter-spacing: .04em;
+  margin-bottom: 3px;
+}
+html[data-shell="dark"] .review-open { background: #1d2a2f; border-color: #2b3a41; color: #a8d3c6; }
+html[data-shell="dark"] .review-figure { background: #1a2429; border-color: #26333a; }
+html[data-shell="dark"] .review-figure b { color: #eef2ec; }
+html[data-shell="dark"] .review-lines li,
+html[data-shell="dark"] .review-resurfaced article { color: #dfe7e2; }

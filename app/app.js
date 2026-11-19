@@ -912,6 +912,86 @@
     });
   }
 
+  /* ── the year, on one page ──────────────────────────────────────── */
+  function yearWindow() {
+    const end = new Date(); end.setHours(12, 0, 0, 0);
+    const start = new Date(end); start.setDate(start.getDate() - 364);
+    return { start: localDate(start), end: localDate(end) };
+  }
+
+  function openReview() {
+    const body = $('#review-body');
+    if (!body) return;
+    const { start, end } = yearWindow();
+    const inYear = entries.filter(entry => entry.date >= start && entry.date <= end);
+    const days = groupDays(inYear);
+    const dayKeys = Object.keys(days);
+    const counts = Object.fromEntries(Object.keys(categories).map(key => [key, 0]));
+    for (const entry of inYear) if (counts[entry.category] !== undefined) counts[entry.category] += 1;
+    const districts = Object.entries(counts).sort((a, b) => b[1] - a[1]).filter(([, n]) => n);
+
+    if (!inYear.length) {
+      body.innerHTML = `<p class="drawer-lede">Nothing in the last twelve months yet. Save a moment and come back — this page is built from what you keep.</p>`;
+      $('#review-modal').classList.remove('hidden');
+      return;
+    }
+
+    const busiestDay = dayKeys.sort((a, b) => days[b].length - days[a].length)[0];
+    const months = new Array(12).fill(0);
+    for (const key of dayKeys) months[new Date(`${key}T12:00:00`).getMonth()] += days[key].length;
+    const busiestMonth = months.indexOf(Math.max(...months));
+    const monthName = new Date(2026, busiestMonth, 1).toLocaleDateString(undefined, { month: 'long' });
+
+    /* the longest quiet stretch, which is a fact about a year, not a failure */
+    const sorted = dayKeys.slice().sort();
+    let gap = 0;
+    for (let i = 1; i < sorted.length; i += 1) {
+      const days_ = Math.round((new Date(`${sorted[i]}T12:00:00`) - new Date(`${sorted[i - 1]}T12:00:00`)) / 86400000);
+      if (days_ > gap) gap = days_;
+    }
+
+    /* a run of consecutive days, which is a truer thing to say than "one of
+       forty days held one moment" */
+    let run = 1, bestRun = 1;
+    for (let i = 1; i < sorted.length; i += 1) {
+      const diff = Math.round((new Date(`${sorted[i]}T12:00:00`) - new Date(`${sorted[i - 1]}T12:00:00`)) / 86400000);
+      run = diff === 1 ? run + 1 : 1;
+      if (run > bestRun) bestRun = run;
+    }
+
+    const resurfaced = inYear
+      .slice()
+      .sort((a, b) => (Number(b.importance) - Number(a.importance)) || b.date.localeCompare(a.date))
+      .slice(0, 3);
+
+    body.innerHTML = `
+      <p class="drawer-lede">${escapeHTML(formatDate(start, { month: 'long', day: 'numeric', year: 'numeric' }))} to ${escapeHTML(formatDate(end, { month: 'long', day: 'numeric', year: 'numeric' }))}.</p>
+      <div class="review-figures">
+        <div class="review-figure"><b>${inYear.length.toLocaleString()}</b><span>moments kept</span></div>
+        <div class="review-figure"><b>${dayKeys.length.toLocaleString()}</b><span>days remembered</span></div>
+        <div class="review-figure"><b>${districts.length}</b><span>districts visited</span></div>
+        <div class="review-figure"><b>${months.filter(n => n).length}</b><span>months with a moment</span></div>
+      </div>
+      <ul class="review-lines">
+        <li>${districts.length ? `${escapeHTML(categories[districts[0][0]].label)} was where your attention went most — ${districts[0][1]} of ${inYear.length} moments.` : 'No district stands out yet.'}</li>
+        ${days[busiestDay].length > 1
+          ? `<li>${escapeHTML(formatDate(busiestDay, { month: 'long', day: 'numeric' }))} held the most: ${days[busiestDay].length} moments.</li>`
+          : `<li>Your longest run was ${bestRun} ${bestRun === 1 ? 'day' : 'days in a row'}.</li>`}
+        <li>${escapeHTML(monthName)} was your fullest month, with ${months[busiestMonth]}.</li>
+        <li>${gap > 1 ? `The longest quiet stretch was ${gap} days. Nothing broke; the city waited.` : 'You kept something on most of the days you looked.'}</li>
+      </ul>
+      <p class="card-kicker">WORTH LOOKING AT AGAIN</p>
+      <div class="review-resurfaced">
+        ${resurfaced.map(entry => `<article><small>${escapeHTML(formatDate(entry.date, { month: 'short', day: 'numeric' }))}</small>${escapeHTML(entry.text)}</article>`).join('')}
+      </div>`;
+    $('#review-modal').classList.remove('hidden');
+    $('#close-review').focus();
+  }
+
+  function closeReview() {
+    $('#review-modal')?.classList.add('hidden');
+  }
+
   /* ── locking the archive ─────────────────────────────────────────── */
   function showLockScreen() {
     const modal = $('#lock-modal');
@@ -1555,6 +1635,10 @@
     $('#undo-button')?.addEventListener('click', runUndo);
     $('#export-json')?.addEventListener('click', exportJSON);
     $('#shell-theme')?.addEventListener('click', toggleShellTheme);
+    $('#open-review')?.addEventListener('click', openReview);
+    $('#close-review')?.addEventListener('click', closeReview);
+    $('#review-close-button')?.addEventListener('click', closeReview);
+    $('#review-postcard')?.addEventListener('click', () => { closeReview(); savePostcard(); });
     $('#lock-city')?.addEventListener('click', lockCity);
     $('#unlock-button')?.addEventListener('click', unlockCity);
     $('#lock-passphrase')?.addEventListener('keydown', event => {

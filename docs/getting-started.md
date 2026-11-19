@@ -70,6 +70,10 @@ Two mechanisms, for two different jobs.
 
 **Import** (`Open a city file` in the share dialog) reads a `.cobble` file, asks for its PIN, validates every field, skips moments whose ids already exist, and reports how many were added.
 
+## The year, on one page
+
+Discoveries → **Your year, on one page** summarises the last twelve months: moments kept, days remembered, districts visited, months with a moment, then four sentences taken from the archive itself — where your attention went, your longest run, your fullest month, the longest quiet stretch. Three moments worth looking at again sit underneath, and **Save as a postcard** turns the skyline into a 1200×630 PNG.
+
 ## Seeing the year
 
 Discoveries carries a heatmap: one square per day for the last twelve months, shaded by how many moments that day held. It is not a streak and nothing breaks if it goes quiet — it is just the shape of the year, in one glance. Click any square with moments in it to open that day.

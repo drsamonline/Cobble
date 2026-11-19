@@ -2,6 +2,19 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.24.0 — 2026-11-19
+
+### Added
+
+- **Your year, on one page.** A button in Discoveries opens a summary of the last twelve months: moments kept, days remembered, districts visited, months with a moment — then four sentences drawn from the archive (where your attention went, your longest run, your fullest month, the longest quiet stretch) and three moments worth looking at again. *Save as a postcard* hands the skyline back as a 1200×630 PNG.
+- The quiet stretch is phrased as a fact, not a failure: *"The longest quiet stretch was 48 days. Nothing broke; the city waited."* There are no streaks and nothing to lose.
+- An archive with nothing in the last year says so plainly instead of showing four zeroes.
+
+### Verified
+
+- Driven with 40 moments spread across a year: figures 40 / 40 / 6 / 11, the four lines correct against the seeded data (7 of 40 in Everyday detail, a 4-day run, November the fullest month with 13, a 48-day gap), three resurfaced moments, close works, and the empty case renders its own sentence.
+- First version said *"November 19 held the most: 1 moment"* — true but useless when every day holds one. It now falls back to the longest run.
+
 ## 1.23.0 — 2026-11-19
 
 ### Removed
