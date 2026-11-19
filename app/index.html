@@ -21,11 +21,16 @@
   <div class="app-shell">
     <aside class="sidebar" aria-label="Your world">
       <a class="brand" href="../" aria-label="Cobble home"><span class="brand-mark"><span></span><span></span><span></span></span><span>cobble<span class="brand-period">.</span></span></a>
-      <div class="side-label">YOUR WORLD</div>
-      <button class="nav-item active" data-view="city"><span class="nav-icon">⌂</span> My city <span class="nav-dot"></span></button>
-      <button class="nav-item" data-view="timeline"><span class="nav-icon">◷</span> Timeline</button>
-      <button class="nav-item" data-view="insights"><span class="nav-icon">✳</span> Discoveries</button>
+      <div class="side-label" data-i18n="nav.world">YOUR WORLD</div>
+      <button class="nav-item active" data-view="city"><span class="nav-icon">⌂</span> <span data-i18n="nav.city">My city</span> <span class="nav-dot"></span></button>
+      <button class="nav-item" data-view="timeline"><span class="nav-icon">◷</span> <span data-i18n="nav.timeline">Timeline</span></button>
+      <button class="nav-item" data-view="insights"><span class="nav-icon">✳</span> <span data-i18n="nav.insights">Discoveries</span></button>
       <button class="nav-item mobile-demo-nav" id="mobile-demo-toggle" type="button"><span class="nav-icon" aria-hidden="true">✦</span><span class="mobile-demo-label">Sample city</span></button>
+      <div class="lang-row" role="group" aria-label="Language" data-i18n-aria="lang.label">
+        <button class="lang-pill" type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button class="lang-pill" type="button" data-lang="hi" aria-pressed="false" lang="hi">हिं</button>
+        <button class="lang-pill" type="button" data-lang="gu" aria-pressed="false" lang="gu">ગુ</button>
+      </div>
       <div class="side-spacer"></div>
       <div class="offline-card"><span class="offline-indicator"></span>
         <div><strong>Yours, always</strong><small>Saved on this device</small></div><span class="lock-icon">⌑</span>
@@ -38,17 +43,17 @@
 
     <main class="main-area">
       <header class="topbar">
-        <div class="breadcrumb">Your world <span>/</span> <strong id="header-section">My city</strong></div>
+        <div class="breadcrumb"><span data-i18n="crumb.world">Your world</span> <span class="crumb-sep">/</span> <strong id="header-section">My city</strong></div>
         <div class="top-actions">
-          <div class="today-pill"><span class="sun-dot"></span><span id="today-label"></span></div><button class="share-button" id="share-button" aria-label="Share city, or open a city file" title="Share city, or open a city file">↗ <span>Share city</span></button><button class="icon-button" id="shell-theme" aria-label="Switch to dark interface" title="Light or dark interface">☾</button><button class="icon-button" id="help-button" aria-label="About Cobble" title="About Cobble">?</button><button class="add-button" id="add-entry"><span>+</span> Add a moment</button>
+          <div class="today-pill"><span class="sun-dot"></span><span id="today-label"></span></div><button class="share-button" id="share-button" aria-label="Share city, or open a city file" title="Share city, or open a city file">↗ <span data-i18n="action.share">Share city</span></button><button class="icon-button" id="shell-theme" aria-label="Switch to dark interface" title="Light or dark interface">☾</button><button class="icon-button" id="help-button" aria-label="About Cobble" title="About Cobble">?</button><button class="add-button" id="add-entry"><span>+</span> <span data-i18n="action.add">Add a moment</span></button>
         </div>
       </header>
 
       <section class="view-section" id="city-view">
         <div class="page-intro">
           <div>
-            <p class="eyebrow">A little world made of your days</p>
-            <h1>Your life, <em>taking shape.</em></h1>
+            <p class="eyebrow" data-i18n="city.tagline">A little world made of your days</p>
+            <h1><span data-i18n="city.title.a">Your life,</span> <em data-i18n="city.title.b">taking shape.</em></h1>
             <p class="intro-copy">Every moment leaves something behind. Look what you’ve been building.</p>
             <button class="demo-button" id="demo-toggle" type="button"><span aria-hidden="true">✦</span> Explore a sample city <span class="demo-arrow" aria-hidden="true">↗</span></button>
           </div>
@@ -60,7 +65,7 @@
         <div class="demo-note hidden" id="demo-note"><span class="demo-note-icon">✧</span><span><strong>You’re exploring a sample city.</strong> Its stories and Unsplash photos are just examples—your own moments stay untouched.</span></div>
         <div class="city-card">
           <div class="city-card-head">
-            <div><span class="card-kicker">THE CITY OF YOU</span>
+            <div><span class="card-kicker"><span data-i18n="city.eyebrow">THE CITY OF YOU</span></span>
               <h2 id="city-title">A place called <span>today</span></h2>
             </div>
             <div class="city-weather"><span class="weather-icon">☀</span>
@@ -79,19 +84,19 @@
               <div class="city-scene" role="group" aria-label="City district"></div>
             </div>
             <div class="city-control-deck" aria-label="City atmosphere controls">
-              <button class="scene-control" id="theme-control" type="button" aria-label="Randomize city theme" title="Randomize city theme"><span aria-hidden="true">◈</span><small>Theme</small></button>
-              <button class="scene-control" id="mood-control" type="button" aria-label="Change city mood" title="Change city mood"><span aria-hidden="true">✧</span><small>Mood</small></button>
-              <button class="scene-control" id="weather-control" type="button" aria-label="Change weather" title="Change weather"><span aria-hidden="true">☁</span><small>Weather</small></button>
-              <button class="scene-control" id="ambience-toggle" type="button" aria-pressed="false" title="Wind, rain and the odd bird — generated in the browser"><span class="scene-control-icon" aria-hidden="true">♪</span><span class="ambience-label">Sound</span></button><button class="scene-control" id="scene-toggle" type="button" aria-pressed="false" title="Switch between the flat and 3D city"><span class="scene-control-icon" aria-hidden="true">◫</span><span class="scene-toggle-label">Flat city</span></button><button class="scene-control" id="time-control" type="button" aria-label="Switch to night" title="Switch day and night"><span aria-hidden="true" id="time-icon">☾</span><small id="time-label">Night</small></button>
+              <button class="scene-control" id="theme-control" type="button" aria-label="Randomize city theme" title="Randomize city theme"><span aria-hidden="true">◈</span><small><span data-i18n="deck.theme">Theme</span></small></button>
+              <button class="scene-control" id="mood-control" type="button" aria-label="Change city mood" title="Change city mood"><span aria-hidden="true">✧</span><small><span data-i18n="deck.mood">Mood</span></small></button>
+              <button class="scene-control" id="weather-control" type="button" aria-label="Change weather" title="Change weather"><span aria-hidden="true">☁</span><small><span data-i18n="deck.weather">Weather</span></small></button>
+              <button class="scene-control" id="ambience-toggle" type="button" aria-pressed="false" title="Wind, rain and the odd bird — generated in the browser"><span class="scene-control-icon" aria-hidden="true">♪</span><span class="ambience-label">Sound</span></button><button class="scene-control" id="scene-toggle" type="button" aria-pressed="false" title="Switch between the flat and 3D city"><span class="scene-control-icon" aria-hidden="true">◫</span><span class="scene-toggle-label">Flat city</span></button><button class="scene-control" id="time-control" type="button" aria-label="Switch to night" title="Switch day and night"><span aria-hidden="true" id="time-icon">☾</span><small id="time-label"><span data-i18n="deck.night">Night</span></small></button>
             </div>
-            <button class="hud-toggle" id="hud-toggle" type="button" aria-pressed="false"><span class="hud-toggle-icon" aria-hidden="true">⤢</span><span class="hud-toggle-label">Hide controls</span></button>
+            <button class="hud-toggle" id="hud-toggle" type="button" aria-pressed="false"><span class="hud-toggle-icon" aria-hidden="true">⤢</span><span class="hud-toggle-label"><span data-i18n="action.hide">Hide controls</span></span></button>
           </div>
         </div>
 
         <section class="panel onthisday-panel hidden" id="onthisday-panel" aria-labelledby="onthisday-title">
           <div class="panel-heading">
             <div><span class="card-kicker">THE SAME DAY, ANOTHER YEAR</span>
-              <h3 id="onthisday-title">On this day</h3>
+              <h3 id="onthisday-title" data-i18n="city.onthiday">On this day</h3>
             </div><span class="onthisday-count" id="onthisday-count"></span>
           </div>
           <div class="onthisday-list" id="onthisday-list"></div>
@@ -101,7 +106,7 @@
           <section class="panel timeline-panel">
             <div class="panel-heading">
               <div><span class="card-kicker">A LIFE IN LITTLE CHAPTERS</span>
-                <h3>Your timeline</h3>
+                <h3 data-i18n="city.timeline">Your timeline</h3>
               </div><button class="text-button" data-view-link="timeline">See all <span>→</span></button>
             </div>
             <div id="timeline-content"></div>
@@ -109,7 +114,7 @@
           <section class="panel insight-panel">
             <div class="panel-heading">
               <div><span class="card-kicker">A THING YOU MAY NOT KNOW</span>
-                <h3>From your city</h3>
+                <h3 data-i18n="city.from">From your city</h3>
               </div><span class="insight-spark">✳</span>
             </div>
             <div class="insight-content" id="insight-content"></div>
@@ -122,14 +127,14 @@
         <div class="page-intro compact-intro">
           <div>
             <p class="eyebrow">The days that made your city</p>
-            <h1>Your <em>timeline.</em></h1>
+            <h1><span data-i18n="timeline.title.a">Your</span> <em data-i18n="timeline.title.b">timeline.</em></h1>
             <p class="intro-copy">Choose a day to step back into it.</p>
           </div><button class="add-button intro-add" id="add-entry-timeline"><span>+</span> Add a moment</button>
         </div>
         <section class="panel full-timeline-panel">
           <div class="panel-heading">
             <div><span class="card-kicker">YOUR PERSONAL ARCHIVE</span>
-              <h3>Everyday, remembered</h3>
+              <h3 data-i18n="timeline.everyday">Everyday, remembered</h3>
             </div><span class="entry-total" id="timeline-total">0 moments</span>
           </div>
           <div class="timeline-search">
@@ -162,7 +167,7 @@
         <div class="page-intro compact-intro">
           <div>
             <p class="eyebrow">Patterns hiding in plain sight</p>
-            <h1>Little <em>discoveries.</em></h1>
+            <h1><span data-i18n="insights.title.a">Little</span> <em data-i18n="insights.title.b">discoveries.</em></h1>
             <p class="intro-copy">As your city grows, it starts noticing things you might miss.</p>
           </div>
           <div class="insight-top-note">✳ &nbsp;Your patterns, not predictions</div>
@@ -174,7 +179,7 @@
         <section class="panel heatmap-panel hidden" id="heatmap-panel" aria-labelledby="heatmap-title">
           <div class="panel-heading">
             <div><span class="card-kicker">THE LAST TWELVE MONTHS</span>
-              <h3 id="heatmap-title">Your year, one square a day</h3>
+              <h3 id="heatmap-title" data-i18n="insights.heatmap">Your year, one square a day</h3>
             </div><span class="heatmap-legend" aria-hidden="true">
               <small>less</small><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><small>more</small>
             </span>
@@ -186,7 +191,7 @@
         </section>
         <section class="panel archive-storage-panel" aria-labelledby="archive-storage-title">
           <div class="archive-storage-icon" aria-hidden="true">⌂</div>
-          <div class="archive-storage-copy"><span class="card-kicker">YOUR LONG-TERM ARCHIVE</span><h3 id="archive-storage-title">Room for years of moments</h3><p id="storage-summary">Checking your saved archive…</p><small id="storage-note">Your memories stay in this browser. Photo capacity depends on available device storage.</small></div>
+          <div class="archive-storage-copy"><span class="card-kicker">YOUR LONG-TERM ARCHIVE</span><h3 id="archive-storage-title" data-i18n="insights.storage">Room for years of moments</h3><p id="storage-summary">Checking your saved archive…</p><small id="storage-note">Your memories stay in this browser. Photo capacity depends on available device storage.</small></div>
           <div class="storage-warning hidden" id="storage-warning" role="status">
             <span id="storage-warning-text"></span>
             <button type="button" class="text-button" id="storage-export">Export a backup</button>
@@ -197,7 +202,7 @@
         <section class="panel achievements-panel">
           <div class="panel-heading">
             <div><span class="card-kicker">MILESTONES ALONG THE WAY</span>
-              <h3>Your achievements</h3>
+              <h3 data-i18n="insights.achievements">Your achievements</h3>
             </div><span class="achievement-count" id="achievement-count">0 earned</span>
           </div>
           <div class="achievement-grid" id="achievement-grid"></div>
@@ -206,7 +211,7 @@
           <section class="panel discoveries-panel">
             <div class="panel-heading">
               <div><span class="card-kicker">NOTICED OVER TIME</span>
-                <h3>What your days are saying</h3>
+                <h3 data-i18n="insights.saying">What your days are saying</h3>
               </div><span class="insight-spark">✳</span>
             </div>
             <div class="discovery-list" id="discovery-list"></div>
@@ -214,7 +219,7 @@
           <section class="panel category-panel">
             <div class="panel-heading">
               <div><span class="card-kicker">YOUR CITY'S DISTRICTS</span>
-                <h3>What makes you, you</h3>
+                <h3 data-i18n="insights.you">What makes you, you</h3>
               </div>
             </div>
             <div id="category-bars"></div>
@@ -261,7 +266,7 @@
       <button class="modal-close" id="share-close" aria-label="Close">×</button>
       <div class="share-emblem">↗</div>
       <p class="eyebrow">A small world, shared with care</p>
-      <h2 id="share-title">Send a little <em>Cobble.</em></h2>
+      <h2 id="share-title" data-i18n="share.title">Send a little <em>Cobble.</em></h2>
       <p class="share-intro">Make an encrypted city file on this device. Send the file and your PIN to someone you trust—separately. Nothing is uploaded.</p>
       <div class="share-security"><span>⌑</span><span><strong>Private by design</strong><small>Your PIN encrypts the file. Only someone with the file and PIN can open it.</small></span></div>
       <div class="share-list-wrap"><div class="share-list-title">CHOOSE WHAT TO SHARE</div><div id="share-list"></div></div>
@@ -311,7 +316,7 @@
     <div class="help-card"><button class="modal-close" id="close-help">×</button>
       <div class="help-mark">✳</div>
       <p class="eyebrow">A place made by you</p>
-      <h2 id="help-title">Welcome to <em>Cobble.</em></h2>
+      <h2 id="help-title" data-i18n="help.title">Welcome to <em>Cobble.</em></h2>
       <p>Save the small things you want to remember. Your city gives them shape: meaningful moments become landmarks, repeating details become familiar streets, and new ideas add places that didn’t exist before.</p>
       <p>Everything is stored on this device. The more you add, the more your city can notice about you.</p>
       <p class="help-links"><a href="https://github.com/drsamonline/Cobble" target="_blank" rel="noopener">Source on GitHub</a><span>·</span><a href="https://github.com/drsamonline/Cobble/blob/main/LICENSE" target="_blank" rel="noopener">PolyForm Noncommercial 1.0.0</a><span>·</span><a href="https://drsamonline.github.io/Cobble/docs/" target="_blank" rel="noopener">Documentation</a></p>
@@ -319,6 +324,7 @@
     </div>
   </div>
   <script src="core.js" defer></script>
+  <script src="i18n.js" defer></script>
   <script src="scene3d.js" defer></script>
   <script src="ambience.js" defer></script>
   <script src="app.js" defer></script>

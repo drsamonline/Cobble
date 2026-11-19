@@ -228,7 +228,7 @@ button {
   font-size: 11px;
 }
 
-.breadcrumb span {
+.breadcrumb > span:not([data-i18n]) {
   padding: 0 8px;
   color: #c5c7c0;
 }
@@ -3313,3 +3313,22 @@ html[data-shell="dark"] .city-switcher-list { background: #162024; border-color:
 html[data-shell="dark"] .city-switcher-item { color: #dfe7e2; }
 html[data-shell="dark"] .city-switcher-item:hover { background: #1d2a2f; }
 html[data-shell="dark"] .city-switcher-item[aria-current="true"] { background: #22303a; }
+
+/* ── Interface language ───────────────────────────────────────────
+   Three small pills in the sidebar footer. The chrome translates; the
+   sentences Cobble writes about your archive stay in English for now. */
+.lang-row { display: flex; gap: 4px; padding: 0 2px 10px; }
+.lang-pill {
+  flex: 1;
+  padding: 5px 0;
+  border: 1px solid #e6e4d9;
+  border-radius: 8px;
+  background: #fbfaf4;
+  font: 600 11px var(--font-body);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.lang-pill:hover { border-color: #cfdcc4; color: #22302b; }
+.lang-pill[aria-pressed="true"] { background: #22302b; border-color: #22302b; color: #f6f4ef; }
+html[data-shell="dark"] .lang-pill { background: #162024; border-color: #26333a; color: #b9c6c0; }
+html[data-shell="dark"] .lang-pill[aria-pressed="true"] { background: #e8efe9; border-color: #e8efe9; color: #16211d; }

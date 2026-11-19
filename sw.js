@@ -12,9 +12,9 @@
  * cache is deleted on activate, and the new files are fetched with cache:reload
  * during install so a stale copy cannot win.
  */
-const CACHE_VERSION = 'v30';
+const CACHE_VERSION = 'v31';
 const CACHE_NAME = `cobble-${CACHE_VERSION}`;
-const ASSET_VERSION = '1.32.0';
+const ASSET_VERSION = '1.33.0';
 
 const PRECACHE = [
   './',
@@ -27,6 +27,7 @@ const PRECACHE = [
   './app/styles.css',
   './app/app.js',
   './app/core.js',
+  './app/i18n.js',
   './app/scene3d.js',
   './app/ambience.js',
   './app/vendor/jszip.min.js',

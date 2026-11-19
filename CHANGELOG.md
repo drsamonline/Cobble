@@ -2,6 +2,23 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.33.0 — 2026-11-19
+
+### Added
+
+- **The app's interface in Hindi and Gujarati.** Three small pills in the sidebar footer — EN · हिं · ગુ — translate the chrome: the sidebar and its nav, the breadcrumb, all three view headings, the section titles in each view, the city's control deck, *Add a moment*, *Share city*, *Hide controls*, and *On this day*. The choice is remembered, `lang` is set on the document, and each pill carries `aria-pressed`.
+- `app/i18n.js`, with the dictionaries in one file and elements opting in through `data-i18n`, `data-i18n-aria` and `data-i18n-placeholder`. A missing key leaves the English in place rather than blanking an element — a half-empty interface is worse than an untranslated one.
+
+### Scope, stated plainly
+
+This is the chrome, not the whole app. The sentences Cobble writes about your archive — toasts, the observations in Discoveries, the year-in-review lines — stay in English, because they are assembled from templates with numbers inside them and a half-translated sentence is worse than an English one. The sample-city banner and some panel body copy are also still English. `ENHANCEMENTS.md` records the rest.
+
+### Verified
+
+- In the browser: EN → HI → GU changes nav, headings, deck and buttons; `lang` follows; the pill states follow; the choice survives a reload; switching back to EN restores everything. No page errors.
+- A fourth, caught by CI after the local run passed: wrapping the breadcrumb's words in a span made them inherit the *separator's* pale grey — 1.55:1 against the page. The separator now has its own class instead of being every span inside the breadcrumb.
+- Three defects caught by looking at the renders, not by the tests: the heading's emphasised half stayed English (the `<em>` was a separate element), `city.title.a` was mapped to the wrong sentence, and a breadcrumb tag landed on the sidebar's `aria-label`, pushing the words "Your world" above the logo.
+
 ## 1.32.0 — 2026-11-19
 
 ### Added
