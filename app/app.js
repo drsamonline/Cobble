@@ -210,6 +210,25 @@
     return bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   }
 
+  /* Fraction of the origin quota still free, or null when the browser will not
+     say. Kept so the photo picker can refuse before a save fails. */
+  let storageRoom = null;
+
+  function updateStorageWarning() {
+    const banner = $('#storage-warning');
+    const text = $('#storage-warning-text');
+    if (!banner || !text) return;
+    if (storageRoom === null || storageRoom > 0.2) {
+      banner.classList.add('hidden');
+      return;
+    }
+    const percent = Math.round((1 - storageRoom) * 100);
+    text.textContent = storageRoom <= 0.05
+      ? `This browser is ${percent}% full for this site. New moments may not save. Export a backup now.`
+      : `This browser is ${percent}% full for this site. Export a backup, or remove a few photos.`;
+    banner.classList.remove('hidden');
+  }
+
   async function updateStorageInfo() {
     const summary = $('#storage-summary');
     const note = $('#storage-note');
@@ -223,9 +242,11 @@
     try {
       const estimate = await navigator.storage?.estimate?.();
       const available = estimate?.quota ? Math.max(0, estimate.quota - (estimate.usage || 0)) : 0;
+      storageRoom = estimate?.quota ? 1 - (estimate.usage || 0) / estimate.quota : null;
       note.textContent = available
         ? `Stored in this browser’s expanded archive. Space varies by device; about ${formatBytes(available)} remains available to this site. Export a backup now and then.`
         : 'Stored in this browser’s expanded archive. Text-only memories take little space; photo capacity depends on your device. Export a backup now and then.';
+      updateStorageWarning();
     } catch {
       note.textContent = 'Stored in this browser’s expanded archive. Text-only memories take little space; photo capacity depends on your device. Export a backup now and then.';
     }
@@ -665,7 +686,8 @@
   }
 
   let editingId = null;
-  let lastDeleted = null;
+  /* One slot, one action. Delete, edit and import all park a way back here. */
+  let undoAction = null;
 
   function openEntry(entry = null) {
     if (demoMode) exitDemo();
@@ -699,27 +721,36 @@
     setTimeout(() => $('#entry-text').focus(), 50);
   }
 
+  function offerUndo(message, action) {
+    undoAction = action;
+    const text = $('#undo-text');
+    if (text) text.textContent = message;
+    showUndo();
+  }
+
+  function runUndo() {
+    if (!undoAction) return;
+    const action = undoAction;
+    undoAction = null;
+    action();
+    hideUndo();
+  }
+
   function deleteEntry(id) {
     const index = entries.findIndex(entry => String(entry.id) === String(id));
     if (index < 0) return;
-    lastDeleted = { entry: entries[index], index };
+    const removed = entries[index];
     entries.splice(index, 1);
     save();
     render();
     $('#day-backdrop').classList.add('hidden');
-    toast('Moment removed. Press Ctrl+Z, or the Undo button, to put it back.');
-    showUndo();
-  }
-
-  function undoDelete() {
-    if (!lastDeleted) return;
-    const { entry, index } = lastDeleted;
-    entries.splice(Math.min(index, entries.length), 0, entry);
-    lastDeleted = null;
-    save();
-    render();
-    hideUndo();
-    toast('Moment restored.');
+    toast('Moment removed. Press Ctrl+Z, or Undo, to put it back.');
+    offerUndo('Moment removed.', () => {
+      entries.splice(Math.min(index, entries.length), 0, removed);
+      save();
+      render();
+      toast('Moment restored.');
+    });
   }
 
   function showUndo() {
@@ -835,6 +866,13 @@
       save();
       render();
       closeShare();
+      const addedIds = new Set(imported.map(entry => String(entry.id)));
+      offerUndo(`${imported.length} ${imported.length === 1 ? 'moment' : 'moments'} imported.`, () => {
+        entries = entries.filter(entry => !addedIds.has(String(entry.id)));
+        save();
+        render();
+        toast('Import undone.');
+      });
       toast(`${imported.length} ${imported.length === 1 ? 'moment added' : 'moments added'} to your city.`);
     } catch (error) {
       $('#share-status').textContent = error.name === 'OperationError' ? 'That PIN did not unlock this city file. Try again.' : (error.message || 'Could not open this city file.');
@@ -1034,7 +1072,14 @@
         const existing = entries.find(entry => String(entry.id) === editingId);
         if (!existing) editingId = null;
         if (existing) {
+          const previous = { ...existing };
           Object.assign(existing, { text, date, category, importance, photo: photoData });
+          offerUndo('Moment updated.', () => {
+            Object.assign(existing, previous);
+            save();
+            render();
+            toast('Change undone.');
+          });
           editingId = null;
           save();
           render();
@@ -1071,6 +1116,11 @@
       if (!file) return;
       if (file.size > 12 * 1024 * 1024) {
         toast('Choose a photo smaller than 12 MB; it will be resized before saving.');
+        event.target.value = '';
+        return;
+      }
+      if (storageRoom !== null && storageRoom <= 0.03) {
+        toast('This browser is nearly full for this site. Export a backup, then remove a photo or two.');
         event.target.value = '';
         return;
       }
@@ -1150,17 +1200,21 @@
       if (trigger) openerElement = trigger;
     }, true);
 
-    $('#undo-button')?.addEventListener('click', undoDelete);
+    $('#undo-button')?.addEventListener('click', runUndo);
     $('#export-json')?.addEventListener('click', exportJSON);
+    $('#storage-export')?.addEventListener('click', () => {
+      setView('insights');
+      exportJSON();
+    });
     $('#share-button')?.addEventListener('click', () => {
       if (!entries.length) $('#share-status').textContent = 'Add a moment first — there is nothing to export yet.';
     });
 
     document.addEventListener('keydown', event => {
       const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z' && !typing && lastDeleted) {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z' && !typing && undoAction) {
         event.preventDefault();
-        undoDelete();
+        runUndo();
         return;
       }
       if (typing || event.ctrlKey || event.metaKey || event.altKey) return;

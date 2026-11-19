@@ -2850,3 +2850,32 @@ mark {
 @media (max-width: 640px) {
   .onthisday-list { grid-template-columns: 1fr; padding: 2px 14px 16px; }
 }
+
+/* ── Storage guard ────────────────────────────────────────────────
+   Shown only when the origin is close to its quota. The point is to say so
+   while there is still room to act, not when a save has already failed. */
+.storage-warning {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border: 1px solid #e8d5b8;
+  border-radius: 11px;
+  background: #fdf6ea;
+  font: 400 12.5px/1.5 var(--font-body);
+  color: #7a5a2e;
+}
+.storage-warning button {
+  font: 600 12px var(--font-body);
+  color: #6b4a1e;
+  background: #f3e2c4;
+  border: 1px solid #e2cba4;
+  border-radius: 99px;
+  padding: 5px 11px;
+  cursor: pointer;
+  margin-left: auto;
+}
+.storage-warning button:hover { background: #efd8b4; }

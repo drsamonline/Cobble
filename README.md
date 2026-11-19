@@ -98,7 +98,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 - **One photo per moment**, resized on the device to at most 1280 px and encoded as WebP where the browser allows it, JPEG otherwise, whichever is smaller. EXIF orientation is honoured, so a photo taken sideways is stored upright. Nothing is uploaded.
 - **A day drawer** that opens any date as a short chapter, with its photos and its order in the day.
 - **On this day.** Moments from the same calendar date in earlier years, under the city, with how long ago each was. The panel hides itself when there is nothing to show.
-- **Edit and delete.** Any moment in the drawer can be changed or removed; a delete leaves an Undo strip for twenty seconds, and `Ctrl`/`Cmd`+`Z` works after that.
+- **Edit and delete**, with undo for both. Any moment in the drawer can be changed or removed; the Undo strip names what it will take back, and `Ctrl`/`Cmd`+`Z` does the same for twenty seconds.
 - **A full timeline** of every day you have saved, newest first, one click from the same drawer.
 - **Search over the whole archive.** One box in the timeline: what you wrote, the district name, or a date. Case and accents are folded (`cafe` finds `café`), the match is marked in place, and results keep their day grouping.
 
@@ -115,7 +115,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 - **Import with validation.** Every field of every imported moment is checked against a schema before it touches your archive; duplicates are skipped; a damaged file is refused with a reason.
 - **A readable backup too.** Beside the encrypted file there is "Export readable backup" — plain JSON, with a note inside saying it is not encrypted. Lose the PIN, keep the city.
 - **Download the whole app** as a zip, straight from the app, with a README inside.
-- **Honest storage reporting.** IndexedDB with a localStorage fallback, the size of your archive in KB, and how much room the browser will still give you.
+- **Honest storage reporting, and a guard.** IndexedDB with a localStorage fallback, the size of your archive in KB, how much room the browser will still give you — and a warning at 80% of quota with a one-click backup, before a save has a chance to fail.
 
 **Offline, installable, self-contained**
 

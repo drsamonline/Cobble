@@ -2,6 +2,23 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.11.0 — 2026-11-19
+
+Two more off the short list.
+
+### Changed
+
+- **Undo now covers edit and import, not just delete.** One slot, one action: the bar names what it will take back ("Moment updated.", "Moment removed.", "2 moments imported.") and `Ctrl`/`Cmd`+`Z` runs the same thing. Editing parks the previous version and restores it; importing remembers the ids it added and removes exactly those.
+
+### Added
+
+- **A storage guard.** At 80% of the origin quota a warning appears in the Discoveries view, with a one-click readable backup; at 95% the wording changes to say new moments may not save. Past 97% the photo picker refuses a new photo and says why, instead of letting the save fail afterwards. The numbers come from `navigator.storage.estimate()`, and the guard says nothing at all when the browser will not answer.
+
+### Verified
+
+- Three undo paths driven in headless Chrome: edit → undo restored the original text; delete → `Ctrl+Z` restored the moment; import of two moments took the archive from 1 to 3 and undo took it back to 1.
+- The guard at 30%, 85% and 97% of quota: silent, warning, urgent.
+
 ## 1.10.0 — 2026-11-19
 
 Two items off the short list.

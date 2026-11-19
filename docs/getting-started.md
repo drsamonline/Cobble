@@ -31,7 +31,9 @@ Once the page has loaded, it works with the network off: a service worker keeps 
 
 The block appears in the city, and the day appears in the timeline. That is the whole loop.
 
-**Changing and removing.** Open a day in the timeline and each moment in the drawer has **Edit** and **Delete**. Edit reopens the form with everything already filled in; Delete leaves an Undo strip for twenty seconds, and `Ctrl`/`Cmd`+`Z` still works after that.
+**Changing and removing.** Open a day in the timeline and each moment in the drawer has **Edit** and **Delete**. Edit reopens the form with everything already filled in. Both leave an Undo strip for twenty seconds, and `Ctrl`/`Cmd`+`Z` does the same — as does importing a city file, which can be taken back in one click.
+
+**When the browser is nearly full.** Past 80% of the space this site is allowed, Discoveries shows a warning with a one-click backup. Past 97% the photo picker refuses a new photo rather than letting the save fail.
 
 **Repetition.** If you have noticed the same thing before, say so with the repetition field. A moment seen twice or more gets a wider block and more windows, and counts towards "returning themes" in Discoveries.
 
