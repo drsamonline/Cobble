@@ -29,11 +29,14 @@ jobs:
         run: node --test tests/
 
       - name: Script syntax
+        # Globs, not a hard-coded list: a list is one more place to forget when
+        # a file is added or removed — which is exactly how this step broke.
         run: |
-          node --check sw.js
-          node --check app/app.js
-          node --check app/city3d.js
-          node --check assets/landing.js
+          for f in sw.js app/*.js assets/*.js tools/*.mjs tests/*.mjs; do
+            [ -e "$f" ] || continue
+            echo "checking $f"
+            node --check "$f"
+          done
 
   browser:
     name: browser check
