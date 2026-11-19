@@ -2,6 +2,19 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.27.0 — 2026-11-19
+
+### Added
+
+- **Import another journal.** *Share city → Import another journal* reads two shapes: **Day One's JSON export** (any array of objects with `text` and a `creationDate`/`date`), and **markdown or plain text with a `YYYY-MM-DD` line above each entry**. Everything is read in the page — no upload — dates become moments, text is cut to the app's 500-character limit, and the result goes through the same merge rule as a city file, so importing twice adds nothing.
+- The toast reports what happened: *"2 entries imported from dayone.json, 1 skipped."*, and the import can be undone from the same strip as everything else.
+- `parseForeignJournal()` in `app/core.js`, with three unit tests: Day One JSON with an empty and an undated entry, markdown with headings, and three kinds of unusable file.
+
+### Verified
+
+- In the browser: a Day One export gave 2 moments and reported 1 skipped; a markdown journal added 2 more; undo took it back to 2; a file with no dates said *"No dated entries found. This reads Day One JSON, or text with a YYYY-MM-DD line above each entry."*
+- First wiring attempt attached the listeners to strings that did not exist in `app.js`, so the buttons did nothing and the test caught it immediately — no toast, no moments.
+
 ## 1.26.0 — 2026-11-19
 
 ### Changed

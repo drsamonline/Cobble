@@ -1300,6 +1300,47 @@
     toast('Postcard saved — 1200×630, your skyline, nothing personal.');
   }
 
+  /* Another journal's export: Day One JSON, or markdown with a date above
+     each entry. Nothing is sent anywhere — the file is read in the page. */
+  async function importJournal(file) {
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const parsed = window.CobbleCore.parseForeignJournal(text, file.name);
+      if (!parsed.moments.length) {
+        toast('No dated entries found. This reads Day One JSON, or text with a YYYY-MM-DD line above each entry.');
+        return;
+      }
+      const incoming = parsed.moments.map((row, index) => ({
+        id: `foreign-${row.date}-${index}`,
+        date: row.date,
+        text: row.text.slice(0, 500),
+        category: 'everyday',
+        importance: 1,
+        repeatCount: 1,
+        photo: '',
+        createdAt: `${row.date}T12:00:00.000Z`
+      }));
+      const { added, variants } = window.CobbleCore.mergeEntries(entries, incoming);
+      if (!added.length) { toast('Nothing new — those entries are already here.'); return; }
+      entries = [...entries, ...added];
+      save();
+      render();
+      closeShare();
+      const addedIds = new Set(added.map(entry => String(entry.id)));
+      offerUndo(`${added.length} ${added.length === 1 ? 'entry' : 'entries'} imported.`, () => {
+        entries = entries.filter(entry => !addedIds.has(String(entry.id)));
+        save();
+        render();
+        toast('Import undone.');
+      });
+      const skipped = parsed.skipped ? `, ${parsed.skipped} skipped` : '';
+      toast(`${added.length} ${added.length === 1 ? 'entry' : 'entries'} imported from ${file.name}${skipped}${variants ? `, ${variants} kept as a second version` : ''}.`);
+    } catch (error) {
+      toast(error.message || 'That file could not be read.');
+    }
+  }
+
   function exportJSON() {
     const payload = JSON.stringify({
       app: 'Cobble',
@@ -1670,6 +1711,12 @@
     });
     $('#export-city').addEventListener('click', exportCity);
     $('#import-city').addEventListener('click', () => $('#import-file').click());
+    $('#import-journal').addEventListener('click', () => $('#journal-file').click());
+    $('#journal-file').addEventListener('change', event => {
+      const file = event.target.files[0];
+      event.target.value = '';
+      importJournal(file);
+    });
     $('#import-file').addEventListener('change', event => importCity(event.target.files[0]));
     // ── focus management ──────────────────────────────────────────
     const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';

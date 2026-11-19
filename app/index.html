@@ -267,8 +267,9 @@
       <div class="share-list-wrap"><div class="share-list-title">CHOOSE WHAT TO SHARE</div><div id="share-list"></div></div>
       <label class="field-label share-pin-label" for="share-pin">Create a 6–12 digit PIN</label>
       <input class="share-pin-input" id="share-pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="12" placeholder="Enter a private PIN">
-      <div class="share-actions"><button class="cancel-button" id="import-city">Open a city file</button><button class="cancel-button" id="export-json" title="A plain JSON copy of every moment, for your own backup">Export readable backup</button><button class="add-button" id="export-city">Encrypt & download <span>↗</span></button></div>
+      <div class="share-actions"><button class="cancel-button" id="import-city">Open a city file</button><button class="cancel-button" id="import-journal">Import another journal</button><button class="cancel-button" id="export-json" title="A plain JSON copy of every moment, for your own backup">Export readable backup</button><button class="add-button" id="export-city">Encrypt & download <span>↗</span></button></div>
       <input id="import-file" type="file" accept=".cobble,.json,application/json" hidden>
+      <input id="journal-file" type="file" accept=".json,.md,.markdown,.txt,text/plain,application/json" hidden>
       <p class="share-status" id="share-status" aria-live="polite"></p>
       <p class="share-footnote">For importing, choose the received city file and enter the PIN its owner gave you.</p>
     </section>

@@ -249,6 +249,61 @@
     return { added, variants };
   }
 
+  /* ── importing from another journal ───────────────────────────────
+     Two shapes, because they cover most exports people actually have:
+     Day One's JSON, and a markdown or text file with a date above each
+     entry. Pure: it returns candidate moments and a count of what it could
+     not read, and the caller decides what to do with them. */
+  const DATE_LINE = /^\s*(?:#{1,6}\s*)?(\d{4}-\d{2}-\d{2})\b[^\n]*$/;
+
+  function parseForeignJournal(text, filename = '') {
+    const source = String(text || '');
+    const name = String(filename || '').toLowerCase();
+    const out = { moments: [], skipped: 0, kind: 'unknown' };
+
+    const looksJson = name.endsWith('.json') || /^\s*[\[{]/.test(source);
+    if (looksJson) {
+      let parsed;
+      try { parsed = JSON.parse(source); } catch { return out; }
+      const rows = Array.isArray(parsed) ? parsed
+        : Array.isArray(parsed?.entries) ? parsed.entries
+        : Array.isArray(parsed?.moments) ? parsed.moments
+        : null;
+      if (!rows) return out;
+      out.kind = 'json';
+      for (const row of rows) {
+        if (!row || typeof row !== 'object') { out.skipped += 1; continue; }
+        const body = row.text ?? row.body ?? row.content ?? row.note ?? '';
+        const when = row.creationDate ?? row.date ?? row.createdAt ?? row.timestamp ?? '';
+        const day = String(when).slice(0, 10);
+        if (!body || !/^\d{4}-\d{2}-\d{2}$/.test(day)) { out.skipped += 1; continue; }
+        out.moments.push({ date: day, text: String(body).trim() });
+      }
+      return out;
+    }
+
+    /* markdown or plain text: a date on its own line, then whatever follows */
+    out.kind = 'text';
+    const lines = source.split(/\r?\n/);
+    let current = null;
+    let buffer = [];
+    const flush = () => {
+      if (current && buffer.join(' ').trim()) {
+        out.moments.push({ date: current, text: buffer.join(' ').trim() });
+      } else if (current) {
+        out.skipped += 1;
+      }
+      buffer = [];
+    };
+    for (const line of lines) {
+      const match = line.match(DATE_LINE);
+      if (match) { flush(); current = match[1]; continue; }
+      if (current) buffer.push(line.trim());
+    }
+    flush();
+    return out;
+  }
+
   const api = {
     FORMAT,
     VERSION,
@@ -269,7 +324,8 @@
     decryptVault,
     encryptVaultWithKey,
     decryptVaultWithKey,
-    mergeEntries
+    mergeEntries,
+    parseForeignJournal
   };
 
   globalThis.CobbleCore = api;

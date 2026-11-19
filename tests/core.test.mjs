@@ -197,6 +197,41 @@ test('a vault that is not a vault is refused', async () => {
   await assert.rejects(() => core.decryptVault(null, 'a long enough passphrase'), /not a Cobble vault/);
 });
 
+/* ── importing another journal ───────────────────────────────────── */
+
+test('Day One JSON becomes dated moments, and empty entries are counted', () => {
+  const json = JSON.stringify([
+    { text: 'The first day.', creationDate: '2024-05-04T10:00:00Z' },
+    { text: 'A later entry.', creationDate: '2024-06-01T21:30:00Z' },
+    { text: '', creationDate: '2024-06-02T10:00:00Z' },
+    { text: 'No date at all.' }
+  ]);
+  const { moments, skipped, kind } = core.parseForeignJournal(json, 'export.json');
+  assert.equal(kind, 'json');
+  assert.deepEqual(moments, [
+    { date: '2024-05-04', text: 'The first day.' },
+    { date: '2024-06-01', text: 'A later entry.' }
+  ]);
+  assert.equal(skipped, 2);
+});
+
+test('markdown with a date above each entry becomes moments', () => {
+  const md = '# My journal\n\n## 2024-01-02\nFirst line.\nSecond line.\n\n## 2024-01-03\nAnother day.\n';
+  const { moments, kind } = core.parseForeignJournal(md, 'notes.md');
+  assert.equal(kind, 'text');
+  assert.deepEqual(moments, [
+    { date: '2024-01-02', text: 'First line. Second line.' },
+    { date: '2024-01-03', text: 'Another day.' }
+  ]);
+});
+
+test('a file with no dates yields nothing rather than nonsense', () => {
+  const { moments } = core.parseForeignJournal('just some prose, no dates', 'x.txt');
+  assert.deepEqual(moments, []);
+  assert.deepEqual(core.parseForeignJournal('{not json', 'x.json').moments, []);
+  assert.deepEqual(core.parseForeignJournal('', '').moments, []);
+});
+
 /* ── merging one city into another ───────────────────────────────── */
 
 const localCity = [
