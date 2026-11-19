@@ -18,6 +18,7 @@ The last honest gap in the privacy page, closed.
 
 ### Changed
 
+- **The app shell budget moved from 200 KB to 220 KB**, and CI caught it: the shell is 205.6 KB after the dark interface, the heatmap, the filters and the vault. Minifying is still not done on purpose — this repository ships readable source. `docs/performance.md` records what grew and why.
 - `PRIVACY.md` and `SECURITY.md` said plainly that the archive was not encrypted at rest. They now describe what the vault does, and what it does not protect against.
 
 ## 1.19.0 — 2026-11-19

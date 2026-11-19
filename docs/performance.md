@@ -45,6 +45,12 @@ What this changes:
 - Nothing in the app. The landing page was already fine.
 - The enhancement list loses a defect and gains a check: CLS and axe should be measured in CI, so the number is tracked rather than chased.
 
+## What grew, and why
+
+The app shell budget was 200 KB and is now 220 KB. That is not drift, it is four features: the dark interface, the year heatmap, timeline filters and the encrypted vault took the shell from about 163 KB to 206 KB since v1.12. The CSS alone went from 57 KB to 80 KB.
+
+The alternative — minifying — is deliberately not done: this repository ships readable source, and a reader can open `app/app.js` and follow it. If the shell ever needs to be smaller, that is the trade to revisit, not the budget.
+
 ## At scale
 
 The timeline renders fifty days at a time, so the cost of a filter change is the pass over the archive, not the size of the page. Measured by clicking a district chip and timing the synchronous render, on archives seeded at four sizes:
