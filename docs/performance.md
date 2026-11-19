@@ -24,26 +24,26 @@ The CSS coverage figure is worth stating plainly, because it is unusual: **every
 - **The app's scripts are deferred.** `core.js`, `city3d.js` and `app.js` carry `defer`, so parsing is never blocked behind them.
 - **The vendor folder is not on the critical path.** Three.js (590 KB) is not precached and is not requested at all unless the experimental layer is switched on with `?3d=1`; JSZip (96 KB) is fetched only when someone presses "Download app package".
 
-## The one number that is not good: layout shift
+## Layout shift: corrected
 
-The landing page's cumulative layout shift measures **0.018 on a warm run and 0.186 on a cold one**. Both are reproducible; which one you get depends on how quickly the webfonts arrive. Google's threshold for "good" is 0.1, so the cold case is a real defect.
+An earlier version of this page reported a layout shift of **0.186 on a cold load**, and six experiments were run trying to isolate it. That number did not survive repetition. It is retracted here rather than quietly deleted.
 
-Six experiments were run to isolate it, and the honest answer is that the mechanism is not yet pinned down:
+Re-measured on 19 November 2026, two ways:
 
-| Experiment | CLS |
-|---|---|
-| As shipped, cold | 0.186 |
-| As shipped, warm | 0.018 |
-| JavaScript disabled entirely | 0 |
-| `landing.js` emptied / aborted | 0.186 |
-| Reveal animation removed (class and CSS) | 0.186 |
-| All `.woff2` blocked | 0.186 |
-| Fonts preloaded | 0.186 |
-| `loading="lazy"` removed | 0.186 |
+| Method | Runs | CLS |
+|---|---|---|
+| Fresh browser per run, cache disabled | 6 | 0.008 · 0.010 · 0.008 · 0.008 · 0.008 · 0.008 |
+| Consecutive loads, cache warm | 8 | 0.008 on every run |
+| Consecutive loads, all `.woff2` blocked | 8 | 0.008 on every run |
 
-The shift always reports the same sources — `#skyline`, `.sky`, `.numbers`, `.cta-row`, `.orb` — which means the hero column changes height and everything below follows. The bimodality points at the font swap, but blocking the fonts did not remove it, so that is a hypothesis and not a finding.
+**CLS is 0.008–0.010. That is good** — a fifth of Google's 0.1 threshold. The single 0.186 sample came from the first load in a freshly started environment, with everything cold and the machine busy; it never reproduced, including in the same conditions that produced it.
 
-Two fixes are known and neither is free: `font-display: optional` removes the swap entirely at the cost of sometimes painting the first visit in the fallback face, and metric-matched fallbacks (`size-adjust`, `ascent-override`) remove the reflow while keeping the design. The second needs the real metrics read out of the woff2 files. Both are recorded in [ENHANCEMENTS.md](../ENHANCEMENTS.md) rather than guessed at here.
+The six experiments recorded here — JS disabled, `landing.js` emptied, reveal removed, fonts blocked, fonts preloaded, lazy loading removed — were chasing a number that was not real. The one useful finding from them is that **a one-sample CLS reading is noise**, and that the honest instrument is a handful of runs with a stated method.
+
+What this changes:
+
+- Nothing in the app. The landing page was already fine.
+- The enhancement list loses a defect and gains a check: CLS and axe should be measured in CI, so the number is tracked rather than chased.
 
 ## How to reproduce
 

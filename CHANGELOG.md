@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.14.0 — 2026-11-19
+
+A correction, and it matters more than a feature.
+
+### Corrected
+
+- **The layout-shift "defect" was not real.** 1.9.0 reported CLS 0.186 on a cold load and listed six experiments that failed to isolate it. Re-measured with a stated method — six runs in fresh browsers with the cache disabled, plus eight warm and eight with webfonts blocked — CLS is **0.008–0.010**, a fifth of Google's threshold, on every single run. The 0.186 came from the first load in a freshly started environment and never reproduced.
+
+  `docs/performance.md` now says so plainly, keeps the retraction visible rather than deleting the claim, and records the lesson: one sample of a timing metric is noise.
+
+- The enhancement list loses that defect and gains the check it should have had instead: **measure CLS and axe in CI** (item 2.16, rewritten), so the numbers are tracked rather than chased.
+
 ## 1.13.0 — 2026-11-19
 
 The contrast sweep finished, measured rather than eyeballed.
