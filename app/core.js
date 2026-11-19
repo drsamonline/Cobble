@@ -160,6 +160,39 @@
     };
   }
 
+  /* The key, derived once and reused. Deriving it costs ~250,000 PBKDF2
+     iterations, which is the point of PBKDF2 — paying it on every save is not.
+     The salt is kept for the session and the IV is fresh every time, which is
+     what AES-GCM needs. */
+  async function encryptVaultWithKey(entries, key, salt) {
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const plaintext = new TextEncoder().encode(JSON.stringify(entries));
+    const data = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, plaintext);
+    return {
+      format: VAULT_FORMAT,
+      version: VAULT_VERSION,
+      salt: [...salt],
+      iv: [...iv],
+      data: [...new Uint8Array(data)]
+    };
+  }
+
+  async function decryptVaultWithKey(vault, key) {
+    if (!vault || vault.format !== VAULT_FORMAT || vault.version !== VAULT_VERSION) {
+      throw new Error('That is not a Cobble vault.');
+    }
+    let plaintext;
+    try {
+      plaintext = await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv: new Uint8Array(vault.iv) }, key, new Uint8Array(vault.data)
+      );
+    } catch {
+      throw new Error('That passphrase did not open this city.');
+    }
+    const parsed = JSON.parse(new TextDecoder().decode(plaintext));
+    return Array.isArray(parsed) ? parsed : [];
+  }
+
   async function decryptVault(vault, passphrase) {
     if (!vault || vault.format !== VAULT_FORMAT || vault.version !== VAULT_VERSION) {
       throw new Error('That is not a Cobble vault.');
@@ -234,6 +267,8 @@
     VAULT_VERSION,
     encryptVault,
     decryptVault,
+    encryptVaultWithKey,
+    decryptVaultWithKey,
     mergeEntries
   };
 

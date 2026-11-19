@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.22.0 — 2026-11-19
+
+### Changed
+
+- **The vault derives its key once, not once per save.** PBKDF2 at 250,000 iterations is meant to be slow; paying it on every write was the cost of the feature, not the point of it. The key is derived at unlock and reused for the session, with a fresh IV on every write and the salt fixed for that session.
+- Measured on a 205 KB archive (500 moments, 20 photos): derive-and-encrypt **285 ms**, encrypt with the cached key **91 ms** — a save is 68% cheaper. `docs/performance.md` has the table.
+- `core.js` gained `encryptVaultWithKey()` and `decryptVaultWithKey()`, with a test asserting the salt is reused, the IV is not, and the ciphertext differs each time.
+
+### Verified
+
+- The whole lock flow re-run after the refactor: after locking, the store held one `vault` record and no plaintext; reload showed the unlock screen; a wrong passphrase was refused; the right one restored the moment; adding another and reloading gave two moments after a second unlock.
+
 ## 1.21.0 — 2026-11-19
 
 ### Changed

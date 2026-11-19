@@ -170,6 +170,9 @@
      no plaintext moments record is kept. */
   let vaultKey = null;
   let vaultPassphrase = null;
+  /* Derived once per unlock and reused: PBKDF2 at 250,000 iterations is meant
+     to be slow, and it should be paid on unlock, not on every save. */
+  let vaultSession = null;   // { key, salt }
 
   function saveVault(vault) {
     return openDatabase().then(db => new Promise((resolve, reject) => {
@@ -242,10 +245,10 @@
    function save() {
     if (demoMode) return;
     personalEntries = entries;
-    if (vaultKey && vaultPassphrase) {
+    if (vaultSession) {
       /* Encrypt before anything touches the disk; the plaintext record is
          deleted in the same transaction. */
-      window.CobbleCore.encryptVault(entries, vaultPassphrase)
+      window.CobbleCore.encryptVaultWithKey(entries, vaultSession.key, vaultSession.salt)
         .then(vault => saveVault(vault))
         .then(() => updateStorageInfo())
         .catch(() => toast('Could not write the locked archive. Your changes are in memory only.'));
@@ -931,10 +934,13 @@
     if (passphrase === null) return;
     if (passphrase.length < 8) { toast('Use at least eight characters.'); return; }
     try {
-      const vault = await window.CobbleCore.encryptVault(entries, passphrase);
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const key = await window.CobbleCore.deriveKey(passphrase, salt);
+      const vault = await window.CobbleCore.encryptVaultWithKey(entries, key, salt);
       await saveVault(vault);
       vaultKey = 'set';
       vaultPassphrase = passphrase;
+      vaultSession = { key, salt };
       const badge = $('#lock-badge');
       if (badge) badge.textContent = 'SEALED';
       toast('This city is sealed. Enter the passphrase next time you open it.');
@@ -949,11 +955,14 @@
     if (!passphrase) { status.textContent = 'Enter the passphrase.'; return; }
     try {
       const vault = await readVault();
-      const decrypted = await window.CobbleCore.decryptVault(vault, passphrase);
+      const salt = new Uint8Array(vault.salt);
+      const key = await window.CobbleCore.deriveKey(passphrase, salt);
+      const decrypted = await window.CobbleCore.decryptVaultWithKey(vault, key);
       entries = decrypted;
       personalEntries = decrypted;
       vaultKey = 'set';
       vaultPassphrase = passphrase;
+      vaultSession = { key, salt };
       hideLockScreen();
       render();
       updateStorageInfo();

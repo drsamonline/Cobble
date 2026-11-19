@@ -45,6 +45,19 @@ What this changes:
 - Nothing in the app. The landing page was already fine.
 - The enhancement list loses a defect and gains a check: CLS and axe should be measured in CI, so the number is tracked rather than chased.
 
+## Saving a locked archive
+
+The vault derives its key with PBKDF2-SHA-256 at 250,000 iterations. That is deliberate — it is what makes a stolen ciphertext expensive to attack — but paying it on every save is not. The key is now derived once at unlock and reused for the session, with a fresh IV on every write.
+
+Measured on a 205 KB archive (500 moments, 20 photos), encrypting in the page:
+
+| | Time |
+|---|---|
+| Derive the key + encrypt | **285 ms** |
+| Encrypt with the cached key | **91 ms** |
+
+A save is 68% cheaper. The salt stays fixed for the session and the IV changes every time, which is what AES-GCM requires.
+
 ## What grew, and why
 
 The app shell budget was 200 KB and is now 220 KB. That is not drift, it is four features: the dark interface, the year heatmap, timeline filters and the encrypted vault took the shell from about 163 KB to 206 KB since v1.12. The CSS alone went from 57 KB to 80 KB.

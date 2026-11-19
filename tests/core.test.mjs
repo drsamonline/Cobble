@@ -180,6 +180,18 @@ test('two vaults of the same archive differ', async () => {
   assert.notDeepEqual(first.data, second.data);
 });
 
+test('the key can be derived once and reused, with a fresh IV each time', async () => {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const key = await core.deriveKey('a long enough passphrase', salt);
+  const rows = [{ id: 'a', date: '2026-01-02', text: 'Reused key.', category: 'joy', importance: 1, repeatCount: 1, photo: '', createdAt: '2026-01-02T10:00:00.000Z' }];
+  const first = await core.encryptVaultWithKey(rows, key, salt);
+  const second = await core.encryptVaultWithKey(rows, key, salt);
+  assert.deepEqual(first.salt, [...salt]);
+  assert.notDeepEqual(first.iv, second.iv);
+  assert.notDeepEqual(first.data, second.data);
+  assert.deepEqual(await core.decryptVaultWithKey(first, key), rows);
+});
+
 test('a vault that is not a vault is refused', async () => {
   await assert.rejects(() => core.decryptVault({ format: 'cobble-pincode' }, 'a long enough passphrase'), /not a Cobble vault/);
   await assert.rejects(() => core.decryptVault(null, 'a long enough passphrase'), /not a Cobble vault/);
