@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.19.0 — 2026-11-19
+
+### Changed
+
+- **Forty-eight near-grey text colours became three tokens.** `--text-strong`, `--text-secondary` and `--text-muted`, across 71 declarations. The values are within a few points of the ones they replace, so nothing looks different — but the stylesheet no longer carries forty-seven ways to write the same grey, and the dark theme has three values to override instead of a list.
+
+  Only near-greys were touched: colours with any real saturation are semantic (a district's own colour), and flattening those would lose meaning.
+
+### Measured
+
+- **How the timeline scales**, in `docs/performance.md`: 9 ms to filter at 100 moments, 35 ms at 500, 130 ms at 2,000, **598 ms at 5,000**. Load time stays flat at about 2 s because it is dominated by the page and the fonts. The virtualisation item now has a real threshold — two thousand moments — instead of a guess.
+
 ## 1.18.0 — 2026-11-19
 
 The instrument, and the five defects it found on its first run.

@@ -45,6 +45,19 @@ What this changes:
 - Nothing in the app. The landing page was already fine.
 - The enhancement list loses a defect and gains a check: CLS and axe should be measured in CI, so the number is tracked rather than chased.
 
+## At scale
+
+The timeline renders fifty days at a time, so the cost of a filter change is the pass over the archive, not the size of the page. Measured by clicking a district chip and timing the synchronous render, on archives seeded at four sizes:
+
+| Moments | Load | Filter change | Reset |
+|---|---|---|---|
+| 100 | 2,585 ms | 9 ms | 12 ms |
+| 500 | 2,098 ms | 35 ms | 37 ms |
+| 2,000 | 1,935 ms | 130 ms | 46 ms |
+| 5,000 | 2,116 ms | **598 ms** | 70 ms |
+
+Load time is flat because it is dominated by the page and the fonts, not the archive. A filter change grows roughly linearly: fine to about two thousand moments, visibly janky at five thousand. That is the measured basis for the virtualisation item, and it says the threshold is **2,000 moments**, not the ten thousand a guess would have picked.
+
 ## How to reproduce
 
 ```bash

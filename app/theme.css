@@ -5,6 +5,11 @@
   --color-surface: #ffffff;
   --color-text: #293632;
   --color-muted: #5f6b64;
+
+  /* Three greys, where there used to be forty-seven near-identical ones. */
+  --text-strong: #4a584e;
+  --text-secondary: #59685e;
+  --text-muted: #5f6b64;
   --font-heading: 'Manrope', sans-serif;
   --font-body: 'DM Sans', sans-serif;
   --radius: 16px;

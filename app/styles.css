@@ -94,7 +94,7 @@ button {
   font-size: 10px;
   letter-spacing: 1.55px;
   font-weight: 700;
-  color: #5f6b64;
+  color: var(--text-muted);
 }
 
 .side-label {
@@ -108,7 +108,7 @@ button {
   gap: 13px;
   border: 0;
   background: transparent;
-  color: #5f6b64;
+  color: var(--text-muted);
   border-radius: 10px;
   padding: 12px 13px;
   text-align: left;
@@ -155,14 +155,14 @@ button {
 .profile strong {
   display: block;
   font-size: 11px;
-  color: #414d46;
+  color: var(--text-strong);
 }
 
 .offline-card small,
 .profile small {
   display: block;
   font-size: 10px;
-  color: #5f6b64;
+  color: var(--text-muted);
   margin-top: 3px;
 }
 
@@ -179,7 +179,7 @@ button {
 
 .lock-icon {
   margin-left: auto;
-  color: #687168;
+  color: var(--text-muted);
 }
 
 .profile {
@@ -205,7 +205,7 @@ button {
   margin-left: auto;
   border: 0;
   background: none;
-  color: #676f68;
+  color: var(--text-muted);
   font-size: 20px;
 }
 
@@ -224,7 +224,7 @@ button {
 }
 
 .breadcrumb {
-  color: #686f68;
+  color: var(--text-muted);
   font-size: 11px;
 }
 
@@ -234,7 +234,7 @@ button {
 }
 
 .breadcrumb strong {
-  color: #4d5b53;
+  color: var(--text-strong);
   font-weight: 600;
 }
 
@@ -249,7 +249,7 @@ button {
   gap: 8px;
   align-items: center;
   font-size: 11px;
-  color: #5f6b64;
+  color: var(--text-muted);
   padding: 8px 11px;
   background: #eeeee8;
   border-radius: 20px;
@@ -283,7 +283,7 @@ button {
   height: 34px;
   padding: 0;
   background: #eeeee8;
-  color: #637168;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
@@ -313,7 +313,7 @@ button {
 
 .eyebrow {
   margin: 0 0 8px;
-  color: #637066;
+  color: var(--text-muted);
 }
 
 .page-intro h1 {
@@ -333,7 +333,7 @@ button {
 }
 
 .intro-copy {
-  color: #69706a;
+  color: var(--text-muted);
   font-size: 12px;
   margin: 10px 0 0;
 }
@@ -356,14 +356,14 @@ button {
 .city-status strong,
 .city-weather strong {
   display: block;
-  color: #4c5c52;
+  color: var(--text-strong);
   font-size: 11px;
 }
 
 .city-status small,
 .city-weather small {
   display: block;
-  color: #696f67;
+  color: var(--text-muted);
   font-size: 10px;
   margin-top: 3px;
 }
@@ -400,12 +400,12 @@ button {
   border: 1px solid #eadfc8;
   border-radius: 13px;
   background: linear-gradient(110deg, #fcf7eb, #f4f6ef);
-  color: #706e62;
+  color: var(--text-muted);
   font-size: 11px;
   line-height: 1.55;
 }
 
-.demo-note strong { color: #5e6b5e; margin-right: 4px; }
+.demo-note strong { color: var(--text-secondary); margin-right: 4px; }
 .demo-note-icon { color: #926529; font-size: 19px; }
 
 .city-card,
@@ -798,7 +798,7 @@ button {
   align-items: center;
   gap: 20px;
   padding: 12px 21px;
-  color: #687069;
+  color: var(--text-muted);
   font-size: 9px;
 }
 
@@ -829,7 +829,7 @@ button {
 
 .legend-note {
   margin-left: auto;
-  color: #6b7069
+  color: var(--text-muted)
 }
 
 .legend-note span {
@@ -894,7 +894,7 @@ button {
 .full-date {
   flex: none;
   width: 65px;
-  color: #637067;
+  color: var(--text-muted);
   font-size: 10px;
   font-weight: 700
 }
@@ -902,7 +902,7 @@ button {
 .mini-date small,
 .full-date small {
   display: block;
-  color: #6a7069;
+  color: var(--text-muted);
   font-weight: 400;
   margin-top: 4px;
   font-size: 9px
@@ -922,7 +922,7 @@ button {
   gap: 8px;
   min-width: 0;
   font-size: 10px;
-  color: #5f6b64
+  color: var(--text-muted)
 }
 
 .entry-swatch {
@@ -953,12 +953,12 @@ button {
   position: absolute;
   right: 0;
   top: 13px;
-  color: #686f67;
+  color: var(--text-muted);
   font-size: 12px
 }
 
 .more-moments {
-  color: #637065;
+  color: var(--text-muted);
   font-size: 9px;
   padding-left: 14px
 }
@@ -968,14 +968,14 @@ button {
 .no-insights {
   padding: 24px 8px;
   text-align: center;
-  color: #5f6b64;
+  color: var(--text-muted);
   font-size: 11px
 }
 
 .empty-state strong,
 .empty-full strong,
 .no-insights strong {
-  color: #56665a;
+  color: var(--text-secondary);
   font-size: 12px
 }
 
@@ -999,7 +999,7 @@ button {
 .insight-content>p {
   font-size: 10px;
   line-height: 1.7;
-  color: #686f66;
+  color: var(--text-muted);
   margin: 0 0 8px
 }
 
@@ -1008,7 +1008,7 @@ button {
   justify-content: space-between;
   gap: 10px;
   padding: 19px 2px 4px;
-  color: #6a6f68;
+  color: var(--text-muted);
   font-size: 9px
 }
 
@@ -1050,7 +1050,7 @@ button {
 
 .entry-total {
   font-size: 10px;
-  color: #676f67
+  color: var(--text-muted)
 }
 
 .stats-grid {
@@ -1088,14 +1088,14 @@ button {
 
 .stat-label {
   font-size: 10px;
-  color: #59685e;
+  color: var(--text-secondary);
   font-weight: 700;
   margin-top: 3px
 }
 
 .stat-card small {
   font-size: 9px;
-  color: #6a7069;
+  color: var(--text-muted);
   margin-top: auto;
   padding-top: 12px
 }
@@ -1126,13 +1126,13 @@ button {
 
 .discovery-item strong {
   font-size: 11px;
-  color: #55665b
+  color: var(--text-secondary)
 }
 
 .discovery-item p {
   font-size: 10px;
   line-height: 1.65;
-  color: #687067;
+  color: var(--text-muted);
   margin: 4px 0 0
 }
 
@@ -1144,11 +1144,11 @@ button {
   display: flex;
   justify-content: space-between;
   font-size: 10px;
-  color: #657067
+  color: var(--text-muted)
 }
 
 .category-row small {
-  color: #696f68
+  color: var(--text-muted)
 }
 
 .bar-track {
@@ -1180,19 +1180,19 @@ button {
 
 .privacy-note strong {
   font-size: 10px;
-  color: #647267
+  color: var(--text-muted)
 }
 
 .privacy-note p {
   font-size: 9px;
   line-height: 1.5;
-  color: #696f67;
+  color: var(--text-muted);
   margin: 4px 0 0
 }
 
 .insight-top-note {
   font-size: 10px;
-  color: #647264;
+  color: var(--text-muted);
   background: #edf2eb;
   padding: 10px 12px;
   border-radius: 9px
@@ -1237,7 +1237,7 @@ button {
   height: 29px;
   border-radius: 50%;
   font-size: 20px;
-  color: #637167
+  color: var(--text-muted)
 }
 
 .entry-modal h2,
@@ -1253,13 +1253,13 @@ button {
 .share-intro {
   font-size: 11px;
   line-height: 1.7;
-  color: #676f67;
+  color: var(--text-muted);
   margin: 8px 0 20px
 }
 
 .field-label {
   display: block;
-  color: #56655b;
+  color: var(--text-secondary);
   font-size: 10px;
   font-weight: 700;
   margin: 12px 0 7px
@@ -1274,7 +1274,7 @@ textarea,
   border-radius: 9px;
   background: #fbfaf6;
   padding: 11px;
-  color: #4a584e;
+  color: var(--text-strong);
   font-size: 11px;
   outline: none
 }
@@ -1310,7 +1310,7 @@ select:focus {
 
 .importance-field small {
   font-size: 9px;
-  color: #696f66
+  color: var(--text-muted)
 }
 
 .importance-options {
@@ -1332,7 +1332,7 @@ select:focus {
   padding: 7px 9px;
   border: 1px solid #e6e5dc;
   border-radius: 7px;
-  color: #676f66;
+  color: var(--text-muted);
   font-size: 9px
 }
 
@@ -1351,7 +1351,7 @@ select:focus {
   border: 1px dashed #ccd4c8;
   border-radius: 10px;
   cursor: pointer;
-  color: #617164
+  color: var(--text-muted)
 }
 
 .photo-picker input {
@@ -1376,7 +1376,7 @@ select:focus {
 
 .photo-picker small {
   font-size: 9px;
-  color: #687067;
+  color: var(--text-muted);
   margin-top: 3px
 }
 
@@ -1398,7 +1398,7 @@ select:focus {
 .cancel-button {
   border: 1px solid #e5e5dc;
   background: transparent;
-  color: #657066;
+  color: var(--text-muted);
   border-radius: 8px;
   padding: 10px 13px;
   font-size: 10px;
@@ -1446,7 +1446,7 @@ select:focus {
 
 .share-security small {
   font-size: 9px;
-  color: #657266;
+  color: var(--text-muted);
   margin-top: 4px;
   line-height: 1.5
 }
@@ -1454,7 +1454,7 @@ select:focus {
 .share-list-title {
   font-size: 9px;
   letter-spacing: 1.3px;
-  color: #667067;
+  color: var(--text-muted);
   font-weight: 700;
   margin: 16px 0 8px
 }
@@ -1473,7 +1473,7 @@ select:focus {
   align-items: center;
   gap: 8px;
   font-size: 10px;
-  color: #667269;
+  color: var(--text-muted);
   padding: 7px
 }
 
@@ -1484,7 +1484,7 @@ select:focus {
 
 .share-select-all span {
   margin-left: auto;
-  color: #676f66;
+  color: var(--text-muted);
   font-size: 9px;
   font-weight: 400
 }
@@ -1503,14 +1503,14 @@ select:focus {
 
 .share-entry small {
   display: block;
-  color: #696f67;
+  color: var(--text-muted);
   font-size: 8px;
   margin-bottom: 3px
 }
 
 .share-empty {
   padding: 15px;
-  color: #686f66;
+  color: var(--text-muted);
   font-size: 10px
 }
 
@@ -1531,7 +1531,7 @@ select:focus {
 
 .share-footnote {
   font-size: 9px;
-  color: #6a6f68
+  color: var(--text-muted)
 }
 
 .day-drawer-backdrop {
@@ -1558,7 +1558,7 @@ select:focus {
 
 .drawer-lede {
   font-size: 11px;
-  color: #5f6b64;
+  color: var(--text-muted);
   margin: 0 0 22px
 }
 
@@ -1580,7 +1580,7 @@ select:focus {
   display: flex;
   align-items: center;
   gap: 7px;
-  color: #686f66;
+  color: var(--text-muted);
   font-size: 9px
 }
 
@@ -1596,7 +1596,7 @@ select:focus {
 
 .story-card p {
   font: 14px/1.65 Georgia, serif;
-  color: #4b5a50;
+  color: var(--text-strong);
   margin: 12px 0
 }
 
@@ -1615,7 +1615,7 @@ select:focus {
 }
 
 .story-foot span {
-  color: #686f66
+  color: var(--text-muted)
 }
 
 .help-card {
@@ -1631,7 +1631,7 @@ select:focus {
 .help-card>p:not(.eyebrow) {
   font-size: 11px;
   line-height: 1.8;
-  color: #677068
+  color: var(--text-muted)
 }
 
 .toast {
@@ -2360,8 +2360,8 @@ select:focus {
   font: 650 16px var(--font-heading);
   letter-spacing: -.35px;
 }
-.archive-storage-copy p { margin: 0 0 3px; color: #617267; font-size: 11px; font-weight: 700; }
-.archive-storage-copy small { display: block; color: #677168; font-size: 10px; line-height: 1.5; }
+.archive-storage-copy p { margin: 0 0 3px; color: var(--text-muted); font-size: 11px; font-weight: 700; }
+.archive-storage-copy small { display: block; color: var(--text-muted); font-size: 10px; line-height: 1.5; }
 .archive-storage-badge {
   margin-left: auto;
   flex: none;
@@ -2469,7 +2469,7 @@ select:focus {
 .achievement-count {
   font: 500 11px var(--font-body);
   letter-spacing: .04em;
-  color: #5f6b64;
+  color: var(--text-muted);
   background: #f4f2e9;
   border-radius: 99px;
   padding: 4px 10px;
@@ -2526,7 +2526,7 @@ select:focus {
 .achievement-copy span {
   font-size: 11px;
   line-height: 1.4;
-  color: #66726c;
+  color: var(--text-muted);
 }
 .achievement-progress {
   height: 4px;
@@ -2546,7 +2546,7 @@ select:focus {
   margin-left: auto;
   font: 600 10.5px var(--font-body);
   letter-spacing: .03em;
-  color: #66726c;
+  color: var(--text-muted);
   white-space: nowrap;
 }
 .achievement-card.is-earned .achievement-status {
@@ -2605,7 +2605,7 @@ select:focus {
 .story-action {
   font: 500 11px var(--font-body);
   letter-spacing: .02em;
-  color: #5f7168;
+  color: var(--text-muted);
   background: #f4f2e9;
   border: 1px solid #e9e8e1;
   border-radius: 99px;
@@ -2658,7 +2658,7 @@ select:focus {
   gap: 8px;
   align-items: center;
   font: 500 12px var(--font-mono);
-  color: #66726c;
+  color: var(--text-muted);
 }
 .help-links a { color: #41776a; text-decoration: underline; text-underline-offset: 3px; }
 
@@ -2719,7 +2719,7 @@ select:focus {
   padding: 11px 38px 11px 13px;
   transition: border-color .18s ease, background .18s ease;
 }
-.timeline-search input::placeholder { color: #66726c; }
+.timeline-search input::placeholder { color: var(--text-muted); }
 /* Chrome draws its own clear button inside type="search"; ours is the one
    with the label, so the native one goes. */
 .timeline-search input::-webkit-search-cancel-button,
@@ -2741,7 +2741,7 @@ select:focus {
   border: 0;
   border-radius: 50%;
   background: #efeee5;
-  color: #657068;
+  color: var(--text-muted);
   font-size: 14px;
   line-height: 1;
   cursor: pointer;
@@ -2752,7 +2752,7 @@ select:focus {
   padding: 6px 22px 0;
   font: 500 11px var(--font-mono);
   letter-spacing: .05em;
-  color: #66726c;
+  color: var(--text-muted);
   min-height: 0;
 }
 .timeline-search-status:empty { display: none; }
@@ -2766,7 +2766,7 @@ mark {
 .no-search-results {
   padding: 34px 22px 40px;
   text-align: center;
-  color: #65716b;
+  color: var(--text-muted);
   font-size: 13.5px;
 }
 .no-search-results strong {
@@ -2780,7 +2780,7 @@ mark {
   margin-top: 10px;
   font: 400 11.5px var(--font-body);
   line-height: 1.6;
-  color: #66726c;
+  color: var(--text-muted);
   max-width: 34em;
   margin-inline: auto;
 }
@@ -2797,7 +2797,7 @@ mark {
 .onthisday-count {
   font: 500 11px var(--font-body);
   letter-spacing: .04em;
-  color: #5f6b64;
+  color: var(--text-muted);
   background: #f4f2e9;
   border-radius: 99px;
   padding: 4px 10px;
