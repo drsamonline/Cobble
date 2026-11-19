@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.15.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.16.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -64,9 +64,9 @@ What is left of the quick-win tier:
 
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
-| 2.2 | **Filters on the timeline.** By district, by weight, by date range. | With two years of moments the timeline is a wall. Six chips and a date picker fix it. | `app/app.js` | M |
 | 2.9 | **Accessibility pass with axe.** Run axe-core in the headless script, fix the violations it reports, and add the check to CI. | A one-off audit that turns into a permanent guarantee. | `tools/`, `.github/workflows/` | M |
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 2.2 | **Timeline filters** — six districts, landmarks, photos, composing with search, `aria-pressed` chips and a Clear button. | `app/app.js`, `app/index.html`, `app/styles.css` |
 | 2.4 | **A year heatmap** in Discoveries — a square per day for twelve months, shaded by count, clickable, labelled for screen readers. | `app/app.js`, `app/styles.css` |
 | 2.15 | **The contrast sweep, finished** — 71 text colours darkened along their own hue, 81 declarations, zero left below 4.5:1. | `app/styles.css` |
 | 2.3 | **A dark interface** for the shell — toggle in the top bar, remembered, follows `prefers-color-scheme` by default, contrast measured in the dark palette. | `app/styles.css`, `app/app.js` |

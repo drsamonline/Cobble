@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.16.0 — 2026-11-19
+
+### Added
+
+- **Filters on the timeline**, which compose with the search box: six district chips, "Landmarks only", "With a photo", and a Clear button that appears only when something is active. Chips are `aria-pressed` toggles, so a screen reader hears which are on, and the status line says what is narrowing the list — *"5 moments in 5 days — landmarks · with a photo"*.
+- While anything is active, every matching day is shown rather than the first fifty, and the empty state distinguishes "nothing matches that word" from "nothing matches those filters".
+
+### Verified
+
+- Filters alone, in combination, and composed with search: 19 moments → 4 (Nature) → 7 (Nature or Joy) → 9 (landmarks) → 5 (+ photo) → 1 (+ "rain"), then Clear left the search intact and returned 2.
+- The chip for Outside & nature now says **Nature**, matching the district's own short name used in the status line.
+
 ## 1.15.0 — 2026-11-19
 
 ### Added

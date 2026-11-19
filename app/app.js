@@ -402,6 +402,28 @@
   }
 
   let searchQuery = '';
+  const activeCategories = new Set();
+  let landmarksOnly = false;
+  let withPhotoOnly = false;
+
+  const filtersActive = () => activeCategories.size > 0 || landmarksOnly || withPhotoOnly;
+
+  const matchesFilters = entry => {
+    if (activeCategories.size && !activeCategories.has(entry.category)) return false;
+    if (landmarksOnly && Number(entry.importance) < 3) return false;
+    if (withPhotoOnly && !entry.photo) return false;
+    return true;
+  };
+
+  const describeFilters = () => {
+    const parts = [];
+    if (activeCategories.size) {
+      parts.push([...activeCategories].map(key => categories[key]?.short || key).join(' or '));
+    }
+    if (landmarksOnly) parts.push('landmarks');
+    if (withPhotoOnly) parts.push('with a photo');
+    return parts.join(' · ');
+  };
 
   /* Fold case and accents so "cafe" finds "café", and a plain substring is
      enough — this archive is measured in thousands of moments, not millions. */
@@ -429,25 +451,30 @@
 
   function renderTimeline() {
     const allDays = groupDays();
-    const days = searchQuery.trim()
-      ? groupDays(entries.filter(matchesQuery))
+    const narrowing = searchQuery.trim() || filtersActive();
+    const days = narrowing
+      ? groupDays(entries.filter(entry => matchesQuery(entry) && matchesFilters(entry)))
       : allDays;
     const dates = Object.keys(days).sort((a, b) => b.localeCompare(a));
     const cards = (date, items, full = false) => `<button class="${full ? 'full-day' : 'mini-day'}" data-date="${date}"><span class="${full ? 'full-date' : 'mini-date'}">${escapeHTML(formatDate(date, full ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' }))}<small>${items.length} ${items.length === 1 ? 'moment' : 'moments'}</small></span><span class="${full ? 'full-day-entries' : 'mini-day-entries'}">${items.slice(0, full ? 4 : 2).map(entry => `<span class="entry-card"><i class="entry-swatch ${Number(entry.importance) >= 3 ? 'important' : ''}" style="background:${(categories[entry.category] || categories.everyday).color}"></i>${entry.photo ? `<img class="entry-thumb" src="${entry.photo}" alt="">` : ''}<span class="entry-card-text">${highlight(entry.text)}</span></span>`).join('')}${items.length > (full ? 4 : 2) ? `<span class="more-moments">+ ${items.length - (full ? 4 : 2)} more moments</span>` : ''}</span><span class="day-arrow">↗</span></button>`;
     $('#timeline-content').innerHTML = dates.length ? dates.slice(0, 3).map(date => cards(date, days[date])).join('') : `<div class="empty-state"><span class="empty-symbol">☼</span><strong>Your story starts with a small thing.</strong><p>Save one detail from today. Your city will grow around it.</p><button class="text-button" data-open-entry>Save your first moment →</button><p class="empty-hint">Your city lives in this browser only. Moving to another machine, or clearing site data? Use <b>Share city → Export readable backup</b> first.</p></div>`;
-    const shownDates = searchQuery.trim() ? dates : dates.slice(0, visibleTimelineDays);
-    $('#full-timeline-content').innerHTML = dates.length ? `${shownDates.map(date => cards(date, days[date], true)).join('')}${!searchQuery.trim() && dates.length > visibleTimelineDays ? `<button class="timeline-load-more" type="button" data-load-older>Show 50 older days <span>↓</span></button>` : ''}` : searchQuery.trim()
-      ? `<div class="no-search-results"><strong>Nothing matches “${escapeHTML(searchQuery.trim())}”.</strong>Try a shorter word — the search looks at what you wrote, the district and the date.</div>`
+    const shownDates = narrowing ? dates : dates.slice(0, visibleTimelineDays);
+    $('#full-timeline-content').innerHTML = dates.length ? `${shownDates.map(date => cards(date, days[date], true)).join('')}${!narrowing && dates.length > visibleTimelineDays ? `<button class="timeline-load-more" type="button" data-load-older>Show 50 older days <span>↓</span></button>` : ''}` : narrowing
+      ? `<div class="no-search-results"><strong>Nothing matches ${searchQuery.trim() ? `“${escapeHTML(searchQuery.trim())}”` : 'those filters'}.</strong>${searchQuery.trim() ? 'Try a shorter word — the search looks at what you wrote, the district and the date.' : 'Clear a filter to see more.'}</div>`
       : `<div class="empty-full"><strong>No days in the archive yet.</strong>One tiny detail is all it takes to begin.</div>`;
     const status = $('#timeline-search-status');
     if (status) {
       const found = dates.reduce((sum, date) => sum + days[date].length, 0);
-      status.textContent = searchQuery.trim()
-        ? `${found.toLocaleString()} ${found === 1 ? 'moment' : 'moments'} in ${dates.length.toLocaleString()} ${dates.length === 1 ? 'day' : 'days'} matching “${searchQuery.trim()}”`
+      const bits = [];
+      if (searchQuery.trim()) bits.push(`matching “${searchQuery.trim()}”`);
+      if (filtersActive()) bits.push(describeFilters());
+      status.textContent = narrowing
+        ? `${found.toLocaleString()} ${found === 1 ? 'moment' : 'moments'} in ${dates.length.toLocaleString()} ${dates.length === 1 ? 'day' : 'days'}${bits.length ? ` — ${bits.join(' · ')}` : ''}`
         : '';
     }
     $('#timeline-query-clear')?.classList.toggle('hidden', !searchQuery.trim());
-    $('#timeline-total').textContent = searchQuery.trim()
+    $('#filter-reset')?.classList.toggle('hidden', !filtersActive());
+    $('#timeline-total').textContent = narrowing
       ? `${dates.reduce((sum, date) => sum + days[date].length, 0).toLocaleString()} found`
       : `${entries.length.toLocaleString()} ${entries.length === 1 ? 'moment' : 'moments'} · ${dates.length.toLocaleString()} days`;
     $$('[data-load-older]').forEach(button => button.addEventListener('click', () => {
@@ -1139,6 +1166,31 @@
         }
       });
     }
+    $$('[data-filter-category]').forEach(button => button.addEventListener('click', () => {
+      const key = button.dataset.filterCategory;
+      if (activeCategories.has(key)) activeCategories.delete(key);
+      else activeCategories.add(key);
+      button.setAttribute('aria-pressed', String(activeCategories.has(key)));
+      renderTimeline();
+    }));
+    $$('[data-filter-weight]').forEach(button => button.addEventListener('click', () => {
+      landmarksOnly = !landmarksOnly;
+      button.setAttribute('aria-pressed', String(landmarksOnly));
+      renderTimeline();
+    }));
+    $$('[data-filter-photo]').forEach(button => button.addEventListener('click', () => {
+      withPhotoOnly = !withPhotoOnly;
+      button.setAttribute('aria-pressed', String(withPhotoOnly));
+      renderTimeline();
+    }));
+    $('#filter-reset')?.addEventListener('click', () => {
+      activeCategories.clear();
+      landmarksOnly = false;
+      withPhotoOnly = false;
+      $$('[data-filter-category], [data-filter-weight], [data-filter-photo]').forEach(button => button.setAttribute('aria-pressed', 'false'));
+      renderTimeline();
+    });
+
     $('#timeline-query-clear')?.addEventListener('click', () => {
       const input = $('#timeline-query');
       if (input) input.value = '';

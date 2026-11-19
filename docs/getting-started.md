@@ -82,6 +82,8 @@ The timeline has a search box. It looks at three things: what you wrote, the dis
 
 `Esc` in the box clears it; so does the × that appears once you have typed something.
 
+Under the box are filters: the six districts, **Landmarks only**, **With a photo**. They compose with the search and with each other, the status line says what is active, and **Clear filters** appears only when there is something to clear.
+
 ## The sample city
 
 `Explore a sample city` loads eighteen example moments and their photographs. While it is on, the app is read-only with respect to your archive: saving is suppressed, the Add and Share buttons return you to your own city first, and leaving the sample restores exactly what you had. It exists so that someone arriving at an empty app can see what a city looks like after a couple of months.

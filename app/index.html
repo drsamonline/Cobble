@@ -137,6 +137,21 @@
             <input id="timeline-query" type="search" placeholder="Search your moments — a word, a name, a street…" autocomplete="off" spellcheck="false" />
             <button type="button" class="timeline-search-clear hidden" id="timeline-query-clear" aria-label="Clear the search">×</button>
           </div>
+          <div class="timeline-filters" id="timeline-filters">
+            <div class="filter-group" role="group" aria-label="Filter by district">
+              <button type="button" class="filter-chip" data-filter-category="everyday" aria-pressed="false">Everyday</button>
+              <button type="button" class="filter-chip" data-filter-category="people" aria-pressed="false">People</button>
+              <button type="button" class="filter-chip" data-filter-category="nature" aria-pressed="false">Nature</button>
+              <button type="button" class="filter-chip" data-filter-category="ideas" aria-pressed="false">Ideas</button>
+              <button type="button" class="filter-chip" data-filter-category="joy" aria-pressed="false">Joy</button>
+              <button type="button" class="filter-chip" data-filter-category="milestone" aria-pressed="false">Meaningful</button>
+            </div>
+            <div class="filter-group" role="group" aria-label="Filter by weight">
+              <button type="button" class="filter-chip filter-chip-quiet" data-filter-weight="3" aria-pressed="false">Landmarks only</button>
+              <button type="button" class="filter-chip filter-chip-quiet" data-filter-photo="1" aria-pressed="false">With a photo</button>
+              <button type="button" class="filter-chip filter-chip-reset hidden" id="filter-reset">Clear filters</button>
+            </div>
+          </div>
           <p class="timeline-search-status" id="timeline-search-status" role="status" aria-live="polite"></p>
           <div id="full-timeline-content"></div>
         </section>

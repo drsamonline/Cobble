@@ -3094,3 +3094,59 @@ html[data-shell="dark"] .heatmap-legend i[data-level="2"] { background: #4b7a5b;
 html[data-shell="dark"] .heatmap-legend i[data-level="3"] { background: #7fb3a4; }
 html[data-shell="dark"] .heatmap-legend,
 html[data-shell="dark"] .heatmap-months { color: #9aa7a1; }
+
+/* ── Timeline filters ─────────────────────────────────────────────
+   Chips that compose with the search box: district, landmarks, photos.
+   Anything active narrows the same list, and the status line says so. */
+.timeline-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 8px 20px 2px;
+  align-items: center;
+}
+.filter-group { display: flex; flex-wrap: wrap; gap: 5px; }
+.filter-chip {
+  font: 500 11.5px var(--font-body);
+  letter-spacing: .01em;
+  color: #4a5b52;
+  background: #fbfaf4;
+  border: 1px solid #e9e8e1;
+  border-radius: 99px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background .16s ease, border-color .16s ease, color .16s ease;
+}
+.filter-chip::before {
+  content: '';
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+  background: var(--chip-colour, #b9c3bb);
+}
+.filter-chip[data-filter-category="everyday"] { --chip-colour: #b59a79; }
+.filter-chip[data-filter-category="people"] { --chip-colour: #cb8e79; }
+.filter-chip[data-filter-category="nature"] { --chip-colour: #82a58a; }
+.filter-chip[data-filter-category="ideas"] { --chip-colour: #8699b8; }
+.filter-chip[data-filter-category="joy"] { --chip-colour: #d5aa64; }
+.filter-chip[data-filter-category="milestone"] { --chip-colour: #aa86a0; }
+.filter-chip-quiet::before { display: none; }
+.filter-chip:hover { border-color: #b9cdb0; background: #f2f6ec; }
+.filter-chip[aria-pressed="true"] {
+  background: #477d70;
+  border-color: #477d70;
+  color: #fff;
+}
+.filter-chip[aria-pressed="true"]::before { background: #ffffffb0; }
+.filter-chip-reset {
+  color: #6b4a1e;
+  background: #f6ecd8;
+  border-color: #e8d5b8;
+}
+.filter-chip-reset::before { display: none; }
+html[data-shell="dark"] .filter-chip { background: #1a2429; border-color: #2b3a41; color: #cdd7d1; }
+html[data-shell="dark"] .filter-chip:hover { background: #22303a; }
+html[data-shell="dark"] .filter-chip[aria-pressed="true"] { background: #7fb3a4; border-color: #7fb3a4; color: #0d1417; }
+html[data-shell="dark"] .filter-chip-reset { background: #2a2418; border-color: #4a3a1c; color: #e9d3a8; }
