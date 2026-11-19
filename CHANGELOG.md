@@ -2,6 +2,19 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.13.0 — 2026-11-19
+
+The contrast sweep finished, measured rather than eyeballed.
+
+### Fixed
+
+- **Seventy-one text colours were below 4.5:1 on the app's own paper.** Not a few stragglers — the stylesheet had accumulated near-duplicate greys (`#929990`, `#929992`, `#929890` and eight more within three points of each other) from years of hand-editing. Each one was darkened along its own hue until it cleared 4.6:1 against `#f6f4ef`, the darkest of the app's light surfaces, and the result was checked by re-rendering every screen: **81 declarations changed, zero text colours left below 4.5:1.**
+- The method is repeatable: extract every `color:` hex, skip anything light enough to be text on a dark surface, compute the ratio against the darkest light surface, darken in two-point steps until it passes, then look at the screenshots.
+
+### Known, and worth doing later
+
+- The sweep fixed the values but not the cause. Those 71 colours should be three or four semantic tokens (`--text-secondary`, `--text-muted`, `--text-faint`, `--text-warm`) rather than 71 hand-picked hexes. Recorded in the enhancement list, because a token pass is a redesign of the stylesheet rather than a substitution.
+
 ## 1.12.0 — 2026-11-19
 
 ### Added

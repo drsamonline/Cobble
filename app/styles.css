@@ -58,7 +58,7 @@ button {
 }
 
 .brand-period {
-  color: #d29b65;
+  color: #98612b;
 }
 
 .brand-mark {
@@ -94,7 +94,7 @@ button {
   font-size: 10px;
   letter-spacing: 1.55px;
   font-weight: 700;
-  color: #8c948c;
+  color: #687068;
 }
 
 .side-label {
@@ -108,7 +108,7 @@ button {
   gap: 13px;
   border: 0;
   background: transparent;
-  color: #707a73;
+  color: #667069;
   border-radius: 10px;
   padding: 12px 13px;
   text-align: left;
@@ -162,7 +162,7 @@ button {
 .profile small {
   display: block;
   font-size: 10px;
-  color: #929890;
+  color: #6a7068;
   margin-top: 3px;
 }
 
@@ -179,7 +179,7 @@ button {
 
 .lock-icon {
   margin-left: auto;
-  color: #9aa39a;
+  color: #687168;
 }
 
 .profile {
@@ -205,7 +205,7 @@ button {
   margin-left: auto;
   border: 0;
   background: none;
-  color: #8b938c;
+  color: #676f68;
   font-size: 20px;
 }
 
@@ -224,7 +224,7 @@ button {
 }
 
 .breadcrumb {
-  color: #929992;
+  color: #686f68;
   font-size: 11px;
 }
 
@@ -249,7 +249,7 @@ button {
   gap: 8px;
   align-items: center;
   font-size: 11px;
-  color: #79837b;
+  color: #677169;
   padding: 8px 11px;
   background: #eeeee8;
   border-radius: 20px;
@@ -283,7 +283,7 @@ button {
   height: 34px;
   padding: 0;
   background: #eeeee8;
-  color: #69776e;
+  color: #637168;
   font-size: 14px;
 }
 
@@ -313,7 +313,7 @@ button {
 
 .eyebrow {
   margin: 0 0 8px;
-  color: #87948a;
+  color: #637066;
 }
 
 .page-intro h1 {
@@ -329,11 +329,11 @@ button {
 .share-dialog h2 em {
   font-family: Georgia, serif;
   font-weight: 400;
-  color: #6f9380;
+  color: #517562;
 }
 
 .intro-copy {
-  color: #8b928c;
+  color: #69706a;
   font-size: 12px;
   margin: 10px 0 0;
 }
@@ -350,7 +350,7 @@ button {
 
 .status-spark {
   font-size: 18px;
-  color: #c7945e;
+  color: #95622c;
 }
 
 .city-status strong,
@@ -363,7 +363,7 @@ button {
 .city-status small,
 .city-weather small {
   display: block;
-  color: #9da39b;
+  color: #696f67;
   font-size: 10px;
   margin-top: 3px;
 }
@@ -389,7 +389,7 @@ button {
   box-shadow: 0 7px 18px #54756718;
 }
 
-.demo-arrow { color: #b88554; }
+.demo-arrow { color: #966332; }
 
 .demo-note {
   display: flex;
@@ -400,13 +400,13 @@ button {
   border: 1px solid #eadfc8;
   border-radius: 13px;
   background: linear-gradient(110deg, #fcf7eb, #f4f6ef);
-  color: #78766a;
+  color: #706e62;
   font-size: 11px;
   line-height: 1.55;
 }
 
 .demo-note strong { color: #5e6b5e; margin-right: 4px; }
-.demo-note-icon { color: #c29559; font-size: 19px; }
+.demo-note-icon { color: #926529; font-size: 19px; }
 
 .city-card,
 .panel {
@@ -434,7 +434,7 @@ button {
 .city-card-head h2 span {
   font-family: Georgia, serif;
   font-weight: 400;
-  color: #71917f;
+  color: #557563;
   font-style: italic;
 }
 
@@ -451,7 +451,7 @@ button {
   height: 33px;
   border-radius: 50%;
   background: #fcf1de;
-  color: #d7a052;
+  color: #996214;
   font-size: 17px;
 }
 
@@ -477,7 +477,7 @@ button {
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 1.4px;
-  color: #718780;
+  color: #5d736c;
   z-index: 4;
 }
 
@@ -670,7 +670,7 @@ button {
   position: absolute;
   right: -7px;
   top: -14px;
-  color: #e2ae67;
+  color: #96621b;
   font-size: 12px;
 }
 
@@ -689,7 +689,7 @@ button {
   position: absolute;
   z-index: 5;
   font-size: 9px;
-  color: #667e6d;
+  color: #5c7463;
   background: #ffffffbd;
   backdrop-filter: blur(8px);
   border: 1px solid #ffffffa8;
@@ -789,7 +789,7 @@ button {
   left: 50%;
   transform: translateX(-50%);
   font: italic 12px Georgia;
-  color: #617b66;
+  color: #59735e;
   white-space: nowrap
 }
 
@@ -798,7 +798,7 @@ button {
   align-items: center;
   gap: 20px;
   padding: 12px 21px;
-  color: #8c948d;
+  color: #687069;
   font-size: 9px;
 }
 
@@ -829,11 +829,11 @@ button {
 
 .legend-note {
   margin-left: auto;
-  color: #a1a69f
+  color: #6b7069
 }
 
 .legend-note span {
-  color: #658672;
+  color: #537460;
   padding-left: 4px
 }
 
@@ -865,7 +865,7 @@ button {
 .text-button {
   border: 0;
   background: none;
-  color: #638170;
+  color: #577564;
   font-size: 10px;
   font-weight: 700;
   padding: 6px
@@ -894,7 +894,7 @@ button {
 .full-date {
   flex: none;
   width: 65px;
-  color: #69766d;
+  color: #637067;
   font-size: 10px;
   font-weight: 700
 }
@@ -902,7 +902,7 @@ button {
 .mini-date small,
 .full-date small {
   display: block;
-  color: #a0a69f;
+  color: #6a7069;
   font-weight: 400;
   margin-top: 4px;
   font-size: 9px
@@ -922,7 +922,7 @@ button {
   gap: 8px;
   min-width: 0;
   font-size: 10px;
-  color: #6f7971
+  color: #677169
 }
 
 .entry-swatch {
@@ -953,12 +953,12 @@ button {
   position: absolute;
   right: 0;
   top: 13px;
-  color: #a6ada5;
+  color: #686f67;
   font-size: 12px
 }
 
 .more-moments {
-  color: #879489;
+  color: #637065;
   font-size: 9px;
   padding-left: 14px
 }
@@ -968,7 +968,7 @@ button {
 .no-insights {
   padding: 24px 8px;
   text-align: center;
-  color: #929a92;
+  color: #687068;
   font-size: 11px
 }
 
@@ -986,20 +986,20 @@ button {
 .empty-symbol {
   display: block;
   font-size: 24px;
-  color: #d4a76e;
+  color: #92652c;
   margin-bottom: 6px
 }
 
 .insight-quote {
   font: italic 16px/1.5 Georgia, serif;
-  color: #627e6e;
+  color: #587464;
   margin: 7px 0 8px
 }
 
 .insight-content>p {
   font-size: 10px;
   line-height: 1.7;
-  color: #929990;
+  color: #686f66;
   margin: 0 0 8px
 }
 
@@ -1008,7 +1008,7 @@ button {
   justify-content: space-between;
   gap: 10px;
   padding: 19px 2px 4px;
-  color: #a0a59e;
+  color: #6a6f68;
   font-size: 9px
 }
 
@@ -1050,7 +1050,7 @@ button {
 
 .entry-total {
   font-size: 10px;
-  color: #919991
+  color: #676f67
 }
 
 .stats-grid {
@@ -1076,7 +1076,7 @@ button {
   position: absolute;
   right: 15px;
   top: 15px;
-  color: #c99868;
+  color: #956434;
   font-size: 17px
 }
 
@@ -1095,7 +1095,7 @@ button {
 
 .stat-card small {
   font-size: 9px;
-  color: #a0a69f;
+  color: #6a7069;
   margin-top: auto;
   padding-top: 12px
 }
@@ -1121,7 +1121,7 @@ button {
   height: 30px;
   border-radius: 9px;
   background: #f2eee5;
-  color: #bc9163
+  color: #906537
 }
 
 .discovery-item strong {
@@ -1132,7 +1132,7 @@ button {
 .discovery-item p {
   font-size: 10px;
   line-height: 1.65;
-  color: #90988f;
+  color: #687067;
   margin: 4px 0 0
 }
 
@@ -1144,11 +1144,11 @@ button {
   display: flex;
   justify-content: space-between;
   font-size: 10px;
-  color: #6d786f
+  color: #657067
 }
 
 .category-row small {
-  color: #9da39c
+  color: #696f68
 }
 
 .bar-track {
@@ -1171,7 +1171,7 @@ button {
   border-top: 1px solid #eeede7;
   margin-top: 18px;
   padding-top: 15px;
-  color: #b18d68
+  color: #8b6742
 }
 
 .privacy-note>span {
@@ -1180,19 +1180,19 @@ button {
 
 .privacy-note strong {
   font-size: 10px;
-  color: #68766b
+  color: #647267
 }
 
 .privacy-note p {
   font-size: 9px;
   line-height: 1.5;
-  color: #9ba199;
+  color: #696f67;
   margin: 4px 0 0
 }
 
 .insight-top-note {
   font-size: 10px;
-  color: #829082;
+  color: #647264;
   background: #edf2eb;
   padding: 10px 12px;
   border-radius: 9px
@@ -1237,7 +1237,7 @@ button {
   height: 29px;
   border-radius: 50%;
   font-size: 20px;
-  color: #69776d
+  color: #637167
 }
 
 .entry-modal h2,
@@ -1253,7 +1253,7 @@ button {
 .share-intro {
   font-size: 11px;
   line-height: 1.7;
-  color: #8b938b;
+  color: #676f67;
   margin: 8px 0 20px
 }
 
@@ -1287,7 +1287,7 @@ textarea {
 textarea:focus,
 input:focus,
 select:focus {
-  border-color: #8eaa96
+  border-color: #587460
 }
 
 .form-row {
@@ -1310,7 +1310,7 @@ select:focus {
 
 .importance-field small {
   font-size: 9px;
-  color: #9ba198
+  color: #696f66
 }
 
 .importance-options {
@@ -1332,13 +1332,13 @@ select:focus {
   padding: 7px 9px;
   border: 1px solid #e6e5dc;
   border-radius: 7px;
-  color: #899188;
+  color: #676f66;
   font-size: 9px
 }
 
 .importance-options input:checked+span {
   background: #eaf0e9;
-  border-color: #9cb5a0;
+  border-color: #5a735e;
   color: #557360
 }
 
@@ -1351,7 +1351,7 @@ select:focus {
   border: 1px dashed #ccd4c8;
   border-radius: 10px;
   cursor: pointer;
-  color: #6b7b6e
+  color: #617164
 }
 
 .photo-picker input {
@@ -1376,7 +1376,7 @@ select:focus {
 
 .photo-picker small {
   font-size: 9px;
-  color: #9ca49b;
+  color: #687067;
   margin-top: 3px
 }
 
@@ -1398,7 +1398,7 @@ select:focus {
 .cancel-button {
   border: 1px solid #e5e5dc;
   background: transparent;
-  color: #737e74;
+  color: #657066;
   border-radius: 8px;
   padding: 10px 13px;
   font-size: 10px;
@@ -1420,7 +1420,7 @@ select:focus {
   place-items: center;
   background: #e8eee7;
   border-radius: 10px;
-  color: #5e816d;
+  color: #527561;
   margin-bottom: 12px
 }
 
@@ -1430,7 +1430,7 @@ select:focus {
   padding: 12px;
   background: #f0f4ed;
   border-radius: 10px;
-  color: #719077;
+  color: #55745b;
   margin: 14px 0
 }
 
@@ -1446,7 +1446,7 @@ select:focus {
 
 .share-security small {
   font-size: 9px;
-  color: #859286;
+  color: #657266;
   margin-top: 4px;
   line-height: 1.5
 }
@@ -1454,7 +1454,7 @@ select:focus {
 .share-list-title {
   font-size: 9px;
   letter-spacing: 1.3px;
-  color: #8c968d;
+  color: #667067;
   font-weight: 700;
   margin: 16px 0 8px
 }
@@ -1484,7 +1484,7 @@ select:focus {
 
 .share-select-all span {
   margin-left: auto;
-  color: #9ba39a;
+  color: #676f66;
   font-size: 9px;
   font-weight: 400
 }
@@ -1503,14 +1503,14 @@ select:focus {
 
 .share-entry small {
   display: block;
-  color: #9da39b;
+  color: #696f67;
   font-size: 8px;
   margin-bottom: 3px
 }
 
 .share-empty {
   padding: 15px;
-  color: #929990;
+  color: #686f66;
   font-size: 10px
 }
 
@@ -1525,13 +1525,13 @@ select:focus {
 .share-status {
   font-size: 10px;
   line-height: 1.5;
-  color: #63816b;
+  color: #57755f;
   min-height: 15px
 }
 
 .share-footnote {
   font-size: 9px;
-  color: #a0a59e
+  color: #6a6f68
 }
 
 .day-drawer-backdrop {
@@ -1558,7 +1558,7 @@ select:focus {
 
 .drawer-lede {
   font-size: 11px;
-  color: #929a92;
+  color: #687068;
   margin: 0 0 22px
 }
 
@@ -1580,7 +1580,7 @@ select:focus {
   display: flex;
   align-items: center;
   gap: 7px;
-  color: #929990;
+  color: #686f66;
   font-size: 9px
 }
 
@@ -1611,11 +1611,11 @@ select:focus {
 
 .story-foot {
   font-size: 10px;
-  color: #c99a63
+  color: #93642d
 }
 
 .story-foot span {
-  color: #9ca39a
+  color: #686f66
 }
 
 .help-card {
@@ -1624,14 +1624,14 @@ select:focus {
 
 .help-mark {
   font-size: 25px;
-  color: #c99a63;
+  color: #93642d;
   margin: 8px 0
 }
 
 .help-card>p:not(.eyebrow) {
   font-size: 11px;
   line-height: 1.8;
-  color: #858e86
+  color: #677068
 }
 
 .toast {
@@ -2349,7 +2349,7 @@ select:focus {
   height: 43px;
   place-items: center;
   border-radius: 14px;
-  color: #477d70;
+  color: #41776a;
   background: #e4eee5;
   font-size: 23px;
 }
@@ -2361,7 +2361,7 @@ select:focus {
   letter-spacing: -.35px;
 }
 .archive-storage-copy p { margin: 0 0 3px; color: #617267; font-size: 11px; font-weight: 700; }
-.archive-storage-copy small { display: block; color: #89938a; font-size: 10px; line-height: 1.5; }
+.archive-storage-copy small { display: block; color: #677168; font-size: 10px; line-height: 1.5; }
 .archive-storage-badge {
   margin-left: auto;
   flex: none;
@@ -2503,13 +2503,13 @@ select:focus {
   height: 34px;
   border-radius: 10px;
   background: #f1eee2;
-  color: #94a385;
+  color: #647355;
   font-size: 15px;
   line-height: 1;
 }
 .achievement-card.is-earned .achievement-icon {
   background: #e8efdf;
-  color: #6f8f6a;
+  color: #557550;
 }
 .achievement-copy {
   display: flex;
@@ -2550,7 +2550,7 @@ select:focus {
   white-space: nowrap;
 }
 .achievement-card.is-earned .achievement-status {
-  color: #6f8f6a;
+  color: #557550;
   font-size: 12px;
 }
 @media (max-width: 640px) {
@@ -2660,7 +2660,7 @@ select:focus {
   font: 500 12px var(--font-mono);
   color: #66726c;
 }
-.help-links a { color: #477d70; text-decoration: underline; text-underline-offset: 3px; }
+.help-links a { color: #41776a; text-decoration: underline; text-underline-offset: 3px; }
 
 /* ── Print: the timeline on paper ─────────────────────────────────
    Sidebar, controls and overlays go; the days stay, one moment a row. */
@@ -2741,7 +2741,7 @@ select:focus {
   border: 0;
   border-radius: 50%;
   background: #efeee5;
-  color: #6f7a72;
+  color: #657068;
   font-size: 14px;
   line-height: 1;
   cursor: pointer;
@@ -2766,7 +2766,7 @@ mark {
 .no-search-results {
   padding: 34px 22px 40px;
   text-align: center;
-  color: #7b8781;
+  color: #65716b;
   font-size: 13.5px;
 }
 .no-search-results strong {
@@ -2826,7 +2826,7 @@ mark {
   flex: none;
   font: 600 11px var(--font-mono);
   letter-spacing: .04em;
-  color: #477d70;
+  color: #41776a;
   background: #eef4ee;
   border-radius: 7px;
   padding: 3px 7px;

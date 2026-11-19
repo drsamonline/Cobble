@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.12.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.13.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -68,14 +68,15 @@ What is left of the quick-win tier:
 | 2.4 | **A year heatmap.** 53 × 7 cells, one per day, shaded by how many moments it held; click a cell to open the day. | The one view that answers "have I been keeping up?" without a streak or a scold. | `app/app.js`, `app/styles.css` | M |
 | 2.9 | **Accessibility pass with axe.** Run axe-core in the headless script, fix the violations it reports, and add the check to CI. | A one-off audit that turns into a permanent guarantee. | `tools/`, `.github/workflows/` | M |
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 2.15 | **The contrast sweep, finished** — 71 text colours darkened along their own hue, 81 declarations, zero left below 4.5:1. | `app/styles.css` |
 | 2.3 | **A dark interface** for the shell — toggle in the top bar, remembered, follows `prefers-color-scheme` by default, contrast measured in the dark palette. | `app/styles.css`, `app/app.js` |
 | 1.18 | **Version agreement in CI** — `sw.js`, the README badge and the changelog must match. It caught a badge stuck at 1.5.0. | `tools/check-version.mjs` |
 | 2.6 | **Undo for edit and import**, not just delete — one slot, one action, named in the bar. | `app/app.js` |
 | 2.7 | **A storage guard** at 80% of quota, with a one-click backup, and a photo refusal past 97%. | `app/app.js`, `app/styles.css` |
 | 2.5 | **On this day** — same calendar date in earlier years, under the city, hidden when empty. | `app/app.js`, `app/styles.css` |
 | 2.8 | **Photo pipeline** — EXIF orientation honoured, WebP encoding with a JPEG fallback, smaller of the two kept. | `app/app.js` |
+| 2.17 | **Collapse the 71 fixed text colours into tokens.** The values are compliant now; the stylesheet still carries 71 hand-picked hexes where three or four semantic ones belong (`--text-secondary`, `--text-muted`, `--text-faint`, `--text-warm`). Doing this makes the dark theme maintainable instead of a list of overrides. | `app/theme.css`, `app/styles.css` | M |
 | 2.16 | **Fix the landing page's layout shift.** It measures 0.186 cold, 0.018 warm, against a 0.1 threshold. Six experiments are recorded in `docs/performance.md`; the two known fixes are `font-display: optional` (costs the first-paint typeface) and metric-matched fallbacks via `size-adjust`/`ascent-override` (needs the metrics read out of the woff2 files). Do not guess — reproduce it first. | `fonts/fonts.css`, `assets/landing.css` | M |
-| 2.15 | **Finish the contrast sweep.** About forty distinct small-text colours in `app/styles.css` still measure 2.5:1–4.4:1 — chip labels, one-off captions, the achievement status text. Fixing them means choosing new values per component, not one token, which is why it is here and not in the quick wins. Start with `grep -o 'color: *#[0-9a-f]\{6\}' app/styles.css \| sort \| uniq -c` and a contrast checker. | Legibility for everyone, and the difference between an audit that reports and an audit that fixes. | `app/styles.css` | M |
 | 2.12 | **A shareable postcard.** Render the current skyline to a 1200×630 PNG on a canvas and download it with the city's level and count. | The city is the most shareable thing in the app and there is currently no way to show anyone without a screenshot. | `app/app.js` | M |
 
 ---

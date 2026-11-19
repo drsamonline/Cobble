@@ -11,7 +11,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 **Status: v1.5.0 — shipped, offline, editable, searchable, and tested.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.12.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.13.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -132,6 +132,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 **Built to survive a boring browser**
 
 - Escape closes every overlay and returns focus to whatever opened it; focus is trapped inside dialogs; a skip link is first in the tab order; the toast is a live region, so saves and failures are spoken.
+- **Every text colour clears 4.5:1** on the surface it sits on, in both the light and dark interfaces — 71 colours were darkened to get there.
 - `N` opens a new moment, `Ctrl`/`Cmd`+`Z` undoes a delete.
 - The city's motion stops when the system asks for reduced motion, in the app and on the landing page.
 - Printing the timeline gives you the days on paper, without the chrome.
