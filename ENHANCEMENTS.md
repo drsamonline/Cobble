@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.31.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.32.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -65,6 +65,7 @@ What is left of the quick-win tier:
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 4.1b | **The landing page in Gujarati** — `gu.html`, values zipped to the English keys by index with a length assertion. Three-language switcher on all pages. Awaiting native review. | `gu.html`, `hi.html`, `index.html` |
 | 4.1a | **The landing page in Hindi** — `hi.html`, hand-written, switcher in both headers, `hreflang` alternates, precached. Awaiting native review. | `hi.html`, `index.html` |
 | 3.7 | **Multiple cities — attempted and reverted in 1.30.0.** The switcher, per-city records, create and delete all worked; the save queue read the active city when it drained rather than when the save was made, so a save could land in the next city. A proper version needs the city passed through every write path and a state object instead of module-level globals. Both failure modes are in the changelog. | `app/app.js` | L |
 | 3.5 | **Import another journal** — Day One JSON and dated markdown, parsed in `core.js` with three tests, merged and undoable. | `app/core.js`, `app/app.js` |

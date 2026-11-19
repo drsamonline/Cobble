@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="gu" data-time="day">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>કોબલ — તમારું જીવન, આકાર લેતું</title>
+<meta name="description" content="Cobble turns the small things you notice into a private city you build one day at a time. No account, no server, no tracking — your moments stay on your device." />
+<meta name="theme-color" content="#f6f4ef" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Cobble — your life, taking shape" />
+<meta property="og:description" content="A private city built from the small things you notice. One moment, one building. No account, no server, no tracking." />
+<meta property="og:image" content="screenshots/city.webp" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<link rel="manifest" href="manifest.json" />
+<link rel="preload" href="fonts/Manrope.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="fonts/DMSans.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="fonts/fonts.css" />
+<link rel="stylesheet" href="assets/landing.css" />
+  <link rel="alternate" hreflang="en" href="index.html">
+  <link rel="alternate" hreflang="hi" href="hi.html">
+  <link rel="alternate" hreflang="en" href="index.html">
+  <link rel="alternate" hreflang="hi" href="hi.html">
+  <link rel="alternate" hreflang="gu" href="gu.html">
+</head>
+<body>
+
+<a class="skip" href="#main">મુખ્ય સામગ્રી પર જાઓ</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="./" aria-label="Cobble home">
+      <span class="brand-mark"><span></span><span></span><span></span></span>
+      <span class="brand-word">કોબલ<span class="dot">.</span></span>
+    </a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#idea">વિચાર</a>
+      <a href="#districts">ઝિલ્લા</a>
+      <a href="#inside">અંદરથી</a>
+      <a href="#privacy">ગોપનીયતા</a>
+      <a href="#support">સહયોગ</a>
+      <a href="docs/">દસ્તાવેજ</a>
+    </nav>
+    <div class="topbar-actions">
+      <nav class="lang-switch" aria-label="ભાષા">
+        <a href="index.html" hreflang="en" lang="en">EN</a>
+        <a href="hi.html" hreflang="hi" lang="hi">हिं</a>
+        <a href="gu.html" aria-current="true" hreflang="gu" lang="gu">ગુ</a>
+      </nav>
+      <button class="time-toggle" id="time-toggle" type="button" aria-pressed="false">
+        <span class="time-icon" aria-hidden="true">☀</span><span class="time-label">રાત</span>
+      </button>
+      <a class="btn btn-solid btn-sm" href="app/">તમારું શહેર ખોલો</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ── hero ───────────────────────────────────────────── -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="gridlines" aria-hidden="true"></div>
+    <div class="hero-inner">
+
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="rule"></span>તમારા પોતાના દિવસોનું એક ખાનગી શહેર</p>
+        <h1 id="hero-title">તમારું જીવન,<br /><span class="hand">આકાર લેતું.</span></h1>
+        <p class="lede">કોબલ તમે નોંધો છો તે નાની વસ્તુઓને એવા શહેરમાં ફેરવે છે જે તમે રોજ થોડું થોડું બનાવો છો. એક ક્ષણ સાચવો: બારીમાં પડેલી ગરમ બ્રેડ, કોઈએ કહેલી એક વાત, ભીના ફૂટપાથ પર પડતો પ્રકાશ. એક ઈમારત ઊપસી આવે છે. આમ ચાલુ રાખો, અને તમારું સાદું જીવન એક જગ્યા જેવું લાગવા લાગે છે.</p>
+        <div class="cta-row">
+          <a class="btn btn-solid" href="app/">તમારું શહેર ખોલો <span aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href="app/?demo=1">નમૂનાના શહેરમાં ફરો <span aria-hidden="true">✦</span></a>
+        </div>
+        <ul class="promise" role="list">
+          <li><span aria-hidden="true">◍</span> કોઈ ખાતું નહીં</li>
+          <li><span aria-hidden="true">◍</span> કોઈ સર્વર નહીં</li>
+          <li><span aria-hidden="true">◍</span> કોઈ ટ્રેકિંગ નહીં</li>
+          <li><span aria-hidden="true">◍</span> નિકાસ તમારો હક</li>
+        </ul>
+      </div>
+
+      <div class="hero-stage">
+        <div class="stage-meta">
+          <span>ઝિલ્લા નકશો · <b id="stage-count">0</b> ક્ષણો</span>
+          <span class="stage-meta-right">કોઈ બ્લોક પર માઉસ લઈ જાઓ</span>
+        </div>
+        <div class="sky" aria-hidden="true">
+          <div class="orb"><span class="orb-core"></span></div>
+          <div class="cloud cloud-a"></div>
+          <div class="cloud cloud-b"></div>
+          <div class="cloud cloud-c"></div>
+          <div class="stars"></div>
+        </div>
+        <div class="skyline" id="skyline" role="img" aria-label="An illustrated city skyline where each building is one saved moment">
+          <div class="hills"></div>
+          <div class="blocks" id="blocks"></div>
+          <div class="ground"><span class="road-line"></span></div>
+        </div>
+        <p class="stage-caption" id="stage-caption">દરેક બ્લોક એ ક્ષણ છે જે તમે સાચવી. રંગ કહે છે કે એ કેવા પ્રકારની ક્ષણ હતી. <span class="name-note">કોબલ કરવું એટલે હાથમાં જે હોય તેનાથી કંઈક બનાવવું.</span></p>
+      </div>
+
+    </div>
+
+    <div class="numbers" role="list">
+      <div role="listitem"><b>6</b><span>પ્રકારની ક્ષણો</span></div>
+      <div role="listitem"><b>5</b><span>શહેરનાં વાતાવરણ</span></div>
+      <div role="listitem"><b>4</b><span>હાથે દોરેલા મોસમો</span></div>
+      <div role="listitem"><b>0</b><span>સામેલ સર્વર</span></div>
+    </div>
+  </section>
+
+  <!-- ── the idea ───────────────────────────────────────── -->
+  <section class="section" id="idea" aria-labelledby="idea-title">
+    <div class="section-head">
+      <span class="sec-num">01</span>
+      <h2 id="idea-title">ત્રણ નિયમ, અને પછી બધું જાતે ચાલે છે.</h2>
+      <p>કોબલ સુંદર ફોન્ટવાળી ડાયરી નથી. અહીં ભૂમિતિનો અર્થ છે, એટલે વર્ષ સ્ક્રોલ કરવાને બદલે એક નજરમાં વંચાય છે.</p>
+    </div>
+
+    <div class="rules">
+      <article class="rule-card">
+        <span class="rule-glyph" aria-hidden="true">▮▮▯</span>
+        <h3>ઊંચાઈનો અર્થ છે</h3>
+        <p>કોઈ ક્ષણને નાની વિગત, કંઈક જે મહત્ત્વનું હતું, અથવા માઈલનો પથ્થર — એમ ચિહ્નિત કરો. માઈલના પથ્થર ઊંચા ઊભા રહે છે. મહિનાઓમાં સ્કાયલાઈન એ નકશો બની જાય છે કે તમને ખરેખર કોની પરવા હતી, નહીં કે કોની પરવા કરવાનો ઈરાદો હતો.</p>
+        <div class="mini-scale" aria-hidden="true"><i style="--h:26%"></i><i style="--h:52%"></i><i style="--h:86%"></i></div>
+      </article>
+      <article class="rule-card">
+        <span class="rule-glyph" aria-hidden="true">◐</span>
+        <h3>રંગ પ્રકાર બતાવે છે</h3>
+        <p>દરેક ક્ષણ છ ઝિલ્લામાંથી એકમાં જાતે દાખલ થાય છે: રોજિંદી વિગત, લોકો, બહાર, વિચારો, નાની ખુશીઓ, કંઈક અર્થપૂર્ણ. એકસરખા ઝિલ્લા નજીક બસે છે, એટલે શહેર બતાવે છે કે તમારું ધ્યાન વારંવાર ક્યાં જાય છે.</p>
+        <div class="mini-swatches" aria-hidden="true"><i style="--c:#b59a79"></i><i style="--c:#cb8e79"></i><i style="--c:#82a58a"></i><i style="--c:#8699b8"></i><i style="--c:#d5aa64"></i><i style="--c:#aa86a0"></i></div>
+      </article>
+      <article class="rule-card">
+        <span class="rule-glyph" aria-hidden="true">↻</span>
+        <h3>પુનરાવર્તન પણ એક પેટર્ન છે</h3>
+        <p>જો એક જ વાત વારંવાર થતી હોય (સવા ચાર વાગ્યાની બ્રેડ, મેપલ સ્ટ્રીટનો વૃદ્ધ કૂતરો), તો એ કહો. પાછા આવતા વિષયોને પહોળી ઈમારતો અને વધુ બારીઓ મળે છે, અને કોબલ એમનાં નામ તમને પાછાં આપવા લાગે છે.</p>
+        <div class="mini-windows" aria-hidden="true"><span>▦▦</span><span>▦▦▦</span><span>▦▦▦▦</span></div>
+      </article>
+    </div>
+
+    <div class="grow-demo" aria-labelledby="grow-title">
+      <div class="grow-copy">
+        <h3 id="grow-title">આખો વિચાર અહીં અજમાવો.</h3>
+        <p>એક ઝિલ્લો પસંદ કરો. એક બ્લોક ઊપસે છે, બરાબર એવો જ જેવો તમારા શહેરમાં ઊપસશે. છ વાર દબાવો અને એ કોઈ જગ્યા જેવું લાગવા લાગે છે.</p>
+        <div class="grow-controls" role="group" aria-label="Add a sample moment">
+          <button type="button" data-add="everyday" style="--c:#b59a79">રોજિંદું</button>
+          <button type="button" data-add="people" style="--c:#cb8e79">લોકો</button>
+          <button type="button" data-add="nature" style="--c:#82a58a">બહાર</button>
+          <button type="button" data-add="ideas" style="--c:#8699b8">વિચારો</button>
+          <button type="button" data-add="joy" style="--c:#d5aa64">ખુશી</button>
+          <button type="button" data-add="milestone" style="--c:#aa86a0">અર્થપૂર્ણ</button>
+        </div>
+        <p class="grow-count"><b id="grow-total">0</b> આ બ્લોકમાં ક્ષણો <button class="link-btn" id="grow-reset" type="button">દૂર કરો</button></p>
+      </div>
+      <div class="grow-stage">
+        <div class="grow-blocks" id="grow-blocks" aria-live="polite" aria-label="Your test city"></div>
+        <div class="grow-ground"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── districts ──────────────────────────────────────── -->
+  <section class="section section-tint" id="districts" aria-labelledby="districts-title">
+    <div class="section-head">
+      <span class="sec-num">02</span>
+      <h2 id="districts-title">છ ઝિલ્લા. એમાંથી એક તમે છો.</h2>
+      <p>શ્રેણીઓ જાણી જોઈને ઢીલી રાખી છે. અહીં કંઈ પણ તમને દિવસને દસમાંથી માર્ક આપવાનું કહેતું નથી.</p>
+    </div>
+    <div class="district-grid">
+      <article class="district" style="--c:#b59a79"><span class="d-icon" aria-hidden="true">✦</span><h3>રોજિંદી વિગત</h3><p>બેકરીની સવા ચાર વાગ્યાની બ્રેડ. જે બસ ડ્રાઈવરે રાહ જોઈ. સાધારણ દિવસની નાની નાની મશીનરી.</p></article>
+      <article class="district" style="--c:#cb8e79"><span class="d-icon" aria-hidden="true">♡</span><h3>લોકો અને જોડાણ</h3><p>ટ્રેનમાં કોઈએ જે કહ્યું. કોઈએ પકડી રાખેલું દરવાજું. એ રાતનું જમવાનું જ્યાં મીણબત્તી હોલવાઈ ગઈ.</p></article>
+      <article class="district" style="--c:#82a58a"><span class="d-icon" aria-hidden="true">✿</span><h3>બહાર અને કુદરત</h3><p>વરસાદ પછી સોનેરી થઈ ગયેલો ફૂટપાથ. દીવાલની તિરાડમાંથી ડોકિયું કરતું લીલું પાન.</p></article>
+      <article class="district" style="--c:#8699b8"><span class="d-icon" aria-hidden="true">✧</span><h3>વિચારો અને ભાવનાઓ</h3><p>જૂની પુસ્તકની એ લીટી જે પરવાનગી જેવી લાગી. એ વાત જેની આસપાસ તમે વારંવાર ફરો છો.</p></article>
+      <article class="district" style="--c:#d5aa64"><span class="d-icon" aria-hidden="true">☀</span><h3>નાની ખુશીઓ</h3><p>એ પીચ જેમાં સૌથી વધુ ઉનાળાની સુગંધ હતી. સત્તર વર્ષની ઉંમરનું કોઈ ગીત.</p></article>
+      <article class="district" style="--c:#aa86a0"><span class="d-icon" aria-hidden="true">✷</span><h3>કંઈક અર્થપૂર્ણ</h3><p>નવા ટેબલ પર પહેલું જમવાનું. એ દિવસ જ્યારે મહોલ્લો પોતાનો લાગવા લાગ્યો.</p></article>
+    </div>
+  </section>
+
+  <!-- ── inside ─────────────────────────────────────────── -->
+  <section class="section" id="inside" aria-labelledby="inside-title">
+    <div class="section-head">
+      <span class="sec-num">03</span>
+      <h2 id="inside-title">શહેરની અંદરની એક ઝલક.</h2>
+      <p>આ રિપોઝિટરીની સાચી તસવીરો, 1440×900 પર અને એક ફોન પર. નમૂનાનું શહેર એપ સાથે આવે છે, એટલે એમાંથી કંઈ પણ બનાવટી નથી.</p>
+    </div>
+
+    <div class="shots">
+      <figure class="shot shot-wide">
+        <a href="app/?demo=1"><img src="screenshots/city.webp" alt="The city view, with buildings coloured by category and a day drawer open beside the skyline" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>મારું શહેર.</b> ઝિલ્લા, શેરીઓ, મોસમ અને એવી સ્કાયલાઈન જે આખી તમારા પોતાના આંકડા છે. અંદરની ક્ષણ વાંચવા બ્લોક પર માઉસ લઈ જાઓ.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="app/?demo=1"><img src="screenshots/timeline.webp" alt="The timeline view listing moments by day" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>સમયરેખા.</b> એ જ જિંદગી, જે ક્રમમાં બની.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="app/?demo=1"><img src="screenshots/insights.webp" alt="The discoveries view with statistics, achievements and category bars" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>શોધો.</b> પેટર્ન, પડાવ અને તમારી સૌથી નાની ક્ષણ વિશે એક શાંત નિરીક્ષણ.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="app/?demo=1"><img src="screenshots/city-night.webp" alt="The city at night with lit windows" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>અંધારું થયા પછી.</b> પાંચ વાતાવરણ, ચાર મોસમ, અને રાત્રે ઝગમગતી બારીઓ.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="app/?demo=1"><img src="screenshots/share.webp" alt="The share dialog, asking for a six to twelve digit PIN" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>શહેર શેર કરો.</b> ક્ષણો પસંદ કરો, પિન મૂકો, એક એન્ક્રિપ્ટેડ ફાઈલ મેળવો. પિન અલગથી મોકલો.</figcaption>
+      </figure>
+      <figure class="shot shot-phone">
+        <a href="app/?demo=1"><img src="screenshots/mobile.webp" alt="The city on a phone screen" loading="lazy" width="390" height="844" /></a>
+        <figcaption><b>ફોન પર.</b> એ જ સંગ્રહ, ખિસ્સામાં સમાય એ રીતે દોરેલો.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ── privacy ────────────────────────────────────────── -->
+  <section class="section section-ink" id="privacy" aria-labelledby="privacy-title">
+    <div class="section-head">
+      <span class="sec-num">04</span>
+      <h2 id="privacy-title">શહેર ક્યારેય ડિવાઈસમાંથી બહાર જતું નથી.</h2>
+      <p>કોબલનું કોઈ ખાતું નથી, કારણ કે કોબલનો કોઈ સર્વર જ નથી. તમારો સંગ્રહ તમારા બ્રાઉઝરની પોતાની સ્ટોરેજમાં રહે છે. બહાર જાય છે ફક્ત એ ફાઈલ જે તમે જાતે એન્ક્રિપ્ટ કરો છો.</p>
+    </div>
+    <div class="privacy-grid">
+      <article class="privacy-card">
+        <h3>ક્યાં રહે છે</h3>
+        <p>ક્ષણો IndexedDBમાં સાચવાય છે, અને બ્રાઉઝર ના પાડે તો localStorageમાં. તસવીરો સાચવતાં પહેલાં ડિવાઈસ પર જ નાની કરવામાં આવે છે. કંઈ પણ ક્યારેય અપલોડ થતું નથી.</p>
+      </article>
+      <article class="privacy-card">
+        <h3>જ્યારે તમે શેર કરો છો</h3>
+        <p>શેર કરવાથી બને છે એક <code>.cobble </code> ફાઈલ: AES-256-GCM, કી તમારા 6–12 અંકના પિનમાંથી PBKDF2-SHA-256 દ્વારા 2,50,000 વાર ફેરવીને બને છે. ફાઈલ અને પિન અલગ અલગ મોકલો.</p>
+      </article>
+      <article class="privacy-card">
+        <h3>એ શું કરતું નથી</h3>
+        <p>કોઈ એનાલિટિક્સ નહીં, કોઈ કૂકી નહીં, તમને ટ્રેક કરતો કોઈ ફોન્ટ નહીં, તમારા આંકડા પર કોઈ બહારની સ્ક્રિપ્ટ નહીં. પેજ ફક્ત સ્ટોરેજ અને Web Crypto વાળું બ્રાઉઝર માગે છે.</p>
+      </article>
+      <article class="privacy-card">
+        <h3>કઈ બાબતનું ધ્યાન રાખવું</h3>
+        <p>સાઈટ ડેટા કાઢી નાખવાથી શહેર પણ જતું રહે છે. બ્રાઉઝર સાફ કરતાં પહેલાં બેકઅપ નિકાસ કરો — અને ફાઈલ એવી જગ્યાએ રાખો જેના પર તમને ભરોસો હોય.</p>
+      </article>
+    </div>
+    <p class="privacy-foot">વિગતવાર વાંચો: <a href="https://github.com/drsamonline/Cobble/blob/main/docs/privacy-and-security.md">ગોપનીયતા અને સુરક્ષા</a> · <a href="https://github.com/drsamonline/Cobble/blob/main/docs/data-model.md">આંકડાનું ઢાંચું</a></p>
+  </section>
+
+  <!-- ── support ────────────────────────────────────────── -->
+  <section class="section" id="support" aria-labelledby="support-title">
+    <div class="section-head">
+      <span class="sec-num">05</span>
+      <h2 id="support-title">સહયોગ</h2>
+      <p>મફત, ઓફલાઈન, ખાતા વગર — અને એવું જ રહેશે. એની પાછળ કંઈ પણ બંધ નથી.</p>
+    </div>
+
+    <div class="support">
+      <div class="support-who">
+        <img src="docs/assets/support-portrait.jpg" alt="Dr. Sohil Momin" width="88" height="88" />
+        <div>
+          <strong>ડૉ. સોહિલ મોમિન</strong>
+          <span>હોમિયોપેથિક ચિકિત્સક, ઓફલાઈન-પ્રથમ સોફ્ટવેરનાં નિર્માતા.</span>
+        </div>
+      </div>
+
+      <div class="support-methods">
+        <div class="method">
+          <span class="method-label">યુપીઆઈ (ભારત)</span>
+          <div class="method-body">
+            <code id="upi-id">drsohilboi@ybl</code>
+            <button class="link-btn" id="copy-upi" type="button">કોપી</button>
+          </div>
+          <small>પ્રાપ્તકર્તા: ડૉ. સોહિલ મોમિન · રકમ તમારી મરજી</small>
+        </div>
+        <a class="method" href="https://github.com/sponsors/drsamonline"><span class="method-label">GitHub Sponsors</span><div class="method-body"><span>github.com/sponsors/drsamonline</span><span aria-hidden="true">↗</span></div><small>દર મહિને, અથવા એક વાર</small></a>
+        <a class="method" href="https://ko-fi.com/matneo"><span class="method-label">Ko-fi</span><div class="method-body"><span>ko-fi.com/matneo</span><span aria-hidden="true">↗</span></div><small>એક કોફી, ખાતા વગર</small></a>
+        <a class="method" href="https://paypal.me/drsohilmomin?locale.x=en_GB&amp;country.x=IN"><span class="method-label">PayPal</span><div class="method-body"><span>paypal.me/drsohilmomin</span><span aria-hidden="true">↗</span></div><small>ભારતની બહારથી</small></a>
+        <a class="method" href="https://www.amazon.com/stores/author/B08ZT331LY/allbooks"><span class="method-label">મારાં પુસ્તકો</span><div class="method-body"><span>એમેઝોન લેખક સ્ટોર</span><span aria-hidden="true">↗</span></div><small>કામને સહયોગ આપવાની બીજી રીત</small></a>
+        <a class="method" href="https://drsamonline.github.io/"><span class="method-label">વધુ એપ્સ</span><div class="method-body"><span>drsamonline.github.io</span><span aria-hidden="true">↗</span></div><small>બાકી બધું, એક યાદીમાં</small></a>
+      </div>
+
+      <div class="support-qr">
+        <img src="assets/upi-qr.svg" alt="UPI QR code for drsohilboi@ybl" width="150" height="150" loading="lazy" />
+        <small>કોઈ પણ યુપીઆઈ એપથી સ્કેન કરો</small>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+      <p><b>cobble.</b> તમારા પોતાના દિવસોનું એક ખાનગી શહેર — તમે નોંધ્યું તેનાથી બનેલું.</p>
+      <small>એનો ભાગ <a href="https://drsamonline.github.io/">drsamonline</a> ઓફલાઈન-પ્રથમ સોફ્ટવેરનો સંગ્રહ.</small>
+    </div>
+    <div class="foot-links">
+      <div>
+        <span class="foot-label">એપ</span>
+        <a href="app/">તમારું શહેર ખોલો</a>
+        <a href="app/?demo=1">નમૂનાનું શહેર</a>
+        <a href="https://github.com/drsamonline/Cobble/blob/main/docs/getting-started.md">શરૂઆત કરો</a>
+      </div>
+      <div>
+        <span class="foot-label">વાંચો</span>
+        <a href="docs/">દસ્તાવેજ</a>
+        <a href="https://github.com/drsamonline/Cobble/blob/main/docs/architecture.md">બનાવટ</a>
+        <a href="https://github.com/drsamonline/Cobble/blob/main/ENHANCEMENTS.md">સુધારાની યાદી</a>
+      </div>
+      <div>
+        <span class="foot-label">પ્રોજેક્ટ</span>
+        <a href="https://github.com/drsamonline/Cobble">GitHub</a>
+        <a href="https://github.com/drsamonline/Cobble/issues">સમસ્યાઓ</a>
+        <a href="https://github.com/drsamonline/Cobble/blob/main/LICENSE">લાઈસન્સ</a>
+        <a href="https://github.com/drsamonline/Cobble/blob/main/PRIVACY.md">ગોપનીયતા</a>
+        <a href="https://github.com/drsamonline/Cobble/blob/main/SECURITY.md">સુરક્ષા</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-base">
+    <span>© 2026 ડૉ. સોહિલ મોમિન · PolyForm Noncommercial 1.0.0</span>
+    <span>એવા લોકો માટે જે વસ્તુઓ નોંધે છે.</span>
+  </div>
+</footer>
+
+<script src="assets/landing.js"></script>
+</body>
+</html>

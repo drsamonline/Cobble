@@ -2,6 +2,19 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.32.0 — 2026-11-19
+
+### Added
+
+- **The landing page in Gujarati.** `gu.html`, a full translation: nav, hero, the three rules, all six districts, screenshots, privacy, support, footer. `lang="gu"`, a translated title, `hreflang` alternates, precached like the other two.
+- **A three-language switcher** in the header of all three pages: EN · हिं · ગુ, with `aria-current` on the one being read.
+- The Gujarati values are zipped to the English keys **by index with an assertion that the two lists are the same length** — 127 and 127. A missing line fails the build instead of shifting every translation by one, which is the failure mode that makes a translated page quietly wrong.
+
+### Verified
+
+- Rendered at 1440×1000 and 390×844: no horizontal overflow at either width, `lang="gu"`, translated title, switcher showing all three with ગુ current, no page errors.
+- Both remaining English fragments (the split sentence after the `.cobble` code element) were found by scanning the built page for Latin text rather than by trusting the dictionary.
+
 ## 1.31.0 — 2026-11-19
 
 ### Added
