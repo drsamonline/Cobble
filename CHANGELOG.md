@@ -2,6 +2,19 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.7.0 — 2026-11-19
+
+Performance and handover.
+
+### Changed
+
+- **Every screenshot is WebP.** Fourteen images went from **2,406 KB to 502 KB**, a 79% cut, with no visible difference at the sizes they are displayed. The landing page's gallery is the heaviest thing on it, and it is now a fifth of what it was. `og:image` and the README point at the WebP files; the PNGs are gone rather than kept "just in case", because a repository that ships both ships the wrong one eventually.
+- **`AGENTS.md`** — a short file for whoever works on this next: the six invariants that are bugs if broken (no CDN, relative paths inside `app/`, escape everything that reaches `innerHTML`, data-touching code lives in `core.js`, bump the cache, add new files to three lists), where things are, and the checks to run before saying a change is done.
+
+### Added
+
+- **A GitHub release** for 1.6.0, with the notes the changelog already carried: https://github.com/drsamonline/Cobble/releases
+
 ## 1.6.0 — 2026-11-19
 
 An audit pass with four skills, and the fixes it turned up.

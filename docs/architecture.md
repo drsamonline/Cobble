@@ -26,7 +26,7 @@ cobble/
 ├── fonts/                Manrope, DM Sans, IBM Plex Mono — woff2, latin subset
 ├── icons/               192, 512, maskable, apple-touch
 ├── docs/                 these guides
-├── screenshots/          real renders of this repository
+├── screenshots/          real renders of this repository — WebP, 502 KB for all fourteen
 ├── tests/                core.test.mjs — 24 tests, node --test
 ├── tools/                check-links.mjs, check-size.mjs
 ├── .github/workflows/    check.yml — links, size budget, script syntax

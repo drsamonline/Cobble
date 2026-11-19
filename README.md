@@ -31,7 +31,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 
 ---
 
-![Cobble landing page](screenshots/landing.png)
+![Cobble landing page](screenshots/landing.webp)
 
 ## What it is
 
@@ -50,27 +50,27 @@ The name: *to cobble* is to make a thing from whatever is at hand, and a cobble 
 
 | My city | After dark |
 |---|---|
-| ![The city view with districts, streets and weather](screenshots/city.png) | ![The same city at night, with lit windows](screenshots/city-night.png) |
+| ![The city view with districts, streets and weather](screenshots/city.webp) | ![The same city at night, with lit windows](screenshots/city-night.webp) |
 
 | Timeline | Search |
 |---|---|
-| ![The timeline view, one row per day](screenshots/timeline.png) | ![One search result, with the match marked](screenshots/search.png) |
+| ![The timeline view, one row per day](screenshots/timeline.webp) | ![One search result, with the match marked](screenshots/search.webp) |
 
 | Discoveries | Milestones |
 |---|---|
-| ![Statistics, milestones and district bars](screenshots/insights.png) | ![The achievements grid on the Discoveries view](screenshots/achievements.png) |
+| ![Statistics, milestones and district bars](screenshots/insights.webp) | ![The achievements grid on the Discoveries view](screenshots/achievements.webp) |
 
 | A day, opened | Share city |
 |---|---|
-| ![The day drawer, with a moment, its photo, and the Edit and Delete buttons](screenshots/day-drawer.png) | ![The share dialog, asking for a PIN](screenshots/share.png) |
+| ![The day drawer, with a moment, its photo, and the Edit and Delete buttons](screenshots/day-drawer.webp) | ![The share dialog, asking for a PIN](screenshots/share.webp) |
 
 | Landing page, after dark | On a phone — timeline |
 |---|---|
-| ![The landing page at night](screenshots/landing-night.png) | <img src="screenshots/mobile.png" width="300" alt="The timeline on a phone"> |
+| ![The landing page at night](screenshots/landing-night.webp) | <img src="screenshots/mobile.webp" width="300" alt="The timeline on a phone"> |
 
 | On a phone — city |
 |---|
-| <img src="screenshots/mobile-city.png" width="300" alt="The city on a phone"> |
+| <img src="screenshots/mobile-city.webp" width="300" alt="The city on a phone"> |
 
 Every capture is a real render of this repository at 1440×900, 1440×1000 and 390×844, produced by headless Chrome with the sample city loaded — no mock-ups, no retouching. The city shown is the illustrated CSS city, which is what everyone sees: the WebGL layer is experimental and off by default (see [the enhancement list](ENHANCEMENTS.md#6-the-3d-layer)).
 
@@ -164,6 +164,7 @@ To check the offline promise yourself, open `/selftest.html` with the network on
 | [Customising](docs/customising.md) | Palettes, districts, atmospheres, copy and layout — with the token names |
 | [Deploying](docs/deploying.md) | GitHub Pages, any static host, and packaging as a desktop or Android app |
 | [FAQ](docs/faq.md) | Lost data, broken share files, big archives, browser support |
+| [Working on this repository](AGENTS.md) | The invariants, the file map, and the checks to run before a change is done |
 | [Privacy notice](PRIVACY.md) | What is stored, where, what leaves the device, how to delete it |
 | [Security policy](SECURITY.md) | How to report a vulnerability, and the limitations stated up front |
 
