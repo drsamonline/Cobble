@@ -56,6 +56,9 @@
     'deck.mood': 'Mood',
     'deck.weather': 'Weather',
     'deck.night': 'Night',
+    'deck.sound': 'Sound',
+    'deck.3d': '3D city',
+    'deck.flat': 'Flat city',
     'crumb.world': 'Your world',
     'action.share': 'Share city',
     'lang.label': 'Language'
@@ -103,6 +106,9 @@
     'deck.mood': 'मूड',
     'deck.weather': 'मौसम',
     'deck.night': 'रात',
+    'deck.sound': 'ध्वनि',
+    'deck.3d': '3D शहर',
+    'deck.flat': 'सपाट शहर',
     'crumb.world': 'आपकी दुनिया',
     'action.share': 'शहर साझा करें',
     'lang.label': 'भाषा'
@@ -150,6 +156,9 @@
     'deck.mood': 'મૂડ',
     'deck.weather': 'મોસમ',
     'deck.night': 'રાત',
+    'deck.sound': 'અવાજ',
+    'deck.3d': '3D શહેર',
+    'deck.flat': 'સપાટ શહેર',
     'crumb.world': 'તમારી દુનિયા',
     'action.share': 'શહેર શેર કરો',
     'lang.label': 'ભાષા'
@@ -178,6 +187,9 @@
       button.setAttribute('aria-pressed', String(button.dataset.lang === current));
     });
     try { localStorage.setItem(STORAGE_KEY, current); } catch {}
+    /* modules that draw their own labels (the 3D toggle, the sound toggle)
+       listen for this instead of duplicating the dictionary */
+    window.dispatchEvent(new CustomEvent('cobble-lang', { detail: { lang: current } }));
   }
 
   window.addEventListener('DOMContentLoaded', () => {
@@ -189,5 +201,6 @@
     apply(stored);
   });
 
-  window.CobbleI18n = { apply, current: () => current };
+  const t = key => (DICTS[current] && DICTS[current][key]) || EN[key] || '';
+  window.CobbleI18n = { apply, current: () => current, t };
 })();

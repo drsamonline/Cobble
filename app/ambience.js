@@ -142,7 +142,7 @@
     const paint = () => {
       const on = !!ctx;
       button.setAttribute('aria-pressed', String(on));
-      const label = 'Sound';
+      const label = (window.CobbleI18n && window.CobbleI18n.t('deck.sound')) || 'Sound';
       button.querySelector('.ambience-label').textContent = label;
       button.setAttribute('aria-label', label);
     };
@@ -170,6 +170,7 @@
       };
       document.addEventListener('pointerdown', once, { once: true });
     }
+    window.addEventListener('cobble-lang', paint);
     paint();
   });
 

@@ -74,6 +74,21 @@ Measured on a 205 KB archive (500 moments, 20 photos), encrypting in the page:
 
 A save is 68% cheaper. The salt stays fixed for the session and the IV changes every time, which is what AES-GCM requires.
 
+## The size budget measures the right thing
+
+For a while this project capped **source** bytes, and that was the wrong measure: it counts whitespace and comments no browser parses, and it turned "keep the source readable" into a fight with "leave room for features". The budget is now on **gzipped** size, because that is what a visitor actually downloads — GitHub Pages serves everything with gzip — with a raw ceiling kept only as a sanity check against a stray megabyte.
+
+| | gzip | source |
+|---|---|---|
+| App shell | **64.0 KB** of 75 | 244.2 KB (ceiling 320) |
+| Landing page | 13.2 KB of 18 | 50.6 KB |
+| Hindi page | 6.7 KB of 12 | 26.7 KB |
+| Gujarati page | 6.6 KB of 12 | 26.3 KB |
+| Fonts (already compressed) | 114.8 KB of 170 | 114.8 KB |
+| Vendor (jszip + three) | 173.8 KB of 200 | 684.6 KB |
+
+woff2 is not gzipped twice; it is already compressed, and pretending otherwise would only flatter the numbers.
+
 ## What grew, and why
 
 The app shell budget was 200 KB and is now 220 KB. That is not drift, it is four features: the dark interface, the year heatmap, timeline filters and the encrypted vault took the shell from about 163 KB to 206 KB since v1.12. The CSS alone went from 57 KB to 80 KB.

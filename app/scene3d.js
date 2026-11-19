@@ -322,7 +322,10 @@
     const paint = () => {
       const on = document.body.classList.contains('scene-3d');
       button.setAttribute('aria-pressed', String(on));
-      const label = on ? '3D city' : 'Flat city';
+      const dict = window.CobbleI18n;
+      const label = on
+        ? (dict && dict.t('deck.3d')) || '3D city'
+        : (dict && dict.t('deck.flat')) || 'Flat city';
       button.querySelector('.scene-toggle-label').textContent = label;
       /* the accessible name must contain the visible words */
       button.setAttribute('aria-label', label);
@@ -342,6 +345,7 @@
       }
       setTimeout(paint, 120);
     });
+    window.addEventListener('cobble-lang', () => setTimeout(paint, 0));
     if (wanted()) start();
     setTimeout(paint, 200);
   });

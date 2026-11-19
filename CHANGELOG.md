@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.36.0 — 2026-11-19
+
+### Changed
+
+- **The size budget measures gzipped bytes, not source bytes.** Source size counts whitespace and comments no browser parses, and it had turned "keep the source readable" into a fight with "leave room for features" — the shell was at 243 of 245 KB. GitHub Pages serves everything gzipped, so that is what a visitor actually waits for: the shell is **64.0 KB gzipped**, and the budget is 75. A raw ceiling stays as a sanity check (320 KB) so a stray megabyte still fails the build. `docs/performance.md` carries both columns.
+- **The two labels JavaScript draws itself — *Sound* and *3D city* — now follow the language pills**, through `CobbleI18n.t()` and a `cobble-lang` event rather than a second copy of the dictionary.
+
+### Verified
+
+- `node tools/check-size.mjs` reports gzip and source for all six budgets; the shell passes at 64.0 of 75 KB gzipped.
+- With the pills switched to Hindi, the deck reads थीम · मूड · मौसम · ध्वनि · 3D शहर, and the sound and 3D labels change with it.
+
 ## 1.35.0 — 2026-11-19
 
 ### Added
