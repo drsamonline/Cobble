@@ -164,6 +164,7 @@ To check the offline promise yourself, open `/selftest.html` with the network on
 | [Customising](docs/customising.md) | Palettes, districts, atmospheres, copy and layout — with the token names |
 | [Deploying](docs/deploying.md) | GitHub Pages, any static host, and packaging as a desktop or Android app |
 | [FAQ](docs/faq.md) | Lost data, broken share files, big archives, browser support |
+| [Performance](docs/performance.md) | What the pages weigh, what was done about it, and the one number that is still bad |
 | [Working on this repository](AGENTS.md) | The invariants, the file map, and the checks to run before a change is done |
 | [Privacy notice](PRIVACY.md) | What is stored, where, what leaves the device, how to delete it |
 | [Security policy](SECURITY.md) | How to report a vulnerability, and the limitations stated up front |

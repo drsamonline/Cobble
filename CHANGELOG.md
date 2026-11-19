@@ -2,6 +2,23 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.9.0 — 2026-11-19
+
+A performance pass, with the numbers written down.
+
+### Added
+
+- **`docs/performance.md`** — requests, transfer sizes, paint timings and CSS coverage for both pages, the fixes that came out of them, and one defect stated plainly rather than buried: the landing page's layout shift is 0.018 warm and 0.186 cold, and six experiments failed to pin the mechanism down. The page lists all six so the next person does not repeat them.
+
+### Changed
+
+- **The two hero fonts are preloaded** on both pages, and **the app's three scripts carry `defer`**. Neither moved the layout-shift number; both are correct regardless.
+
+### Measured
+
+- Landing page: 11 requests, 273 KB, FCP 1.66 s. App: 20 requests, 234 KB, FCP 1.12 s.
+- **100% CSS coverage on both pages** — every rule in both stylesheets is used. There is no dead CSS to purge, which is why the size budgets are the guard.
+
 ## 1.8.0 — 2026-11-19
 
 ### Added
