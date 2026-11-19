@@ -2,6 +2,12 @@
 
 Five files, no build step, no dependencies to install. This guide is the map you want before changing any of them.
 
+## The picture
+
+[`cobble-architecture.excalidraw`](cobble-architecture.excalidraw) is the whole system in one drawing: what is served, what runs, where the archive sits, and the two things that ever leave the device. Open it at [excalidraw.com](https://excalidraw.com) with *File → Open*, or in the VS Code Excalidraw extension. It is a scene, not an image, so it stays editable.
+
+The short version of it: everything inside the dashed box is same-origin and local; the bottom row is the only traffic that exists.
+
 ## The tree
 
 ```

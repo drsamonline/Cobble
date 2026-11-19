@@ -158,7 +158,7 @@ To check the offline promise yourself, open `/selftest.html` with the network on
 |---|---|
 | [Getting started](docs/getting-started.md) | First moment, the sample city, where your data lives, how to keep it |
 | [How the city works](docs/how-the-city-works.md) | Districts, weights, repetition, atmospheres, weather and the seed that draws your skyline |
-| [Architecture](docs/architecture.md) | The five files, the render loop, the storage layer, and why there is no build step |
+| [Architecture](docs/architecture.md) | The five files, the render loop, the storage layer, and why there is no build step — plus [the diagram](docs/cobble-architecture.excalidraw) |
 | [Data model](docs/data-model.md) | The moment schema, IndexedDB layout, the localStorage fallback, the `.cobble` file format |
 | [Privacy and security](docs/privacy-and-security.md) | What is stored, what leaves the device, the exact cryptography, and its limits |
 | [Customising](docs/customising.md) | Palettes, districts, atmospheres, copy and layout — with the token names |

@@ -2,6 +2,16 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.8.0 — 2026-11-19
+
+### Added
+
+- **An architecture diagram** — `docs/cobble-architecture.excalidraw`, 36 elements, editable in Excalidraw. It answers one question in one look: what is local, what is served, and the two things that ever leave the device. The layout was checked by rendering it and looking, twice, because a diagram that overlaps its own arrows is worse than no diagram.
+
+### Recorded, not resolved
+
+- **The name is contested.** A search for "Cobble" turns up a funded group-planning app (trycobble.com), an audio walking-tour app from Cobble Media Limited, and a Pebble watch app. None of them is a journalling tool, and this project is non-commercial, so the practical cost is findability and confusion rather than a legal risk. It is written into [ENHANCEMENTS.md](ENHANCEMENTS.md) as a decision to make rather than a task to do.
+
 ## 1.7.0 — 2026-11-19
 
 Performance and handover.

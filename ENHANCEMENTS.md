@@ -130,6 +130,17 @@ Written down so they stop being suggested.
 | 6.3 | **Draw the real city, not a seeded one.** One building per moment, placed by district, height by weight — the metaphor made literal. This is the expensive version, and the one worth doing only after 6.1. | `app/city3d.js` | XL |
 | 6.4 | **A quality switch.** Cap pixel ratio, drop the layer on `saveData`, and fall back silently — the CSS city is already good enough that the 3D layer should never be a cost. | `app/city3d.js` | S |
 
+## A decision, not a task: the name
+
+A search on 19 November 2026 found at least three live products called Cobble: a funded group-planning app at [trycobble.com](https://www.trycobble.com/), an audio walking-tour app from Cobble Media Limited ([cobble.london](https://cobble.london/)), and a Pebble smartwatch app. None is a journalling tool.
+
+| Option | What it costs | What it buys |
+|---|---|---|
+| **Keep Cobble** | Search results will mix the three; someone will eventually ask if this is the London audio app | Nothing to redo. The name is already on the repo, the site, the icon and the docs |
+| **Rename now** | A new repository, a new Pages URL, and about an hour of mechanical work — the storage keys, the `.cobble` extension and every URL changed once already in 1.2.0, so the pattern is known | An uncommon name in the category, no confusion, and a clean App Store search if a mobile build ever happens |
+
+If it renames, the candidates worth checking first are short, unusual and architectural: *Quoin*, *Twitten*, *Mullion*, *Ashlar*. Each needs the same search before it is adopted — this list is not a recommendation, it is a starting point.
+
 ## What the rest of the collection already solved
 
 Written down because the answer to "should we build this?" is usually "no, it is two repositories over". These are the pieces of the author's own fleet that fit Cobble, and what each one would save:
