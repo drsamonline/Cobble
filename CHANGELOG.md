@@ -2,6 +2,32 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.37.0 — 2026-11-20
+
+The 3D city became something you can use, not just look at.
+
+### Added
+
+- **Click a building to open its district.** Hovering a block shows *"Everyday detail — 3 moments. Click to open."*; clicking it switches to the timeline with that district's chip already pressed and says what it found. The building under the pointer lifts out of the scene in a warm glow, and the cursor changes to a pointer.
+- **Drag to pan, scroll to zoom, double-click to re-centre.** Panning is clamped to the town so you cannot lose it.
+- **The camera fits the city it is given.** The old scene had a fixed frustum, so a large archive simply ran off the edges. The view is now derived from the radius of the town: 19 moments sits at 9 units, 300 at 31.6, 1,200 at 38.1 — each fills the frame.
+- **Bigger archives get a denser town**: up to 96 buildings per district past 150 moments, instead of a flat cap of 48.
+
+### Fixed — four reasons the city was neither explorable nor clickable
+
+| Fault | Why it happened |
+|---|---|
+| Nothing was clickable at all | The illustrated CSS city sat *above* the canvas and ate every pointer event. It is now `display: none` while the 3D view is on, `.city-ground` included |
+| Hover worked in a test but not in the browser | Two canvases were built — one from the first render, one from `DOMContentLoaded` — and the pointer listeners were on the one underneath. `start()` now guards against re-entry |
+| Clicks never landed | `setPointerCapture` on the canvas swallowed the `pointerup`. Dragging is tracked on the window instead |
+| The frame ended in a flat band | The orthographic camera's near plane clipped the ground in front of it. An ortho camera may look behind itself, so `near` is now negative |
+
+### Verified
+
+- Hover and click driven by real mouse events in headless Chrome: title text appears, the click lands, the timeline opens filtered to *everyday* with "3 found" and the matching chip pressed.
+- Three archive sizes measured: 19 / 300 / 1,200 moments → 19 / 288 / 576 buildings, camera 9 / 31.6 / 38.1. Wheel zoom and drag pan read back from the live scene.
+- Screenshots inspected at both sizes: no clipped ground, no empty band, town centred.
+
 ## 1.36.0 — 2026-11-19
 
 ### Changed

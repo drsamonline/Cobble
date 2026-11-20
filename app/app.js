@@ -1112,6 +1112,22 @@
     $('#review-modal')?.classList.add('hidden');
   }
 
+  /* A building in the 3D city was clicked: open that district in the
+     timeline, with the filter chip already pressed so the state matches. */
+  window.addEventListener('cobble-building', event => {
+    const district = event.detail?.district;
+    if (!district || !categories[district]) return;
+    activeCategories.clear();
+    activeCategories.add(district);
+    landmarksOnly = false;
+    withPhotoOnly = false;
+    $$('[data-filter-category], [data-filter-weight], [data-filter-photo]')
+      .forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filterCategory === district)));
+    setView('timeline');
+    renderTimeline();
+    toast(`${categories[district].label}: ${event.detail.count} ${event.detail.count === 1 ? 'moment' : 'moments'}.`);
+  });
+
   /* ── locking the archive ─────────────────────────────────────────── */
   function showLockScreen() {
     const modal = $('#lock-modal');

@@ -3237,6 +3237,7 @@ html[data-shell="dark"] .review-resurfaced article { color: #dfe7e2; }
    The canvas sits inside the viewport, over the illustrated city, which stays
    underneath as the fallback. Nothing here is visible unless WebGL started. */
 .city-canvas {
+  pointer-events: auto;
   position: absolute;
   inset: 0;
   width: 100%;
@@ -3246,7 +3247,12 @@ html[data-shell="dark"] .review-resurfaced article { color: #dfe7e2; }
   z-index: 2;
 }
 body.scene-3d .city-canvas { opacity: 1; }
-body.scene-3d #city-pan { opacity: 0; pointer-events: none; }
+/* The illustrated city must stop taking pointer events, or the canvas
+   underneath never sees a hover and nothing is clickable. */
+body.scene-3d #city-pan,
+body.scene-3d #city-pan .city-scene,
+body.scene-3d .city-hill,
+body.scene-3d .city-ground { display: none; }
 #city-viewport.has-3d { background: linear-gradient(180deg, #dfe9e4 0%, #eaf1e6 60%, #dfe9e4 100%); }
 #city-viewport.has-3d.is-night { background: linear-gradient(180deg, #121a1d 0%, #182426 70%, #121a1d 100%); }
 body.scene-3d .scene-control:not(#scene-toggle) { opacity: .55; }

@@ -11,7 +11,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 **Status: v1.5.0 — shipped, offline, editable, searchable, and tested.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.36.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.37.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -100,7 +100,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 - **Hindi and Gujarati.** The landing page ships in English, Hindi (`hi.html`) and Gujarati (`gu.html`); the app's chrome — nav, view headings, deck, primary buttons — switches inside the app with three pills in the sidebar. The sentences Cobble writes about your archive are still English.
 - **The city follows the clock.** One control in the deck, *Auto*, matches the scene to the time of day — dawn, day, dusk, night — and keeps up while the tab is open.
 - **Sound, generated in the browser.** Wind, rain and the occasional bird, synthesised in WebAudio from a noise buffer — no audio files, no network, off until you ask.
-- **A 3D town, and the flat one.** The rebuilt Three.js view puts the buildings on a lit ground with roofs, windows, roads, trees, drifting birds and a slow camera breath; the illustrated city stays underneath as the fallback. The toggle is in the city's control deck and the choice is remembered.
+- **A 3D town you can walk around.** Hover a building to see what it is, click it to open that district in the timeline, drag to pan, scroll to zoom. The camera fits the archive, so a thousand moments is a bigger town rather than a cropped one. The illustrated city stays underneath as the fallback, and the toggle is remembered.
 - **Immersive mode.** Hide every control and look at the city alone.
 
 **The archive**
