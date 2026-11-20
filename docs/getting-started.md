@@ -106,7 +106,7 @@ Open `/selftest.html`. It loads every file the service worker is supposed to kee
 
 ## More than one city
 
-**Saved cities** in the sidebar keeps named copies of the whole archive. *Save a copy of this city* names what you have now; the shelf lists every copy with its moment count, and loading one swaps it in — after the city you were in is saved as *Before switching*, so a load can never lose anything. Delete a copy with the × beside it.
+**Your cities** in the sidebar opens a map: one tile per city, each drawn as a miniature skyline from its own district counts, so you recognise a city by its shape. The city you are in is marked *you are here*; click any other tile to load it. The city you were in is saved as *Before switching* first, so a load can never lose anything. *Save a copy of this city* sits at the foot of the map.
 
 Copies are independent snapshots, not live archives: editing one does not touch another.
 

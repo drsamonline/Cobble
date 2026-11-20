@@ -268,7 +268,13 @@
         const request = database.transaction('archive', 'readonly').objectStore('archive').get(key);
         request.onsuccess = () => {
           const value = request.result?.value || {};
-          resolve({ id: String(key).slice(SNAPSHOT_PREFIX.length), name: value.name || 'Untitled', savedAt: value.savedAt || '', count: (value.entries || []).length });
+          resolve({
+            id: String(key).slice(SNAPSHOT_PREFIX.length),
+            name: value.name || 'Untitled',
+            savedAt: value.savedAt || '',
+            count: (value.entries || []).length,
+            counts: value.counts || {}
+          });
         };
         request.onerror = () => reject(request.error);
       }).catch(reject);
@@ -280,7 +286,7 @@
       const transaction = db.transaction('archive', 'readwrite');
       transaction.objectStore('archive').put({
         id: `${SNAPSHOT_PREFIX}${id}`,
-        value: { name, savedAt: new Date().toISOString(), entries: list }
+        value: { name, savedAt: new Date().toISOString(), entries: list, counts: countByCategory(list) }
       });
       transaction.oncomplete = resolve;
       transaction.onerror = () => reject(transaction.error);
@@ -296,20 +302,65 @@
     }));
   }
 
-  async function renderSnapshotMenu() {
-    const list = $('#city-list');
-    if (!list) return;
+  /* The map of your cities: one tile per saved copy, each drawn as a little
+     skyline from its own district counts, so a city is recognisable by shape
+     before you read its name. The city you are in is the first tile. */
+  function skylineBars(counts) {
+    const order = Object.keys(categories);
+    const peak = Math.max(1, ...order.map(key => counts[key] || 0));
+    return order.map(key => {
+      const value = counts[key] || 0;
+      const height = value ? Math.max(22, Math.round((value / peak) * 100)) : 8;
+      const colour = categories[key] ? categories[key].color : '#c9c6b8';
+      return `<i style="height:${height}%;background:${colour};opacity:${value ? 0.92 : 0.18}"></i>`;
+    }).join('');
+  }
+
+  function countByCategory(list) {
+    const counts = Object.fromEntries(Object.keys(categories).map(key => [key, 0]));
+    for (const entry of list) if (counts[entry.category] !== undefined) counts[entry.category] += 1;
+    return counts;
+  }
+
+  async function renderCityMap() {
+    const grid = $('#city-map-grid');
+    if (!grid) return;
     let snapshots = [];
     try { snapshots = await listSnapshots(); } catch {}
-    list.innerHTML = snapshots.length ? snapshots.map(snap => `
-      <div class="city-row">
-        <button class="city-load" type="button" data-snap-load="${escapeHTML(snap.id)}">
-          <span>${escapeHTML(snap.name)}</span><small>${snap.count} ${snap.count === 1 ? 'moment' : 'moments'}</small>
-        </button>
-        <button class="city-remove" type="button" data-snap-delete="${escapeHTML(snap.id)}" aria-label="Delete ${escapeHTML(snap.name)}">×</button>
-      </div>`).join('') : '<p class="city-empty">No saved cities yet. “Save a copy” puts this one on the shelf.</p>';
-    $$('[data-snap-load]', list).forEach(button => button.addEventListener('click', () => loadSnapshot(button.dataset.snapLoad)));
-    $$('[data-snap-delete]', list).forEach(button => button.addEventListener('click', () => removeSnapshot(button.dataset.snapDelete)));
+
+    const here = `
+      <button class="city-tile" type="button" aria-current="true" data-city-here="1">
+        <div class="city-tile-sky">${skylineBars(countByCategory(entries))}</div>
+        <div class="city-tile-body">
+          <span class="city-tile-here">YOU ARE HERE</span>
+          <span class="city-tile-name">This city</span>
+          <span class="city-tile-meta">${entries.length} ${entries.length === 1 ? 'moment' : 'moments'}</span>
+        </div>
+      </button>`;
+
+    const tiles = snapshots.map(snap => `
+      <button class="city-tile" type="button" data-city-load="${escapeHTML(snap.id)}">
+        <div class="city-tile-sky">${skylineBars(snap.counts || {})}</div>
+        <div class="city-tile-body">
+          <span class="city-tile-name">${escapeHTML(snap.name)}</span>
+          <span class="city-tile-meta">${snap.count} ${snap.count === 1 ? 'moment' : 'moments'} · saved ${escapeHTML((snap.savedAt || '').slice(0, 10))}</span>
+        </div>
+      </button>`).join('');
+
+    grid.innerHTML = here + tiles + (snapshots.length ? '' : '<p class="city-map-empty">No other cities yet. “Save a copy” puts this one on the map, and you can load it again from here whenever you like.</p>');
+    $$('[data-city-load]', grid).forEach(tile => tile.addEventListener('click', () => loadSnapshot(tile.dataset.cityLoad)));
+  }
+
+  function openCityMap() {
+    const modal = $('#city-map-modal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    renderCityMap();
+    $('#close-city-map')?.focus();
+  }
+
+  function closeCityMap() {
+    $('#city-map-modal')?.classList.add('hidden');
   }
 
   async function saveSnapshot() {
@@ -318,7 +369,7 @@
     await saveQueue.catch(() => {});
     try {
       await writeSnapshot(`s${Date.now().toString(36)}`, name.trim().slice(0, 40), entries);
-      await renderSnapshotMenu();
+      await renderCityMap();
       toast(`Saved “${name.trim()}” — ${entries.length} ${entries.length === 1 ? 'moment' : 'moments'}.`);
     } catch {
       toast('Could not save that copy.');
@@ -327,6 +378,7 @@
 
   async function loadSnapshot(id) {
     if (!confirm('Load this city? The one you are in is saved to the shelf first, so nothing is lost.')) return;
+    closeCityMap();
     try {
       const snapshots = await listSnapshots();
       const target = snapshots.find(snap => snap.id === id);
@@ -343,7 +395,7 @@
       personalEntries = entries;
       save();
       render();
-      await renderSnapshotMenu();
+      await renderCityMap();
       toast(`Now showing “${target.name}”.`);
     } catch {
       toast('Could not load that city.');
@@ -354,7 +406,7 @@
     if (!confirm('Delete this saved copy? The city you are in is not affected.')) return;
     try {
       await deleteSnapshot(id);
-      await renderSnapshotMenu();
+      await renderCityMap();
       toast('Copy deleted.');
     } catch {
       toast('Could not delete that copy.');
@@ -1804,14 +1856,9 @@
     $$('.nav-item[data-view]').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
     $$('[data-view-link]').forEach(button => button.addEventListener('click', () => setView(button.dataset.viewLink)));
     $('#save-city')?.addEventListener('click', saveSnapshot);
-    $('#open-city-menu')?.addEventListener('click', () => {
-      const panel = $('#city-shelf');
-      if (!panel) return;
-      const open = panel.classList.contains('hidden');
-      panel.classList.toggle('hidden', !open);
-      $('#open-city-menu')?.setAttribute('aria-expanded', String(open));
-      if (open) renderSnapshotMenu();
-    });
+    $('#open-city-menu')?.addEventListener('click', openCityMap);
+    $('#close-city-map')?.addEventListener('click', closeCityMap);
+    $('#close-city-map-button')?.addEventListener('click', closeCityMap);
     $('#add-entry').addEventListener('click', openEntry);
     $('#add-entry-timeline').addEventListener('click', openEntry);
     const queryInput = $('#timeline-query');

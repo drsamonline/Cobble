@@ -23,13 +23,9 @@
       <a class="brand" href="../" aria-label="Cobble home"><span class="brand-mark"><span></span><span></span><span></span></span><span>cobble<span class="brand-period">.</span></span></a>
       <div class="side-label" data-i18n="nav.world">YOUR WORLD</div>
       <div class="city-shelf-wrap">
-        <button class="city-shelf-button" id="open-city-menu" type="button" aria-expanded="false" aria-controls="city-shelf">
-          <span aria-hidden="true">◫</span> <span>Saved cities</span>
+        <button class="city-shelf-button" id="open-city-menu" type="button" aria-haspopup="dialog" aria-controls="city-map-modal">
+          <span aria-hidden="true">◫</span> <span>Your cities</span>
         </button>
-        <div class="city-shelf hidden" id="city-shelf">
-          <div class="city-list" id="city-list"></div>
-          <button class="city-save" id="save-city" type="button">Save a copy of this city</button>
-        </div>
       </div>
       <button class="nav-item active" data-view="city"><span class="nav-icon">⌂</span> <span data-i18n="nav.city">My city</span> <span class="nav-dot"></span></button>
       <button class="nav-item" data-view="timeline"><span class="nav-icon">◷</span> <span data-i18n="nav.timeline">Timeline</span></button>
@@ -297,6 +293,20 @@
     </section>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div class="modal-backdrop hidden" id="city-map-modal" role="dialog" aria-modal="true" aria-labelledby="city-map-title">
+    <div class="entry-modal city-map-card">
+      <button class="modal-close" id="close-city-map" aria-label="Close">×</button>
+      <p class="eyebrow">THE MAP OF YOUR CITIES</p>
+      <h2 class="drawer-title" id="city-map-title">Every city <em>you keep.</em></h2>
+      <p class="drawer-lede">Each tile is a saved copy. Click one to load it — the city you are in is saved first, so nothing is lost.</p>
+      <div class="city-map-grid" id="city-map-grid"></div>
+      <div class="share-actions">
+        <button type="button" class="cancel-button" id="close-city-map-button">Close</button>
+        <button type="button" class="add-button" id="save-city">Save a copy of this city <span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-backdrop hidden" id="review-modal" role="dialog" aria-modal="true" aria-labelledby="review-title">
     <div class="entry-modal review-card">
       <button class="modal-close" id="close-review" aria-label="Close">×</button>

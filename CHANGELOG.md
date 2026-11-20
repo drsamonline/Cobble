@@ -2,6 +2,45 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.46.0 — 2026-11-20
+
+### Added
+
+- **A map of your cities.** *Your cities* in the sidebar opens a map rather than a dropdown: one tile per city, each drawn as a **miniature skyline from its own district counts**, so a city is recognisable by its shape before you read its name. The city you are in is the first tile, marked *you are here*; the rest are the saved copies, each with its moment count and the date it was saved.
+- Click a tile to load that city. The map closes at once so the click feels immediate, and the city you were in is saved as *Before switching* first — a load still cannot lose anything.
+- *Save a copy of this city* sits at the foot of the map, so the two halves of the feature are in one place.
+
+### Verified
+
+- Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
+- First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.46.0 — 2026-11-20
+
+### Added
+
+- **A map of your cities.** *Your cities* in the sidebar opens a map rather than a dropdown: one tile per city, each drawn as a **miniature skyline from its own district counts**, so a city is recognisable by its shape before you read its name. The city you are in is the first tile, marked *you are here*; the rest are the saved copies, each with its moment count and the date it was saved.
+- Click a tile to load that city. The map closes at once so the click feels immediate, and the city you were in is saved as *Before switching* first — a load still cannot lose anything.
+- *Save a copy of this city* sits at the foot of the map, so the two halves of the feature are in one place.
+
+### Verified
+
+- Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
+- First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.46.0 — 2026-11-20
+
+### Added
+
+- **A map of your cities.** *Your cities* in the sidebar opens a map rather than a dropdown: one tile per city, each drawn as a **miniature skyline from its own district counts**, so a city is recognisable by its shape before you read its name. The city you are in is the first tile, marked *you are here*; the rest are the saved copies, each with its moment count and the date it was saved.
+- Click a tile to load that city. The map closes at once so the click feels immediate, and the city you were in is saved as *Before switching* first — a load still cannot lose anything.
+- *Save a copy of this city* sits at the foot of the map, so the two halves of the feature are in one place.
+
+### Verified
+
+- Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
+- First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
 ## 1.45.0 — 2026-11-20
 
 The town got inhabitants, and the map got a world around it.
