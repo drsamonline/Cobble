@@ -140,6 +140,28 @@ const main = async () => {
   }
   await page.close();
 
+  /* ── the translated landing pages ─────────────────────────────────
+     The Hindi and Gujarati pages are separate documents, so they get their own
+     axe pass. A translated page is exactly where an accessible name drifts
+     away from the visible words. */
+  for (const [path, label] of [['/hi.html', 'Hindi page'], ['/gu.html', 'Gujarati page']]) {
+    const translated = await browser.newPage();
+    translated.on('pageerror', error => errors.push(`${label}: ${error.message}`));
+    await translated.setViewport({ width: 1440, height: 900 });
+    await translated.goto(`${base}${path}`, { waitUntil: 'load' });
+    await translated.evaluate(() => document.fonts.ready);
+    await wait(1000);
+    const violations = await runAxe(translated);
+    const serious = violations.filter(v => v.impact === 'serious' || v.impact === 'critical');
+    note(serious.length <= MAX_SERIOUS, `${label} axe: ${violations.length} violations, ${serious.length} serious or critical`);
+    for (const violation of serious) {
+      console.log(`    ${violation.impact}: ${violation.id} — ${violation.help} (${violation.nodes} node(s), e.g. ${violation.target})`);
+    }
+    const lang = await translated.evaluate(() => document.documentElement.lang);
+    note(lang === path.includes('hi') ? 'hi' : 'gu', `${label} declares its language (${lang})`);
+    await translated.close();
+  }
+
   /* ── the app, in sample-city mode ─────────────────────────────── */
   page = await browser.newPage();
   page.on('pageerror', error => errors.push(`app: ${error.message}`));

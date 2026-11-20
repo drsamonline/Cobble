@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.43.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.44.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -74,6 +74,7 @@ What is left of the quick-win tier:
 | 4.1c | **The app's chrome in Hindi and Gujarati** — sidebar, breadcrumb, view headings, deck, primary buttons. Generated sentences (toasts, observations, year review) still English: templates with numbers inside them. | `app/i18n.js` |
 | 4.1b | **The landing page in Gujarati** — `gu.html`, values zipped to the English keys by index with a length assertion. Three-language switcher on all pages. Awaiting native review. | `gu.html`, `hi.html`, `index.html` |
 | 4.1a | **The landing page in Hindi** — `hi.html`, hand-written, switcher in both headers, `hreflang` alternates, precached. Awaiting native review. | `hi.html`, `index.html` |
+| 2.20 | **axe and a language assertion on the translated pages** — three documents, three passes; found the logo's English accessible name on the Hindi and Gujarati pages. | `tools/browser-check.mjs` |
 | 4.4 | **Desktop and Android wrappers** — Tauri 2 and Capacitor 6 pointing at the same `app/`, a workflow on dispatch, an icon, and a CSP with no `connect-src` beyond self. **Authored, not built**: no Rust, SDK or Windows runner here. | `packaging/` |
 | 3.7a | **Saved cities — shipped in 1.42.0.** Named copies on a shelf, load replaces the live archive after auto-saving it as *Before switching*. Gives the user need without the race. | `app/app.js` |
 | 3.7 | **A live switch between archives — attempted three times (1.30.0, 1.34.0, 1.40.0), reverted three times.** The third avoided in-memory races by reloading the page on switch; creation, isolation and deletion worked, but the return to the first city came up empty and navigation from a sealed city hung. Three attempts, three different faults: this needs the refactor below, not another patch. | `app/app.js` | L |

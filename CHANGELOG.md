@@ -2,6 +2,20 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.44.0 — 2026-11-20
+
+### Added
+
+- **The browser check now runs axe and a language assertion on the Hindi and Gujarati pages**, not just the English one. Three documents, three passes — a translated page is exactly where an accessible name drifts away from the visible words.
+
+### Fixed
+
+- **The logo link's accessible name was English on all three pages**: `aria-label="Cobble home"` while the visible wordmark reads *कॉबल.* or *કોબલ.* — the label-content-name-mismatch this project has now fixed five times. Each page declares its own: *Cobble home*, *कॉबल — मुखपृष्ठ*, *કોબલ — ઘર*.
+
+### Why this took a new check to find
+
+The English page passed because its label and its wordmark happened to agree in the Latin alphabet. The translated pages were never checked, so the mismatch sat there since 1.31.0 — a bug that only exists in a language nobody's instrument was looking at.
+
 ## 1.43.0 — 2026-11-20
 
 ### Added
