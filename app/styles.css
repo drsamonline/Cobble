@@ -3447,3 +3447,26 @@ html[data-shell="dark"] .city-save { background: #1d2a2f; border-color: #2b3a41;
 html[data-shell="dark"] .city-tile { background: #1a2429; border-color: #26333a; }
 html[data-shell="dark"] .city-tile-sky { background: linear-gradient(180deg, #22303a 0%, #1a2429 100%); border-color: #26333a; }
 html[data-shell="dark"] .city-tile-name { color: #eef2ec; }
+
+/* A tile's own actions sit over its corner, out of the way of the load. */
+.city-tile-wrap { position: relative; display: grid; }
+.city-tile-action {
+  position: absolute;
+  top: 6px;
+  width: 22px; height: 22px;
+  display: grid; place-items: center;
+  border: 0; border-radius: 7px;
+  background: #ffffffcc;
+  color: #5f6b64;
+  font-size: 12px; line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .12s ease;
+}
+.city-tile-action[data-city-rename] { right: 32px; }
+.city-tile-action[data-city-remove] { right: 7px; font-size: 15px; }
+.city-tile-wrap:hover .city-tile-action,
+.city-tile-action:focus-visible { opacity: 1; }
+.city-tile-action:hover { background: #fff; color: #22302b; }
+.city-tile-action.is-danger:hover { color: #9c5a4e; background: #fdf2ee; }
+html[data-shell="dark"] .city-tile-action { background: #22303ae6; color: #cfd9d3; }

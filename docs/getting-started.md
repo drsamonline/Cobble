@@ -106,7 +106,7 @@ Open `/selftest.html`. It loads every file the service worker is supposed to kee
 
 ## More than one city
 
-**Your cities** in the sidebar opens a map: one tile per city, each drawn as a miniature skyline from its own district counts, so you recognise a city by its shape. The city you are in is marked *you are here*; click any other tile to load it. Once loaded, that city **stays yours to edit**: every save updates it in place, and the sidebar button shows its name so you always know which one you are in. If you were in an unsaved city, it is filed as *Before switching* first, so a load can never lose anything. *Save a copy of this city* sits at the foot of the map.
+**Your cities** in the sidebar opens a map: one tile per city, each drawn as a miniature skyline from its own district counts, so you recognise a city by its shape. The city you are in is marked *you are here*; click any other tile to load it. Once loaded, that city **stays yours to edit**: every save updates it in place, and the sidebar button shows its name so you always know which one you are in. If you were in an unsaved city, it is filed as *Before switching* first, so a load can never lose anything. *Save a copy of this city* sits at the foot of the map. Hover a tile for a pencil to rename that city and an × to delete it, and the city you are in is remembered across reloads.
 
 Copies are independent snapshots, not live archives: editing one does not touch another.
 

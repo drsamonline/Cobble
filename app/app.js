@@ -263,11 +263,24 @@
   let activeSnapshotName = '';
   let snapshotWriteTimer = null;
 
+  const BIND_KEY = 'cobble-active-snapshot';
+
   function bindCity(id, name) {
     activeSnapshot = id || null;
     activeSnapshotName = name || '';
+    try {
+      if (id) localStorage.setItem(BIND_KEY, JSON.stringify({ id, name: activeSnapshotName }));
+      else localStorage.removeItem(BIND_KEY);
+    } catch {}
     const label = $('#city-shelf-name');
     if (label) label.textContent = activeSnapshotName || 'Your cities';
+  }
+
+  function restoreBinding() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(BIND_KEY) || 'null');
+      if (stored && stored.id) bindCity(stored.id, stored.name || 'Untitled');
+    } catch {}
   }
 
   function scheduleSnapshotWrite() {
@@ -364,16 +377,28 @@
       </button>`;
 
     const tiles = snapshots.map(snap => `
-      <button class="city-tile" type="button" data-city-load="${escapeHTML(snap.id)}">
-        <div class="city-tile-sky">${skylineBars(snap.counts || {})}</div>
-        <div class="city-tile-body">
-          <span class="city-tile-name">${escapeHTML(snap.name)}</span>
-          <span class="city-tile-meta">${snap.count} ${snap.count === 1 ? 'moment' : 'moments'} · saved ${escapeHTML((snap.savedAt || '').slice(0, 10))}</span>
-        </div>
-      </button>`).join('');
+      <div class="city-tile-wrap">
+        <button class="city-tile" type="button" data-city-load="${escapeHTML(snap.id)}">
+          <div class="city-tile-sky">${skylineBars(snap.counts || {})}</div>
+          <div class="city-tile-body">
+            <span class="city-tile-name">${escapeHTML(snap.name)}</span>
+            <span class="city-tile-meta">${snap.count} ${snap.count === 1 ? 'moment' : 'moments'} · saved ${escapeHTML((snap.savedAt || '').slice(0, 10))}</span>
+          </div>
+        </button>
+        <button class="city-tile-action" type="button" data-city-rename="${escapeHTML(snap.id)}" aria-label="Rename ${escapeHTML(snap.name)}">✎</button>
+        <button class="city-tile-action is-danger" type="button" data-city-remove="${escapeHTML(snap.id)}" aria-label="Delete ${escapeHTML(snap.name)}">×</button>
+      </div>`).join('');
 
     grid.innerHTML = here + tiles + (snapshots.length ? '' : '<p class="city-map-empty">No other cities yet. “Save a copy” puts this one on the map, and you can load it again from here whenever you like.</p>');
     $$('[data-city-load]', grid).forEach(tile => tile.addEventListener('click', () => loadSnapshot(tile.dataset.cityLoad)));
+    $$('[data-city-rename]', grid).forEach(button => button.addEventListener('click', event => {
+      event.stopPropagation();
+      renameSnapshot(button.dataset.cityRename);
+    }));
+    $$('[data-city-remove]', grid).forEach(button => button.addEventListener('click', event => {
+      event.stopPropagation();
+      removeSnapshot(button.dataset.cityRemove);
+    }));
   }
 
   async function openCityMap() {
@@ -438,6 +463,27 @@
       toast(`Now showing “${target.name}”.`);
     } catch {
       toast('Could not load that city.');
+    }
+  }
+
+  async function renameSnapshot(id) {
+    try {
+      const snapshots = await listSnapshots();
+      const target = snapshots.find(snap => snap.id === id);
+      if (!target) return;
+      const name = prompt('Rename this city.', target.name);
+      if (!name || !name.trim()) return;
+      const db = await openDatabase();
+      const record = await new Promise((resolve, reject) => {
+        const request = db.transaction('archive', 'readonly').objectStore('archive').get(`${SNAPSHOT_PREFIX}${id}`);
+        request.onsuccess = () => resolve(request.result?.value || {});
+        request.onerror = () => reject(request.error);
+      });
+      await writeSnapshot(id, name.trim().slice(0, 40), record.entries || []);
+      if (activeSnapshot === id) bindCity(id, name.trim().slice(0, 40));
+      await renderCityMap();
+    } catch {
+      toast('Could not rename that city.');
     }
   }
 
@@ -1850,6 +1896,7 @@
      $('#auto-day')?.setAttribute('aria-pressed', String(autoDay));
      if (autoDay) applyAutoDay(true);
      setInterval(() => { if (autoDay) applyAutoDay(true); }, 5 * 60 * 1000);
+     restoreBinding();
      restoreShellTheme();
      restoreAtmosphere();
      render();

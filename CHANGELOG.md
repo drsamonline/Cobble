@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.48.0 — 2026-11-20
+
+### Added
+
+- **Rename and delete from the map.** Each tile carries two quiet buttons that appear on hover: a pencil to rename the city, an × to delete it. Renaming the city you are in updates the sidebar too.
+- **The city you are in survives a reload.** The binding is stored beside the archive, so opening the app tomorrow puts you back in *Kerala* rather than in an unnamed live copy — and the next save still updates the right city.
+
+### Verified
+
+- Saved a copy as *Kerala*, renamed it to *Kerala Coast* — the tile and the sidebar both changed — reloaded the page and the sidebar still read *Kerala Coast*; then deleted it from the map and the tile disappeared and the sidebar fell back to *Your cities*.
+- The snapshot record and the binding both survived the reload, read back from IndexedDB and localStorage rather than assumed.
+
 ## 1.47.0 — 2026-11-20
 
 ### Changed
@@ -29,6 +41,18 @@ It is still **one live archive plus named copies**, not several archives open at
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.48.0 — 2026-11-20
+
+### Added
+
+- **Rename and delete from the map.** Each tile carries two quiet buttons that appear on hover: a pencil to rename the city, an × to delete it. Renaming the city you are in updates the sidebar too.
+- **The city you are in survives a reload.** The binding is stored beside the archive, so opening the app tomorrow puts you back in *Kerala* rather than in an unnamed live copy — and the next save still updates the right city.
+
+### Verified
+
+- Saved a copy as *Kerala*, renamed it to *Kerala Coast* — the tile and the sidebar both changed — reloaded the page and the sidebar still read *Kerala Coast*; then deleted it from the map and the tile disappeared and the sidebar fell back to *Your cities*.
+- The snapshot record and the binding both survived the reload, read back from IndexedDB and localStorage rather than assumed.
+
 ## 1.47.0 — 2026-11-20
 
 ### Changed
@@ -55,6 +79,18 @@ It is still **one live archive plus named copies**, not several archives open at
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.48.0 — 2026-11-20
+
+### Added
+
+- **Rename and delete from the map.** Each tile carries two quiet buttons that appear on hover: a pencil to rename the city, an × to delete it. Renaming the city you are in updates the sidebar too.
+- **The city you are in survives a reload.** The binding is stored beside the archive, so opening the app tomorrow puts you back in *Kerala* rather than in an unnamed live copy — and the next save still updates the right city.
+
+### Verified
+
+- Saved a copy as *Kerala*, renamed it to *Kerala Coast* — the tile and the sidebar both changed — reloaded the page and the sidebar still read *Kerala Coast*; then deleted it from the map and the tile disappeared and the sidebar fell back to *Your cities*.
+- The snapshot record and the binding both survived the reload, read back from IndexedDB and localStorage rather than assumed.
 
 ## 1.47.0 — 2026-11-20
 
