@@ -2,6 +2,22 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.53.0 — 2026-11-21
+
+### Changed
+
+- **The landing page caught up with the app.** It still described the app as it was around v1.20 — no 3D town, no sound, no clock, no saved cities, no Hindi or Gujarati. Two new screenshots (the 3D town, the map of cities) and a section, *"And the things around the edges"*, covering the vault, importing another journal, the clock and the sound, and the three languages. Nav gained a *More* link; the privacy section renumbered to 05.
+- The same section, translated, in `hi.html` and `gu.html`.
+
+### Fixed on the way
+
+- The new cards borrowed `.privacy-card`, which is white-on-dark for the section below them — pale text on beige, unreadable. They have their own `.more-card` on the light tint now. The page's own axe pass would have caught it had I run it before looking; the screenshot caught it first.
+- The English card spelled the languages in Devanagari and Gujarati inline, which fell back to a mismatched font at card size. It says "Hindi and Gujarati" in words and links to the two pages.
+
+### Verified
+
+- All three pages rendered at 1440: no horizontal overflow, eight screenshots each, four cards each, nav links correct in each language, and axe clean on all three.
+
 ## 1.52.0 — 2026-11-20
 
 ### Added
@@ -105,6 +121,22 @@ It is still **one live archive plus named copies**, not several archives open at
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.53.0 — 2026-11-21
+
+### Changed
+
+- **The landing page caught up with the app.** It still described the app as it was around v1.20 — no 3D town, no sound, no clock, no saved cities, no Hindi or Gujarati. Two new screenshots (the 3D town, the map of cities) and a section, *"And the things around the edges"*, covering the vault, importing another journal, the clock and the sound, and the three languages. Nav gained a *More* link; the privacy section renumbered to 05.
+- The same section, translated, in `hi.html` and `gu.html`.
+
+### Fixed on the way
+
+- The new cards borrowed `.privacy-card`, which is white-on-dark for the section below them — pale text on beige, unreadable. They have their own `.more-card` on the light tint now. The page's own axe pass would have caught it had I run it before looking; the screenshot caught it first.
+- The English card spelled the languages in Devanagari and Gujarati inline, which fell back to a mismatched font at card size. It says "Hindi and Gujarati" in words and links to the two pages.
+
+### Verified
+
+- All three pages rendered at 1440: no horizontal overflow, eight screenshots each, four cards each, nav links correct in each language, and axe clean on all three.
+
 ## 1.52.0 — 2026-11-20
 
 ### Added
@@ -207,6 +239,22 @@ It is still **one live archive plus named copies**, not several archives open at
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.53.0 — 2026-11-21
+
+### Changed
+
+- **The landing page caught up with the app.** It still described the app as it was around v1.20 — no 3D town, no sound, no clock, no saved cities, no Hindi or Gujarati. Two new screenshots (the 3D town, the map of cities) and a section, *"And the things around the edges"*, covering the vault, importing another journal, the clock and the sound, and the three languages. Nav gained a *More* link; the privacy section renumbered to 05.
+- The same section, translated, in `hi.html` and `gu.html`.
+
+### Fixed on the way
+
+- The new cards borrowed `.privacy-card`, which is white-on-dark for the section below them — pale text on beige, unreadable. They have their own `.more-card` on the light tint now. The page's own axe pass would have caught it had I run it before looking; the screenshot caught it first.
+- The English card spelled the languages in Devanagari and Gujarati inline, which fell back to a mismatched font at card size. It says "Hindi and Gujarati" in words and links to the two pages.
+
+### Verified
+
+- All three pages rendered at 1440: no horizontal overflow, eight screenshots each, four cards each, nav links correct in each language, and axe clean on all three.
 
 ## 1.52.0 — 2026-11-20
 

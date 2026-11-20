@@ -518,3 +518,33 @@ a.method:hover { border-color: var(--primary); background: color-mix(in srgb, va
 html[data-time="night"] .lang-switch { background: #1a2429; border-color: #2b3a41; }
 html[data-time="night"] .lang-switch a { color: #b9c6c0; }
 html[data-time="night"] .lang-switch a[aria-current="true"] { background: #e8efe9; color: #16211d; }
+
+/* ── The rest of it ───────────────────────────────────────────────
+   Four cards on a light tint. They cannot borrow .privacy-card, which is
+   white-on-dark for the section below — reusing it here put pale text on
+   beige, which is exactly what the axe pass on this page is for. */
+.more-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 26px;
+}
+.more-card {
+  padding: 18px 20px;
+  border: 1px solid #e6e4d9;
+  border-radius: 14px;
+  background: #fbfaf4;
+}
+.more-card h3 {
+  margin: 0 0 6px;
+  font: 700 15px/1.3 var(--font-heading, Georgia, serif);
+  color: #22302b;
+}
+.more-card p {
+  margin: 0;
+  font: 400 13.5px/1.6 var(--font-body, system-ui, sans-serif);
+  color: #4a584e;
+}
+html[data-time="night"] .more-card { background: #1a2429; border-color: #26333a; }
+html[data-time="night"] .more-card h3 { color: #eef2ec; }
+html[data-time="night"] .more-card p { color: #cfd9d3; }

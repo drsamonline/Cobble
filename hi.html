@@ -38,6 +38,7 @@
       <a href="#idea">विचार</a>
       <a href="#districts">ज़िले</a>
       <a href="#inside">अंदर से</a>
+      <a href="#more">और</a>
       <a href="#privacy">निजता</a>
       <a href="#support">सहयोग</a>
       <a href="docs/">दस्तावेज़</a>
@@ -205,6 +206,14 @@
         <a href="app/?demo=1"><img src="screenshots/share.webp" alt="The share dialog, asking for a six to twelve digit PIN" loading="lazy" width="1440" height="900" /></a>
         <figcaption><b>शहर साझा करें।</b> पल चुनिए, पिन लगाइए, एक एन्क्रिप्टेड फ़ाइल पाइए। पिन अलग से भेजिए।</figcaption>
       </figure>
+      <figure class="shot">
+        <a href="app/?demo=1"><img src="screenshots/city-3d.webp" alt="3D town" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>3D शहर।</b> बंगले, विला और ऊँची इमारतें; लोग, गाड़ियाँ, एक ट्रेन और एक हवाई जहाज़; मछलियों वाला तालाब, एक नदी, और पहाड़। किसी इमारत पर माउस ले जाइए तो उसका ज़िला पढ़िए, क्लिक कीजिए तो वह खुल जाता है। बाहर स्क्रॉल कीजिए और शहर बादलों के नीचे एक घाटी बन जाता है।</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="app/?demo=1"><img src="screenshots/city-map.webp" alt="Saved cities" loading="lazy" width="1440" height="900" /></a>
+        <figcaption><b>आपके शहर।</b> एक से ज़्यादा रखिए। हर शहर एक खाना है जो उसके अपने पलों से बना है — किसी पर क्लिक कीजिए तो वह खुल जाता है, और संपादन के लिए आपका ही रहता है।</figcaption>
+      </figure>
       <figure class="shot shot-phone">
         <a href="app/?demo=1"><img src="screenshots/mobile.webp" alt="The city on a phone screen" loading="lazy" width="390" height="844" /></a>
         <figcaption><b>फ़ोन पर।</b> वही संग्रह, जेब में समाने के लिए बना।</figcaption>
@@ -212,10 +221,37 @@
     </div>
   </section>
 
+  <!-- ── the rest of it ─────────────────────────────────── -->
+  <section class="section section-tint" id="more" aria-labelledby="more-title">
+    <div class="section-head">
+      <span class="sec-num">04</span>
+      <h2 id="more-title">और किनारे की कुछ बातें।</h2>
+      <p>इनमें से कोई भी मूल बात नहीं है। ये सब इसलिए हैं कि मूल बात व्यस्त हफ़्ते में भी बनी रहे।</p>
+    </div>
+    <div class="more-grid">
+      <article class="more-card">
+        <h3>शहर को ताला लगाइए</h3>
+        <p>एक पासफ़्रेज़ पूरे संग्रह को सील कर देता है: AES-256-GCM, सादा रिकॉर्ड हटा दिया जाता है, और अंदर आने पर अनलॉक स्क्रीन। वापसी का कोई रास्ता नहीं — और ताला लगाने से पहले यह बता दिया जाता है।</p>
+      </article>
+      <article class="more-card">
+        <h3>अपनी डायरी साथ लाइए</h3>
+        <p>Day One का JSON निर्यात, या हर प्रविष्टि के ऊपर तारीख़ वाली मार्कडाउन फ़ाइल — दोनों पलों में बदल जाती हैं। पढ़ा पेज में ही जाता है, उसी नियम से जुड़ता है जिससे शहर की फ़ाइल, और अनडू हो सकता है।</p>
+      </article>
+      <article class="more-card">
+        <h3>एक घड़ी, और एक आवाज़</h3>
+        <p>अगर आप कहें तो दृश्य दिन के समय के साथ चलता है, और शहर में हवा, बारिश और कभी-कभी कोई चिड़िया है — ब्राउज़र में ही बनी हुई, कोई फ़ाइल नहीं, और जब तक आप न कहें बंद।</p>
+      </article>
+      <article class="more-card">
+        <h3>तीन भाषाएँ</h3>
+        <p>यह पेज और ऐप का इंटरफ़ेस अंग्रेज़ी, हिंदी और गुजराती में। अनुवाद हाथ से लिखे हैं और इन्हें किसी मूल वक्ता की नज़र चाहिए — पेज यह खुद कहता है।</p>
+      </article>
+    </div>
+  </section>
+
   <!-- ── privacy ────────────────────────────────────────── -->
   <section class="section section-ink" id="privacy" aria-labelledby="privacy-title">
     <div class="section-head">
-      <span class="sec-num">04</span>
+      <span class="sec-num">05</span>
       <h2 id="privacy-title">शहर कभी डिवाइस से बाहर नहीं जाता।</h2>
       <p>कॉबल का कोई खाता नहीं है, क्योंकि कॉबल का कोई सर्वर ही नहीं है। आपका संग्रह आपके ब्राउज़र की अपनी स्टोरेज में रहता है। बाहर सिर्फ़ वही फ़ाइल जाती है जिसे आप खुद एन्क्रिप्ट करते हैं।</p>
     </div>
