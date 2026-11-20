@@ -86,6 +86,12 @@ The first version of the town drew every building, window, tree and person as it
 
 The fix is instancing: one mesh per *shape*, with a matrix per placement. Buildings, roofs, windows, mountains, trees, people and fish are all `InstancedMesh` now, and a district's buildings are one mesh each, so picking reports the district rather than the individual box.
 
+### The quality dial
+
+Because the scene is fill-bound, the pixel ratio is a dial rather than a constant. The frame timer averages frame time over roughly a second of wall-clock and moves one step at a time through `1.75 → 1.25 → 1 → 0.75 → 0.5`, down when frames are slower than 40 ms and back up when they are faster than 18 ms. One step per decision, so the change is never visible as a flicker.
+
+**Verified in one direction only.** Under load the dial moves down and stays there: on this machine it went from ratio 1.0 to 0.5 within a few seconds at 1,200 moments, which is what it is for. The climb back up has not been observed, because software rendering here never gets a frame under 18 ms at any canvas size — the machine cannot produce the condition. That is stated rather than assumed.
+
 **What this measurement is not.** Frame rate on this machine is 1–4 fps before and after, because the sandbox renders WebGL in software (SwiftShader), where the cost is fill rate — every pixel of a 1440×1000 canvas shaded on the CPU — and draw calls barely register. So the honest claim is the one the numbers support: **draw calls fell by 50–60×**, which is what matters on a real GPU and especially on a phone, where a few hundred calls is already too many. The frame rate on real hardware has not been measured here and should be checked on a device before anyone quotes a number for it.
 
 ## The size budget measures the right thing

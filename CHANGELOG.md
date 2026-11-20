@@ -2,6 +2,22 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.52.0 — 2026-11-20
+
+### Added
+
+- **The 3D scene sets its own quality.** The pixel ratio is a dial rather than a constant: the frame timer averages frame time over about a second of wall-clock and steps through `1.75 → 1.25 → 1 → 0.75 → 0.5`, down when frames run slower than 40 ms and back up when they run faster than 18 ms. One step per decision, so it never flickers.
+
+### Two things this got wrong first
+
+- The dial was driven by a **frame count** — forty-five frames — which at one frame a second is forty-five seconds. It now decides on elapsed time.
+- The frame-time guard rejected any delta over 500 ms, which is exactly a slow frame, so the dial never moved on the hardware that needed it. The guard is now generous and the average does the work.
+
+### Verified
+
+- At 1,200 moments the dial moved from ratio 1.0 to 0.5 within a few seconds and stayed there.
+- **The climb back up has not been observed**, because software rendering here never produces a frame under 18 ms at any canvas size. `docs/performance.md` says so rather than implying both directions were tested.
+
 ## 1.51.0 — 2026-11-20
 
 ### Changed
@@ -89,6 +105,22 @@ It is still **one live archive plus named copies**, not several archives open at
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.52.0 — 2026-11-20
+
+### Added
+
+- **The 3D scene sets its own quality.** The pixel ratio is a dial rather than a constant: the frame timer averages frame time over about a second of wall-clock and steps through `1.75 → 1.25 → 1 → 0.75 → 0.5`, down when frames run slower than 40 ms and back up when they run faster than 18 ms. One step per decision, so it never flickers.
+
+### Two things this got wrong first
+
+- The dial was driven by a **frame count** — forty-five frames — which at one frame a second is forty-five seconds. It now decides on elapsed time.
+- The frame-time guard rejected any delta over 500 ms, which is exactly a slow frame, so the dial never moved on the hardware that needed it. The guard is now generous and the average does the work.
+
+### Verified
+
+- At 1,200 moments the dial moved from ratio 1.0 to 0.5 within a few seconds and stayed there.
+- **The climb back up has not been observed**, because software rendering here never produces a frame under 18 ms at any canvas size. `docs/performance.md` says so rather than implying both directions were tested.
+
 ## 1.51.0 — 2026-11-20
 
 ### Changed
@@ -175,6 +207,22 @@ It is still **one live archive plus named copies**, not several archives open at
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.52.0 — 2026-11-20
+
+### Added
+
+- **The 3D scene sets its own quality.** The pixel ratio is a dial rather than a constant: the frame timer averages frame time over about a second of wall-clock and steps through `1.75 → 1.25 → 1 → 0.75 → 0.5`, down when frames run slower than 40 ms and back up when they run faster than 18 ms. One step per decision, so it never flickers.
+
+### Two things this got wrong first
+
+- The dial was driven by a **frame count** — forty-five frames — which at one frame a second is forty-five seconds. It now decides on elapsed time.
+- The frame-time guard rejected any delta over 500 ms, which is exactly a slow frame, so the dial never moved on the hardware that needed it. The guard is now generous and the average does the work.
+
+### Verified
+
+- At 1,200 moments the dial moved from ratio 1.0 to 0.5 within a few seconds and stayed there.
+- **The climb back up has not been observed**, because software rendering here never produces a frame under 18 ms at any canvas size. `docs/performance.md` says so rather than implying both directions were tested.
 
 ## 1.51.0 — 2026-11-20
 

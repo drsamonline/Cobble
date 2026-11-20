@@ -446,7 +446,14 @@
 
   function build(THREE, viewport) {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    /* The scene is fill-bound on weak hardware: shading a full-size canvas is
+       what costs, not the geometry. So the pixel ratio is a dial, and the frame
+       timer turns it — down when frames are slow, back up when they are not. */
+    const QUALITY_STEPS = [1.75, 1.25, 1, 0.75, 0.5];
+    let quality = Math.min(QUALITY_STEPS.length - 1,
+      QUALITY_STEPS.findIndex(step => step <= (window.devicePixelRatio || 1)));
+    if (quality < 0) quality = QUALITY_STEPS.length - 1;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, QUALITY_STEPS[quality]));
     renderer.setSize(viewport.clientWidth, viewport.clientHeight, false);
     renderer.setClearColor(0x000000, 0);
 
@@ -523,7 +530,8 @@
 
     const instance = {
       renderer, scene, camera, cityGroup, landscape, life, clouds, sun, sky, birds, backdrop,
-      frame: 0, t: 0, baseView: 11, zoom: 1, pan: { x: 0, z: 0 }, cloudPuffs: []
+      frame: 0, t: 0, baseView: 11, zoom: 1, pan: { x: 0, z: 0 }, cloudPuffs: [],
+      quality, qualitySteps: QUALITY_STEPS, frameMs: 16, qualityTimer: 0, lastFrame: 0
     };
 
     function applyFrustum() {
@@ -742,6 +750,31 @@
     if (!scene3d) return;
     scene3d.frame = requestAnimationFrame(tick);
     scene3d.t += 0.004;
+
+    /* adaptive quality: an exponential average of frame time, nudged one step
+       at a time so the change is never visible as a flicker */
+    const now = performance.now();
+    const delta = now - (scene3d.lastFrame || now);
+    scene3d.lastFrame = now;
+    /* a slow frame can be a whole second, and that is exactly when the dial
+       needs to move — so the guard is generous and the average is what counts */
+    if (delta > 0 && delta < 2000) {
+      scene3d.frameMs = (scene3d.frameMs || 16) * 0.9 + delta * 0.1;
+      /* decide on elapsed time, not frame count: at one frame a second a
+         forty-five-frame window would take forty-five seconds */
+      scene3d.qualityTimer = (scene3d.qualityTimer || 0) + delta;
+      if (scene3d.qualityTimer > 1200) {
+        scene3d.qualityTimer = 0;
+        const steps = scene3d.qualitySteps;
+        if (scene3d.frameMs > 40 && scene3d.quality < steps.length - 1) {
+          scene3d.quality += 1;
+          scene3d.renderer.setPixelRatio(steps[scene3d.quality]);
+        } else if (scene3d.frameMs < 18 && scene3d.quality > 0) {
+          scene3d.quality -= 1;
+          scene3d.renderer.setPixelRatio(steps[scene3d.quality]);
+        }
+      }
+    }
     const { renderer, scene, camera, sun, birds, life, clouds } = scene3d;
 
     const drift = Math.sin(scene3d.t * 0.5) * 0.9;
