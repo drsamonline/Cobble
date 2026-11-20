@@ -61,7 +61,27 @@
     'deck.flat': 'Flat city',
     'crumb.world': 'Your world',
     'action.share': 'Share city',
-    'lang.label': 'Language'
+    'lang.label': 'Language',
+    'district.everyday': 'Everyday detail',
+    'district.people': 'People & connection',
+    'district.nature': 'Outside & nature',
+    'district.ideas': 'Thoughts & ideas',
+    'district.joy': 'Small joys',
+    'district.milestone': 'Something meaningful',
+    'mood.serene': 'serene',
+    'mood.curious': 'curious',
+    'mood.dreamy': 'dreamy',
+    'mood.festive': 'festive',
+    'mood.tranquil': 'tranquil',
+    'weather.clear': 'clear',
+    'weather.cloudy': 'cloudy',
+    'weather.rain': 'rain',
+    'weather.snow': 'snow',
+    'theme.meadow': 'meadow',
+    'theme.coastal': 'coastal',
+    'theme.amber': 'amber',
+    'theme.lavender': 'lavender',
+    'theme.midnight': 'midnight'
   };
 
   const HI = {
@@ -111,7 +131,27 @@
     'deck.flat': 'सपाट शहर',
     'crumb.world': 'आपकी दुनिया',
     'action.share': 'शहर साझा करें',
-    'lang.label': 'भाषा'
+    'lang.label': 'भाषा',
+    'district.everyday': 'रोज़मर्रा की बातें',
+    'district.people': 'लोग और जुड़ाव',
+    'district.nature': 'बाहर और क़ुदरत',
+    'district.ideas': 'सोच और विचार',
+    'district.joy': 'छोटी खुशियाँ',
+    'district.milestone': 'कुछ सार्थक',
+    'mood.serene': 'शांत',
+    'mood.curious': 'जिज्ञासु',
+    'mood.dreamy': 'स्वप्निल',
+    'mood.festive': 'उत्सवी',
+    'mood.tranquil': 'निर्मल',
+    'weather.clear': 'साफ़',
+    'weather.cloudy': 'बादल',
+    'weather.rain': 'बारिश',
+    'weather.snow': 'बर्फ़',
+    'theme.meadow': 'हरा मैदान',
+    'theme.coastal': 'समुद्री',
+    'theme.amber': 'अंबर',
+    'theme.lavender': 'लैवेंडर',
+    'theme.midnight': 'आधी रात'
   };
 
   const GU = {
@@ -161,7 +201,27 @@
     'deck.flat': 'સપાટ શહેર',
     'crumb.world': 'તમારી દુનિયા',
     'action.share': 'શહેર શેર કરો',
-    'lang.label': 'ભાષા'
+    'lang.label': 'ભાષા',
+    'district.everyday': 'રોજિંદી વિગત',
+    'district.people': 'લોકો અને જોડાણ',
+    'district.nature': 'બહાર અને કુદરત',
+    'district.ideas': 'વિચારો અને ભાવનાઓ',
+    'district.joy': 'નાની ખુશીઓ',
+    'district.milestone': 'કંઈક અર્થપૂર્ણ',
+    'mood.serene': 'શાંત',
+    'mood.curious': 'જિજ્ઞાસુ',
+    'mood.dreamy': 'સ્વપ્નિલ',
+    'mood.festive': 'ઉત્સવી',
+    'mood.tranquil': 'નિર્મળ',
+    'weather.clear': 'સાફ',
+    'weather.cloudy': 'વાદળ',
+    'weather.rain': 'વરસાદ',
+    'weather.snow': 'બરફ',
+    'theme.meadow': 'લીલું મેદાન',
+    'theme.coastal': 'દરિયાઈ',
+    'theme.amber': 'એમ્બર',
+    'theme.lavender': 'લેવેન્ડર',
+    'theme.midnight': 'મધરાત'
   };
 
   const DICTS = { en: EN, hi: HI, gu: GU };
@@ -201,6 +261,71 @@
     apply(stored);
   });
 
+
+  /* ── sentences with numbers in them ───────────────────────────────
+     A dictionary swaps words; these are templates, so each language gets a
+     function that builds the sentence in its own order. `say()` falls back to
+     English when a key is missing, which is why an untranslated sentence reads
+     as English rather than as an empty toast. */
+  const TEMPLATES = {
+    en: {
+      'toast.district': v => `${v.label}: ${v.count} ${v.count === 1 ? 'moment' : 'moments'}.`,
+      'toast.unlocked': v => `Unlocked — ${v.count} ${v.count === 1 ? 'moment' : 'moments'}.`,
+      'toast.merged': v => `${v.count} ${v.count === 1 ? 'moment' : 'moments'} merged${v.variants ? `, ${v.variants} kept as a second version` : ''}.`,
+      'toast.imported': v => `${v.count} ${v.count === 1 ? 'entry' : 'entries'} imported from ${v.file}${v.skipped ? `, ${v.skipped} skipped` : ''}.`,
+      'toast.theme': v => `A new ${v.theme} palette settles over your city.`,
+      'toast.mood': v => `The city feels ${v.mood} today.`,
+      'toast.weather': v => `Weather changed to ${v.weather}.`,
+      'toast.part': v => `The city is at ${v.part} with you.`,
+      'obs.busiest.title': v => `${v.label} is your busiest district.`,
+      'obs.busiest.body': v => `${v.count} of your ${v.total} saved ${v.total === 1 ? 'moment lives' : 'moments live'} there. That's the shape of your attention, lately.`,
+      'obs.day.title': v => `${v.date} held a lot.`,
+      'obs.day.body': v => `You gathered ${v.count} moments in a single day. Some days leave a bigger footprint.`,
+      'obs.short.title': () => 'Small can hold a whole world.',
+      'obs.short.body': v => `Your shortest saved moment is just ${v.count} ${v.count === 1 ? 'word' : 'words'} long. Not everything needs explaining.`,
+      'plan.foot': v => `${v.count} of ${v.total} moments sit in ${v.label}. Click a tile to read them.`
+    },
+    hi: {
+      'toast.district': v => `${v.label}: ${v.count} पल।`,
+      'toast.unlocked': v => `खुल गया — ${v.count} पल।`,
+      'toast.merged': v => `${v.count} पल जोड़े गए${v.variants ? `, ${v.variants} दूसरे रूप में रखे गए` : ''}।`,
+      'toast.imported': v => `${v.file} से ${v.count} प्रविष्टियाँ आयात हुईं${v.skipped ? `, ${v.skipped} छोड़ी गईं` : ''}।`,
+      'toast.theme': v => `एक नई ${v.theme} रंग-योजना आपके शहर पर बस गई।`,
+      'toast.mood': v => `आज शहर ${v.mood} सा लगता है।`,
+      'toast.weather': v => `मौसम बदलकर ${v.weather} हो गया।`,
+      'toast.part': v => `शहर आपके साथ ${v.part} पर है।`,
+      'obs.busiest.title': v => `${v.label} आपका सबसे व्यस्त ज़िला है।`,
+      'obs.busiest.body': v => `आपके ${v.total} सहेजे पलों में से ${v.count} वहाँ हैं। यही आपके ध्यान का आकार है।`,
+      'obs.day.title': v => `${v.date} में बहुत कुछ था।`,
+      'obs.day.body': v => `एक ही दिन में आपने ${v.count} पल जोड़े। कुछ दिन बड़ी छाप छोड़ जाते हैं।`,
+      'obs.short.title': () => 'छोटे में पूरी दुनिया समा सकती है।',
+      'obs.short.body': v => `आपका सबसे छोटा पल सिर्फ़ ${v.count} शब्दों का है। हर बात को समझाने की ज़रूरत नहीं।`,
+      'plan.foot': v => `${v.total} में से ${v.count} पल ${v.label} में हैं। पढ़ने के लिए कोई खाना दबाइए।`
+    },
+    gu: {
+      'toast.district': v => `${v.label}: ${v.count} ક્ષણો.`,
+      'toast.unlocked': v => `ખૂલી ગયું — ${v.count} ક્ષણો.`,
+      'toast.merged': v => `${v.count} ક્ષણો જોડાઈ${v.variants ? `, ${v.variants} બીજા સ્વરૂપમાં રાખી` : ''}.`,
+      'toast.imported': v => `${v.file} માંથી ${v.count} એન્ટ્રીઓ આયાત થઈ${v.skipped ? `, ${v.skipped} છોડી` : ''}.`,
+      'toast.theme': v => `નવી ${v.theme} રંગયોજના તમારા શહેર પર બેસી ગઈ.`,
+      'toast.mood': v => `આજે શહેર ${v.mood} લાગે છે.`,
+      'toast.weather': v => `મોસમ બદલાઈને ${v.weather} થઈ.`,
+      'toast.part': v => `શહેર તમારી સાથે ${v.part} પર છે.`,
+      'obs.busiest.title': v => `${v.label} તમારો સૌથી વ્યસ્ત ઝિલ્લો છે.`,
+      'obs.busiest.body': v => `તમારી ${v.total} સાચવેલી ક્ષણોમાંથી ${v.count} ત્યાં છે. આ તમારા ધ્યાનનો આકાર છે.`,
+      'obs.day.title': v => `${v.date} માં ઘણું બધું હતું.`,
+      'obs.day.body': v => `એક જ દિવસમાં તમે ${v.count} ક્ષણો એકઠી કરી. અમુક દિવસો મોટી છાપ છોડે છે.`,
+      'obs.short.title': () => 'નાનામાં આખી દુનિયા સમાય છે.',
+      'obs.short.body': v => `તમારી સૌથી નાની ક્ષણ ફક્ત ${v.count} શબ્દોની છે. દરેક વાત સમજાવવી જરૂરી નથી.`,
+      'plan.foot': v => `${v.total} માંથી ${v.count} ક્ષણો ${v.label} માં છે. વાંચવા માટે કોઈ ખાનું દબાવો.`
+    }
+  };
+
+  const say = (key, values = {}) => {
+    const build = (TEMPLATES[current] && TEMPLATES[current][key]) || TEMPLATES.en[key];
+    return build ? build(values) : '';
+  };
+
   const t = key => (DICTS[current] && DICTS[current][key]) || EN[key] || '';
-  window.CobbleI18n = { apply, current: () => current, t };
+  window.CobbleI18n = { apply, current: () => current, t, say };
 })();

@@ -1,5 +1,13 @@
 (() => {
   const STORE = 'cobble-moments-v1';
+  const districtName = key => {
+    const dict = window.CobbleI18n;
+    const localised = dict ? dict.t(`district.${key}`) : '';
+    return localised || (categories[key] ? categories[key].label : key);
+  };
+
+  const say = (key, values) => (window.CobbleI18n ? window.CobbleI18n.say(key, values) : '');
+
   const categories = {
     everyday: {
       label: 'Everyday detail',
@@ -107,7 +115,7 @@
     }[part];
     Object.assign(atmosphere, preset);
     applyAtmosphere();
-    if (!silent) toast(`The city is at ${part} with you.`);
+    if (!silent) toast(say('toast.part', { part }));
   }
 
   function setAutoDay(on) {
@@ -941,13 +949,13 @@
     $('#stats-grid').innerHTML = cards.map(([icon, value, label, note]) => `<article class="stat-card"><span class="stat-icon">${icon}</span><strong class="stat-value">${value}</strong><span class="stat-label">${label}</span><small>${note}</small></article>`).join('');
     renderAchievements(total, activeDays, categoryCounts.filter(item => item.count > 0).length);
     const discoveries = [];
-    if (total && favorite?.count) discoveries.push(`<article class="discovery-item"><span class="discovery-icon">${favorite.info.icon}</span><div><strong>${favorite.info.label} is your busiest district.</strong><p>${favorite.count} of your ${total} saved ${total === 1 ? 'moment lives' : 'moments live'} there. That's the shape of your attention, lately.</p></div></article>`);
+    if (total && favorite?.count) discoveries.push(`<article class="discovery-item"><span class="discovery-icon">${favorite.info.icon}</span><div><strong>${escapeHTML(say('obs.busiest.title', { label: districtName(favorite.key) }))}</strong><p>${escapeHTML(say('obs.busiest.body', { count: favorite.count, total }))}</p></div></article>`);
     const days = groupDays();
     const busiest = Object.entries(days).sort((a, b) => b[1].length - a[1].length)[0];
-    if (busiest && busiest[1].length > 1) discoveries.push(`<article class="discovery-item"><span class="discovery-icon">☼</span><div><strong>${formatDate(busiest[0], { month: 'long', day: 'numeric' })} held a lot.</strong><p>You gathered ${busiest[1].length} moments in a single day. Some days leave a bigger footprint.</p></div></article>`);
+    if (busiest && busiest[1].length > 1) discoveries.push(`<article class="discovery-item"><span class="discovery-icon">☼</span><div><strong>${escapeHTML(say('obs.day.title', { date: formatDate(busiest[0], { month: 'long', day: 'numeric' }) }))}</strong><p>${escapeHTML(say('obs.day.body', { count: busiest[1].length }))}</p></div></article>`);
     if (total >= 3) {
       const longest = entries.slice().sort((a, b) => (a.text || '').length - (b.text || '').length)[0];
-      discoveries.push(`<article class="discovery-item"><span class="discovery-icon">⌁</span><div><strong>Small can hold a whole world.</strong><p>Your shortest saved moment is just ${longest.text.trim().split(/\s+/).length} ${longest.text.trim().split(/\s+/).length === 1 ? 'word' : 'words'} long. Not everything needs explaining.</p></div></article>`);
+      discoveries.push(`<article class="discovery-item"><span class="discovery-icon">⌁</span><div><strong>${escapeHTML(say('obs.short.title'))}</strong><p>${escapeHTML(say('obs.short.body', { count: longest.text.trim().split(/\s+/).length }))}</p></div></article>`);
     }
     $('#discovery-list').innerHTML = discoveries.length ? discoveries.join('') : `<div class="no-insights"><strong>Your city is still learning your shape.</strong>Add a few more moments, and gentle observations will begin to appear here. No predictions—just patterns from your own words and choices.</div>`;
     $('#category-bars').innerHTML = categoryCounts.map(({
@@ -1113,6 +1121,10 @@
     $('#review-modal')?.classList.add('hidden');
   }
 
+  /* Switching language has to redraw the views whose sentences are built at
+     render time — the dictionary alone only reaches the static chrome. */
+  window.addEventListener('cobble-lang', () => { try { render(); } catch {} });
+
   /* The plan of the city: six tiles, one per district, each a way into the
      timeline. It is the same filter the 3D buildings and the chips use. */
   function renderDistrictPlan() {
@@ -1130,7 +1142,7 @@
       return `
         <button class="plan-tile" type="button" data-plan="${key}" aria-pressed="${activeCategories.has(key)}" style="--tile:${info.color}">
           <b>${n.toLocaleString()}</b>
-          <span>${escapeHTML(info.label)} · ${share}%</span>
+          <span>${escapeHTML(districtName(key))} · ${share}%</span>
           <span class="plan-bar"><i style="width:${Math.max(2, share)}%"></i></span>
         </button>`;
     }).join('');
@@ -1152,7 +1164,11 @@
     if (foot) {
       const busiest = order[0];
       foot.textContent = entries.length
-        ? `${counts[busiest].toLocaleString()} of ${entries.length.toLocaleString()} moments sit in ${categories[busiest].label.toLowerCase()}. Click a tile to read them.`
+        ? say('plan.foot', {
+            count: counts[busiest].toLocaleString(),
+            total: entries.length.toLocaleString(),
+            label: districtName(busiest).toLowerCase()
+          })
         : 'Nothing in the plan yet — save a moment and the districts will fill in.';
     }
   }
@@ -1170,7 +1186,7 @@
       .forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filterCategory === district)));
     setView('timeline');
     renderTimeline();
-    toast(`${categories[district].label}: ${event.detail.count} ${event.detail.count === 1 ? 'moment' : 'moments'}.`);
+    toast(say('toast.district', { label: categories[district].label, count: event.detail.count }));
   });
 
   /* ── locking the archive ─────────────────────────────────────────── */
@@ -1226,7 +1242,7 @@
       hideLockScreen();
       render();
       updateStorageInfo();
-      toast(`Unlocked — ${entries.length} ${entries.length === 1 ? 'moment' : 'moments'}.`);
+      toast(say('toast.unlocked', { count: entries.length }));
     } catch (error) {
       status.textContent = error.message || 'That passphrase did not open this city.';
     }
@@ -1499,7 +1515,7 @@
         render();
         toast('Import undone.');
       });
-      toast(`${imported.length} ${imported.length === 1 ? 'moment' : 'moments'} merged${secondVersions ? `, ${secondVersions} kept as a second version` : ''}.`);
+      toast(say('toast.merged', { count: imported.length, variants: secondVersions }));
     } catch (error) {
       $('#share-status').textContent = error.name === 'OperationError' ? 'That PIN did not unlock this city file. Try again.' : (error.message || 'Could not open this city file.');
     }
@@ -1646,19 +1662,19 @@
       if (autoDay) setAutoDay(false);
       atmosphere.theme = pickDifferent(themes, atmosphere.theme);
       applyAtmosphere();
-      toast(`A new ${atmosphere.theme} palette settles over your city.`);
+      toast(say('toast.theme', { theme: (window.CobbleI18n ? window.CobbleI18n.t(`theme.${atmosphere.theme}`) : atmosphere.theme) }));
     });
     $('#mood-control').addEventListener('click', () => {
       if (autoDay) setAutoDay(false);
       atmosphere.mood = pickDifferent(moods, atmosphere.mood);
       applyAtmosphere();
-      toast(`The city feels ${atmosphere.mood} today.`);
+      toast(say('toast.mood', { mood: (window.CobbleI18n ? window.CobbleI18n.t(`mood.${atmosphere.mood}`) : atmosphere.mood) }));
     });
     $('#weather-control').addEventListener('click', () => {
       if (autoDay) setAutoDay(false);
       atmosphere.weather = weatherTypes[(weatherTypes.indexOf(atmosphere.weather) + 1) % weatherTypes.length];
       applyAtmosphere();
-      toast(`Weather changed to ${atmosphere.weather}.`);
+      toast(say('toast.weather', { weather: (window.CobbleI18n ? window.CobbleI18n.t(`weather.${atmosphere.weather}`) : atmosphere.weather) }));
     });
     $('#auto-day').addEventListener('click', () => setAutoDay(!autoDay));
     $('#time-control').addEventListener('click', () => {

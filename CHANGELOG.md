@@ -2,6 +2,22 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.39.0 — 2026-11-20
+
+### Added
+
+- **The sentences Cobble writes about your archive are translated too.** Fifteen templates — the toasts for a district, an unlock, a merge, an import, a theme, a mood, a weather, the time of day; the three Discoveries observations; the plan's footer — are functions per language, not strings, so each language builds the sentence in its own order and places its numbers where it wants them. District names and the atmosphere words (*serene*, *rain*, *midnight*) are dictionary entries, so nothing English is left inside a Hindi sentence.
+- Switching language now redraws the views whose sentences are built at render time. Before this, the chrome changed and the observations did not.
+
+### Verified
+
+- Same archive read in three languages: *"Outside & nature is your busiest district. 4 of your 19 saved moments live there"* → *"बाहर और क़ुदरत आपका सबसे व्यस्त ज़िला है। आपके 19 सहेजे पलों में से 4 वहाँ हैं।"* → *"બહાર અને કુદરત તમારો સૌથી વ્યસ્ત ઝિલ્લો છે…"*; the plan footer and the mood toast follow the same way.
+- `say()` falls back to English when a key is missing, so an untranslated sentence reads as English rather than as an empty toast.
+
+### Still English
+
+The help dialog's prose and a handful of long-form insights paragraphs. Recorded in `ENHANCEMENTS.md`.
+
 ## 1.38.0 — 2026-11-20
 
 ### Added
