@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.43.0 — 2026-11-20
+
+### Added
+
+- **Packaging for desktop and Android.** `packaging/desktop/` is a Tauri 2 wrapper and `packaging/android/` a Capacitor wrapper, both pointing `frontendDist` / `webDir` at the same `app/` folder — no copy step, no bundler, no chance of a package drifting from the web version. `docs/packaging.md` explains both, and the `.github/workflows/package.yml` runs them on `workflow_dispatch`.
+- The desktop content security policy is structural rather than a promise: `default-src 'self'`, images from `self` and `data:` (photos are data URLs), and no `connect-src` beyond `self`, so a packaged Cobble has nowhere to send anything.
+- A 512×512 icon generated from the brand's three bars, so the bundle has one.
+
+### Read this before trusting it
+
+**Neither package has been built.** This sandbox has no Rust toolchain, no Android SDK and no Windows runner, so the wrappers are syntax-checked and path-checked but never run. The workflow is `workflow_dispatch` only for exactly that reason: an untested job should not be able to turn `main` red. `docs/packaging.md` lists what a first real run and a device test should look at — IndexedDB eviction on Android, service-worker behaviour in a WebView, and WebGL on low-end hardware.
+
 ## 1.42.0 — 2026-11-20
 
 ### Added

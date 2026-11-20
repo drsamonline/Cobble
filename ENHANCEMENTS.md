@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.42.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.43.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -74,6 +74,7 @@ What is left of the quick-win tier:
 | 4.1c | **The app's chrome in Hindi and Gujarati** — sidebar, breadcrumb, view headings, deck, primary buttons. Generated sentences (toasts, observations, year review) still English: templates with numbers inside them. | `app/i18n.js` |
 | 4.1b | **The landing page in Gujarati** — `gu.html`, values zipped to the English keys by index with a length assertion. Three-language switcher on all pages. Awaiting native review. | `gu.html`, `hi.html`, `index.html` |
 | 4.1a | **The landing page in Hindi** — `hi.html`, hand-written, switcher in both headers, `hreflang` alternates, precached. Awaiting native review. | `hi.html`, `index.html` |
+| 4.4 | **Desktop and Android wrappers** — Tauri 2 and Capacitor 6 pointing at the same `app/`, a workflow on dispatch, an icon, and a CSP with no `connect-src` beyond self. **Authored, not built**: no Rust, SDK or Windows runner here. | `packaging/` |
 | 3.7a | **Saved cities — shipped in 1.42.0.** Named copies on a shelf, load replaces the live archive after auto-saving it as *Before switching*. Gives the user need without the race. | `app/app.js` |
 | 3.7 | **A live switch between archives — attempted three times (1.30.0, 1.34.0, 1.40.0), reverted three times.** The third avoided in-memory races by reloading the page on switch; creation, isolation and deletion worked, but the return to the first city came up empty and navigation from a sealed city hung. Three attempts, three different faults: this needs the refactor below, not another patch. | `app/app.js` | L |
 | 3.7b | **Multiple cities — second attempt.** Second attempt threaded the city explicitly through every read and write and still mixed archives on a mid-save switch. The conclusion is that the shape is wrong: `entries`, `personalEntries`, `lastPhotoKeys` and `activeCity` are module-level and every function reaches into them. Needs a city object owning its entries, records and render. | `app/app.js` | L |
@@ -116,7 +117,6 @@ What is left of the quick-win tier:
 |---|---|---|---|---|
 | 4.1 | **Hindi and Gujarati.** Every string into a `strings` object with three locales, a language switch in help, and `lang` attributes updated. The author writes in both, and the audience for a reflective app in India is not monolingual. | `app/i18n/`, all render functions | XL |
 | 4.3 | **A real 3D city.** Replace the ambient Three.js scene with the actual skyline: one building per moment, placed by district, height by weight. | It would make the metaphor literal. It is also the most expensive thing on this list per unit of value, which is why it sits here. | `app/city3d.js` | XL |
-| 4.4 | **Desktop and Android builds.** One portable Windows executable and one Android WebView APK, using the author's own [`app-builder`](https://github.com/drsamonline/app-builder). | A journal that lives in a browser tab is a journal you forget. An icon is a habit. | `build/` | L |
 | 4.5 | **Optional local model.** A small on-device model that proposes a district and a weight as you type, with a switch that is off by default and a hard rule that nothing leaves the device. | Genuinely useful, genuinely risky for a private app. Only worth doing if 1.1–1.3 are done and the network surface is provably zero. | `app/` | XL |
 | 4.6 | **Map view, if you want it.** Optional coarse location per moment, stored as a city name — never coordinates — and a district map that groups them. | Some people think in places. Most do not, and the privacy cost is real, which is why it is opt-in and last. | `app/` | L |
 

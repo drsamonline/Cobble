@@ -11,6 +11,7 @@ Cobble is a private city built from the small things you notice. These guides co
 | [Privacy and security](privacy-and-security.md) | You are deciding whether to trust it with something personal |
 | [Customising](customising.md) | You want different colours, districts or copy |
 | [Deploying](deploying.md) | You want it on your own domain, your LAN, or in a desktop wrapper |
+| [Packaging](packaging.md) | You want an `.exe` or an `.apk` — and want to know it has not been built yet |
 | [FAQ](faq.md) | Something went wrong, or you are wondering about a browser |
 
 Two documents live at the repository root rather than here, because they are about the project rather than the software: [PRIVACY.md](../PRIVACY.md) and [SECURITY.md](../SECURITY.md).

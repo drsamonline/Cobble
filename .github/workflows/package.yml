@@ -1,0 +1,88 @@
+name: package
+
+# Builds the desktop and Android packages.
+#
+# This workflow is a first draft and has never been run: it is here so the
+# packaging is reproducible rather than a set of instructions in a README. It
+# runs only on workflow_dispatch, so an untested job cannot turn main red.
+#
+# Expect the first run to need one or two pins — a Tauri CLI version, an Android
+# SDK level, a keystore for a signed release. That is normal for a first
+# packaging run, and the failure will say which.
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Which package to build'
+        required: true
+        default: 'both'
+        type: choice
+        options: [both, desktop, android]
+
+permissions:
+  contents: read
+
+jobs:
+  desktop:
+    if: ${{ inputs.target == 'both' || inputs.target == 'desktop' }}
+    name: desktop (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Linux system libraries for Tauri
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install and build
+        working-directory: packaging/desktop
+        run: |
+          npm install
+          npm run tauri build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cobble-desktop-${{ matrix.os }}
+          path: |
+            packaging/desktop/src-tauri/target/release/bundle/**/*.msi
+            packaging/desktop/src-tauri/target/release/bundle/**/*.exe
+            packaging/desktop/src-tauri/target/release/bundle/**/*.deb
+            packaging/desktop/src-tauri/target/release/bundle/**/*.AppImage
+          if-no-files-found: warn
+
+  android:
+    if: ${{ inputs.target == 'both' || inputs.target == 'android' }}
+    name: android (debug apk)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - name: Build the APK
+        working-directory: packaging/android
+        run: |
+          npm install
+          npx cap add android
+          npx cap sync android
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cobble-android-debug
+          path: packaging/android/android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: warn

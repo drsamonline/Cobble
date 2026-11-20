@@ -1,0 +1,13 @@
+{
+  "appId": "io.github.drsamonline.cobble",
+  "appName": "Cobble",
+  "webDir": "../../app",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#f6f4ef"
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

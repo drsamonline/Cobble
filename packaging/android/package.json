@@ -1,0 +1,15 @@
+{
+  "name": "cobble-android",
+  "private": true,
+  "version": "1.42.0",
+  "description": "Cobble as an Android app",
+  "scripts": {
+    "sync": "cap sync android",
+    "open": "cap open android"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/android": "^6.2.0"
+  }
+}

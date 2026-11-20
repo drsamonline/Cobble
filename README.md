@@ -11,7 +11,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 **Status: v1.5.0 — shipped, offline, editable, searchable, and tested.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.42.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.43.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -175,6 +175,13 @@ Open <http://localhost:8000> for the landing page, or <http://localhost:8000/app
 Nothing is loaded from a CDN. The fonts are in `fonts/`, the two libraries are in `app/vendor/`, and the service worker keeps the whole site for offline use. Serve it over `http://` or `https://` — a service worker will not register on `file://`.
 
 To check the offline promise yourself, open `/selftest.html` with the network on, then again with it off.
+
+## Packaging
+
+`packaging/` holds a Tauri desktop wrapper and a Capacitor Android wrapper, both
+pointing at the same `app/` folder with no build step. They are **authored, not
+yet built** — `docs/packaging.md` says what that means, what the first run will
+likely need, and what a device test should look at.
 
 ## Documentation
 
