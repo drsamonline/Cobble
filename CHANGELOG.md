@@ -2,6 +2,29 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.51.0 — 2026-11-20
+
+### Changed
+
+- **The 3D scene is instanced.** Every building, roof, window, mountain, tree, person and fish used to be its own mesh with its own material: **4,089 draw calls** at 1,200 moments, which is a slideshow on any phone. They are now `InstancedMesh` — one mesh per shape, a matrix per placement — and a district's buildings share one mesh each, so a click still reports the district rather than the box.
+
+| Moments | Draw calls before | after |
+|---|---|---|
+| 19 | 170 | **54** |
+| 300 | 2,127 | **64** |
+| 1,200 | 4,089 | **75** |
+
+- People and fish move by updating instance matrices rather than object positions, which is two buffer writes a frame instead of forty object transforms.
+
+### What I can and cannot claim
+
+Draw calls fell by 50–60×. **Frame rate on this machine did not change** — 1–4 fps before and after — because the sandbox renders WebGL in software, where the cost is fill rate, not call count. So the improvement is real but unproven on the axis a person feels. `docs/performance.md` says exactly that, and says the frame rate on real hardware has not been measured here.
+
+### Verified
+
+- Hover and click still work after the change: *"Everyday detail — 3 moments. Click to open."*, and the click opens the timeline filtered to `everyday` at "3 found".
+- Rendered at 1× and 2× and inspected: roofs keep their district colour, the pond, river, train, trees and mountains are all still there.
+
 ## 1.50.0 — 2026-11-20
 
 ### Added
@@ -66,6 +89,29 @@ It is still **one live archive plus named copies**, not several archives open at
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.51.0 — 2026-11-20
+
+### Changed
+
+- **The 3D scene is instanced.** Every building, roof, window, mountain, tree, person and fish used to be its own mesh with its own material: **4,089 draw calls** at 1,200 moments, which is a slideshow on any phone. They are now `InstancedMesh` — one mesh per shape, a matrix per placement — and a district's buildings share one mesh each, so a click still reports the district rather than the box.
+
+| Moments | Draw calls before | after |
+|---|---|---|
+| 19 | 170 | **54** |
+| 300 | 2,127 | **64** |
+| 1,200 | 4,089 | **75** |
+
+- People and fish move by updating instance matrices rather than object positions, which is two buffer writes a frame instead of forty object transforms.
+
+### What I can and cannot claim
+
+Draw calls fell by 50–60×. **Frame rate on this machine did not change** — 1–4 fps before and after — because the sandbox renders WebGL in software, where the cost is fill rate, not call count. So the improvement is real but unproven on the axis a person feels. `docs/performance.md` says exactly that, and says the frame rate on real hardware has not been measured here.
+
+### Verified
+
+- Hover and click still work after the change: *"Everyday detail — 3 moments. Click to open."*, and the click opens the timeline filtered to `everyday` at "3 found".
+- Rendered at 1× and 2× and inspected: roofs keep their district colour, the pond, river, train, trees and mountains are all still there.
+
 ## 1.50.0 — 2026-11-20
 
 ### Added
@@ -129,6 +175,29 @@ It is still **one live archive plus named copies**, not several archives open at
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.51.0 — 2026-11-20
+
+### Changed
+
+- **The 3D scene is instanced.** Every building, roof, window, mountain, tree, person and fish used to be its own mesh with its own material: **4,089 draw calls** at 1,200 moments, which is a slideshow on any phone. They are now `InstancedMesh` — one mesh per shape, a matrix per placement — and a district's buildings share one mesh each, so a click still reports the district rather than the box.
+
+| Moments | Draw calls before | after |
+|---|---|---|
+| 19 | 170 | **54** |
+| 300 | 2,127 | **64** |
+| 1,200 | 4,089 | **75** |
+
+- People and fish move by updating instance matrices rather than object positions, which is two buffer writes a frame instead of forty object transforms.
+
+### What I can and cannot claim
+
+Draw calls fell by 50–60×. **Frame rate on this machine did not change** — 1–4 fps before and after — because the sandbox renders WebGL in software, where the cost is fill rate, not call count. So the improvement is real but unproven on the axis a person feels. `docs/performance.md` says exactly that, and says the frame rate on real hardware has not been measured here.
+
+### Verified
+
+- Hover and click still work after the change: *"Everyday detail — 3 moments. Click to open."*, and the click opens the timeline filtered to `everyday` at "3 found".
+- Rendered at 1× and 2× and inspected: roofs keep their district colour, the pond, river, train, trees and mountains are all still there.
 
 ## 1.50.0 — 2026-11-20
 

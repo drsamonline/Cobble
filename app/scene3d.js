@@ -71,74 +71,33 @@
     document.head.appendChild(script);
   });
 
+  /* ── instancing ───────────────────────────────────────────────────
+     One mesh per shape, not one per object. The first version drew every
+     building, window and tree as its own mesh: 4,089 draw calls at 1,200
+     moments, which is a slideshow on any GPU. Instanced meshes put the same
+     shape down hundreds of times in a single call. */
+  function instanced(THREE, geometry, material, transforms, extra = {}) {
+    const mesh = new THREE.InstancedMesh(geometry, material, transforms.length);
+    const matrix = new THREE.Matrix4();
+    const quaternion = new THREE.Quaternion();
+    const position = new THREE.Vector3();
+    const scale = new THREE.Vector3();
+    transforms.forEach((t, i) => {
+      position.set(t.x, t.y, t.z);
+      quaternion.setFromEuler(new THREE.Euler(0, t.rotationY || 0, 0));
+      scale.set(t.sx || 1, t.sy || 1, t.sz || 1);
+      matrix.compose(position, quaternion, scale);
+      mesh.setMatrixAt(i, matrix);
+    });
+    mesh.instanceMatrix.needsUpdate = true;
+    Object.assign(mesh.userData, extra);
+    return mesh;
+  }
+
   /* ── houses ───────────────────────────────────────────────────────
      Three kinds, so a district does not look like one building copied. A
      bungalow is wide and low with a pitched roof; a villa is two volumes and a
      terrace; a tower is the old box, for the busiest districts. */
-  function addHouse(THREE, group, options) {
-    const { x, z, height, width, depth, colour, kind, rotation, district, count } = options;
-    const body = new THREE.Mesh(
-      new THREE.BoxGeometry(width, height, depth),
-      new THREE.MeshLambertMaterial({ color: colour })
-    );
-    body.position.set(x, height / 2, z);
-    body.rotation.y = rotation;
-    body.userData.district = district;
-    body.userData.count = count;
-    group.add(body);
-    group.userData.pickables.push(body);
-
-    if (kind === 'bungalow') {
-      const roof = new THREE.Mesh(
-        new THREE.ConeGeometry(Math.max(width, depth) * 0.78, height * 0.55, 4),
-        new THREE.MeshLambertMaterial({ color: colour.clone().offsetHSL(0, -0.05, -0.12) })
-      );
-      roof.position.set(x, height + height * 0.26, z);
-      roof.rotation.y = rotation + Math.PI / 4;
-      group.add(roof);
-    } else if (kind === 'villa') {
-      const wing = new THREE.Mesh(
-        new THREE.BoxGeometry(width * 0.6, height * 0.55, depth * 0.9),
-        new THREE.MeshLambertMaterial({ color: colour.clone().offsetHSL(0, -0.04, 0.08) })
-      );
-      wing.position.set(x + width * 0.5, height * 0.275, z);
-      wing.rotation.y = rotation;
-      group.add(wing);
-      const terrace = new THREE.Mesh(
-        new THREE.BoxGeometry(width * 1.05, 0.08, depth * 1.05),
-        new THREE.MeshLambertMaterial({ color: colour.clone().offsetHSL(0, -0.06, 0.14) })
-      );
-      terrace.position.set(x, height + 0.05, z);
-      terrace.rotation.y = rotation;
-      group.add(terrace);
-    } else {
-      const cap = new THREE.Mesh(
-        new THREE.BoxGeometry(width * 1.04, 0.08, depth * 1.04),
-        new THREE.MeshLambertMaterial({ color: colour.clone().offsetHSL(0, -0.06, 0.12) })
-      );
-      cap.position.set(x, height + 0.04, z);
-      cap.rotation.y = rotation;
-      group.add(cap);
-    }
-
-    if (height > 2.2) {
-      const rows = Math.max(1, Math.floor(height / 1.1));
-      for (let r = 0; r < rows; r += 1) {
-        const light = new THREE.Mesh(
-          new THREE.PlaneGeometry(width * 0.55, 0.1),
-          new THREE.MeshBasicMaterial({ color: 0xfff0cc, transparent: true, opacity: 0.75 })
-        );
-        light.position.set(
-          x + Math.sin(rotation) * (depth / 2 + 0.01),
-          0.9 + r * 1.05,
-          z + Math.cos(rotation) * (depth / 2 + 0.01)
-        );
-        light.rotation.y = rotation;
-        group.add(light);
-      }
-    }
-  }
-
   function buildCity(THREE, counts) {
     const group = new THREE.Group();
     group.userData.pickables = [];
@@ -148,7 +107,6 @@
     const cap = n => Math.min(n, n > 150 ? 96 : 48);
     const wantedCount = entries.reduce((sum, [, n]) => sum + cap(n), 0);
 
-    /* a grid of slots with jitter, growing outward in rings */
     const slots = [];
     for (let ring = 0; ring < 14 && slots.length < wantedCount; ring += 1) {
       const radius = ring * 3.1;
@@ -163,14 +121,23 @@
     const random = rng(entries.reduce((sum, [, n]) => sum + n, 0) + 17);
     let slot = 0;
 
+    const unitBox = new THREE.BoxGeometry(1, 1, 1);
+    const unitPlane = new THREE.PlaneGeometry(1, 1);
+    const windows = [];
+    const perDistrict = [];
+
     for (const [key, count] of entries) {
       const colour = new THREE.Color(palette[key] || '#9aa79a');
       const shown = cap(count);
+      const bodies = [];
+      const flat = [];
+      const cones = [];
+      const record = { district: key, count, indices: [] };
+
       for (let i = 0; i < shown; i += 1) {
         const [x, z] = slots[slot % slots.length];
         slot += 1;
         const busy = Math.min(count, 24);
-        /* which kind of house: the quieter the district, the more bungalows */
         const roll = random();
         const kind = busy > 14 ? (roll < 0.62 ? 'tower' : roll < 0.85 ? 'villa' : 'bungalow')
           : busy > 6 ? (roll < 0.3 ? 'tower' : roll < 0.7 ? 'villa' : 'bungalow')
@@ -178,65 +145,96 @@
         const height = kind === 'bungalow' ? 0.9 + random() * 0.5
           : kind === 'villa' ? 1.5 + random() * 1.1
             : 2.2 + busy * 0.22 + random() * 0.9;
-        addHouse(THREE, group, {
-          x, z,
-          height,
-          width: kind === 'bungalow' ? 1.25 + random() * 0.5 : 0.85 + random() * 0.35,
-          depth: kind === 'bungalow' ? 1.15 + random() * 0.45 : 0.85 + random() * 0.35,
-          colour,
-          kind,
-          rotation: random() * Math.PI,
-          district: key,
-          count
-        });
+        const width = kind === 'bungalow' ? 1.25 + random() * 0.5 : 0.85 + random() * 0.35;
+        const depth = kind === 'bungalow' ? 1.15 + random() * 0.45 : 0.85 + random() * 0.35;
+        const rotationY = random() * Math.PI;
+
+        record.indices.push(bodies.length);
+        bodies.push({ x, y: height / 2, z, sx: width, sy: height, sz: depth, rotationY });
+
+        if (kind === 'bungalow') {
+          cones.push({ x, y: height + height * 0.26, z, sx: Math.max(width, depth) * 1.1, sy: height * 0.55, sz: Math.max(width, depth) * 1.1, rotationY: rotationY + Math.PI / 4 });
+        } else if (kind === 'villa') {
+          flat.push({ x: x + width * 0.5, y: height * 0.275, z, sx: width * 0.6, sy: height * 0.55, sz: depth * 0.9, rotationY });
+          flat.push({ x, y: height + 0.05, z, sx: width * 1.05, sy: 0.08, sz: depth * 1.05, rotationY });
+        } else {
+          flat.push({ x, y: height + 0.04, z, sx: width * 1.04, sy: 0.08, sz: depth * 1.04, rotationY });
+        }
+
+        if (height > 2.2) {
+          const rows = Math.max(1, Math.floor(height / 1.1));
+          for (let r = 0; r < rows; r += 1) {
+            windows.push({
+              x: x + Math.sin(rotationY) * (depth / 2 + 0.01),
+              y: 0.9 + r * 1.05,
+              z: z + Math.cos(rotationY) * (depth / 2 + 0.01),
+              sx: width * 0.55,
+              sy: 0.1,
+              sz: 1,
+              rotationY
+            });
+          }
+        }
       }
+
+      const body = instanced(THREE, unitBox, new THREE.MeshLambertMaterial({ color: colour }), bodies, record);
+      group.add(body);
+      group.userData.pickables.push(body);
+      /* roofs keep their district's colour: a pale cap and a darker pitched
+         roof, one instanced mesh each per district */
+      if (flat.length) {
+        group.add(instanced(THREE, unitBox,
+          new THREE.MeshLambertMaterial({ color: colour.clone().offsetHSL(0, -0.06, 0.14) }), flat));
+      }
+      if (cones.length) {
+        group.add(instanced(THREE, new THREE.ConeGeometry(0.5, 1, 4),
+          new THREE.MeshLambertMaterial({ color: colour.clone().offsetHSL(0, -0.05, -0.1) }), cones));
+      }
+      perDistrict.push(record);
     }
+
+    if (windows.length) {
+      group.add(instanced(THREE, unitPlane,
+        new THREE.MeshBasicMaterial({ color: 0xfff0cc, transparent: true, opacity: 0.8, side: THREE.DoubleSide }), windows));
+    }
+    group.userData.districts = perDistrict;
     return group;
   }
 
   /* ── the landscape ────────────────────────────────────────────────
      Mountains on the horizon, a river cutting through, a pond with fish, and
-     trees around the edge. All of it static except the fish. */
+     trees around the edge — all instanced, so the whole landscape costs a
+     handful of draw calls. */
   function buildLandscape(THREE, spread) {
     const group = new THREE.Group();
 
-    /* mountains: two ridges of low-poly cones, further and paler */
+    const peaks = [];
+    const caps = [];
     for (let ridge = 0; ridge < 2; ridge += 1) {
       const distance = spread * 1.8 + 30 + ridge * 26;
-      const colour = new THREE.Color(ridge ? 0x93a89a : 0x7d948a);
       const random = rng(ridge + 5);
-      /* Two or three peaks per bearing, squashed on one axis and overlapping,
-         so a ridge reads as a range rather than a ring of cones. */
       for (let i = 0; i < 10; i += 1) {
         const bearing = (i / 10) * Math.PI * 2 + ridge * 0.31;
-        const peaks = ridge === 0 ? 3 : 2;
-        for (let k = 0; k < peaks; k += 1) {
+        const count = ridge === 0 ? 3 : 2;
+        for (let k = 0; k < count; k += 1) {
           const angle = bearing + (k - 1) * 0.11;
-          const spreadOut = distance + (random() - 0.5) * 18;
+          const out = distance + (random() - 0.5) * 18;
           const height = (4 + random() * 5 + ridge * 2) * (k === 1 ? 1.25 : 0.85);
-          const peak = new THREE.Mesh(
-            new THREE.ConeGeometry(5 + random() * 5, height, 6),
-            new THREE.MeshLambertMaterial({ color: colour.clone().offsetHSL(0, 0, (random() - 0.5) * 0.06) })
-          );
-          peak.position.set(Math.cos(angle) * spreadOut, height / 2 - 0.6, Math.sin(angle) * spreadOut);
-          peak.rotation.y = random() * Math.PI;
-          peak.scale.set(1, 1, 0.7 + random() * 0.7);
-          group.add(peak);
+          const width = 5 + random() * 5;
+          const x = Math.cos(angle) * out;
+          const z = Math.sin(angle) * out;
+          peaks.push({ x, y: height / 2 - 0.6, z, sx: width, sy: height, sz: width * (0.7 + random() * 0.7), rotationY: random() * Math.PI });
           if (ridge === 0 && height > 8) {
-            const cap = new THREE.Mesh(
-              new THREE.ConeGeometry(1.4, height * 0.2, 6),
-              new THREE.MeshLambertMaterial({ color: 0xf2f4ee })
-            );
-            cap.position.set(peak.position.x, height - height * 0.08, peak.position.z);
-            cap.rotation.y = peak.rotation.y;
-            cap.scale.set(1, 1, peak.scale.z);
-            group.add(cap);
+            caps.push({ x, y: height - height * 0.08, z, sx: 2.8, sy: height * 0.2, sz: 2.8 });
           }
         }
       }
     }
+    group.add(instanced(THREE, new THREE.ConeGeometry(0.5, 1, 6), new THREE.MeshLambertMaterial({ color: 0x7d948a }), peaks));
+    if (caps.length) {
+      group.add(instanced(THREE, new THREE.ConeGeometry(0.5, 1, 6), new THREE.MeshLambertMaterial({ color: 0xf2f4ee }), caps));
+    }
 
-    /* a river: a long band curving past the town */
     const riverCurve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(-spread * 3.2, 0.02, spread * 1.5),
       new THREE.Vector3(-spread * 0.8, 0.02, spread * 2.1),
@@ -244,18 +242,17 @@
       new THREE.Vector3(spread * 3.2, 0.02, spread * 1.2)
     ]);
     const river = new THREE.Mesh(
-      new THREE.TubeGeometry(riverCurve, 40, 1.5, 8, false),
+      new THREE.TubeGeometry(riverCurve, 30, 1.5, 6, false),
       new THREE.MeshLambertMaterial({ color: 0x6f9db0, transparent: true, opacity: 0.92 })
     );
     river.scale.set(1, 0.02, 1);
     river.position.y = 0.03;
     group.add(river);
 
-    /* a pond, with fish under a translucent surface */
     const pondX = -spread * 1.5;
     const pondZ = -spread * 1.25;
     const pond = new THREE.Mesh(
-      new THREE.CircleGeometry(spread * 0.24, 32),
+      new THREE.CircleGeometry(spread * 0.24, 24),
       new THREE.MeshLambertMaterial({ color: 0x7aa8b8, transparent: true, opacity: 0.85 })
     );
     pond.rotation.x = -Math.PI / 2;
@@ -263,20 +260,18 @@
     group.add(pond);
 
     const fish = new THREE.Group();
-    const fishMat = new THREE.MeshLambertMaterial({ color: 0xd98f5c });
-    for (let i = 0; i < 7; i += 1) {
-      const body = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.5, 5), fishMat);
-      body.rotation.z = Math.PI / 2;
-      body.position.set(0, 0.12, 0);
-      fish.add(body);
-    }
+    const fishMesh = new THREE.InstancedMesh(
+      new THREE.ConeGeometry(0.16, 0.5, 5),
+      new THREE.MeshLambertMaterial({ color: 0xd98f5c }),
+      7
+    );
+    fish.add(fishMesh);
     fish.position.set(pondX, 0.05, pondZ);
     group.add(fish);
-    group.userData.fish = { group: fish, radius: spread * 0.16, centre: { x: pondX, z: pondZ } };
+    group.userData.fish = { group: fish, mesh: fishMesh, radius: spread * 0.16 };
 
-    /* trees around the edge, denser than before */
-    const trunkMat = new THREE.MeshLambertMaterial({ color: 0x7d6247 });
-    const leafMat = new THREE.MeshLambertMaterial({ color: 0x6f8f6a });
+    const trunks = [];
+    const crowns = [];
     const random = rng(31);
     const treeCount = Math.min(90, Math.max(20, Math.round(spread * 2.2)));
     for (let i = 0; i < treeCount; i += 1) {
@@ -284,24 +279,23 @@
       const radius = spread + 1.6 + random() * 5;
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
-      const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.07, 0.6, 6), trunkMat);
-      stem.position.set(x, 0.3, z);
-      const crown = new THREE.Mesh(new THREE.ConeGeometry(0.34 + random() * 0.12, 0.9 + random() * 0.4, 7), leafMat);
-      crown.position.set(x, 1.0, z);
-      group.add(stem, crown);
+      trunks.push({ x, y: 0.3, z, sx: 1, sy: 1, sz: 1 });
+      crowns.push({ x, y: 1.0, z, sx: 1 + random() * 0.3, sy: 1 + random() * 0.4, sz: 1 + random() * 0.3 });
     }
+    group.add(instanced(THREE, new THREE.CylinderGeometry(0.05, 0.07, 0.6, 5), new THREE.MeshLambertMaterial({ color: 0x7d6247 }), trunks));
+    group.add(instanced(THREE, new THREE.ConeGeometry(0.34, 0.9, 6), new THREE.MeshLambertMaterial({ color: 0x6f8f6a }), crowns));
     return group;
   }
 
   /* ── traffic, people, trains, planes ──────────────────────────────
-     Each of these keeps a little state so the animation can move it: the tick
-     loop reads `userData.motion` and does one line per prop. */
+     Vehicles, the train and the plane are groups of a few meshes each — there
+     are only a couple of dozen of them. People are instanced, because there can
+     be forty and each one is two shapes. */
   function buildLife(THREE, spread, total) {
     const group = new THREE.Group();
     const random = rng(total + 91);
     const road = spread * 0.9;
 
-    /* roads: two crossing strips with a dashed centre line */
     const roadMat = new THREE.MeshLambertMaterial({ color: 0x6d6f68 });
     for (const rotation of [0, Math.PI / 2]) {
       const strip = new THREE.Mesh(new THREE.PlaneGeometry(road * 2.6, 2.2), roadMat);
@@ -311,7 +305,6 @@
       group.add(strip);
     }
 
-    /* a rail line at the back, with a train that runs along it */
     const rail = new THREE.Mesh(
       new THREE.PlaneGeometry(road * 3, 0.5),
       new THREE.MeshLambertMaterial({ color: 0x55564f })
@@ -328,18 +321,17 @@
       );
       carriage.position.set(i * 2.6 - 5, 0.55, 0);
       train.add(carriage);
-      const window_ = new THREE.Mesh(
+      const light = new THREE.Mesh(
         new THREE.PlaneGeometry(1.6, 0.28),
         new THREE.MeshBasicMaterial({ color: 0xffe9b8 })
       );
-      window_.position.set(i * 2.6 - 5, 0.7, 0.41);
-      train.add(window_);
+      light.position.set(i * 2.6 - 5, 0.7, 0.41);
+      train.add(light);
     }
     train.position.set(0, 0, -spread * 1.35);
     train.userData.motion = { kind: 'train', span: road * 1.5, speed: 0.06 };
     group.add(train);
 
-    /* vehicles: cars, a bus, two-wheelers */
     const vehicleCount = Math.min(14, Math.max(3, Math.round(total / 40)));
     for (let i = 0; i < vehicleCount; i += 1) {
       const isBus = i % 5 === 0;
@@ -359,59 +351,52 @@
         );
         cabin.position.y = isBus ? 1.15 : 0.62;
         vehicle.add(cabin);
-      } else {
-        const rider = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, 0.5, 6), new THREE.MeshLambertMaterial({ color: CLOTH[i % CLOTH.length] }));
-        rider.position.y = 0.78;
-        vehicle.add(rider);
       }
       const alongZ = i % 2 === 0;
       const offset = (random() - 0.5) * spread * 1.2;
-      vehicle.position.set(alongZ ? offset : (i % 4 === 0 ? -road : road) * 0.5, 0, alongZ ? (i % 4 === 0 ? -road : road) * 0.5 : offset);
+      vehicle.position.set(
+        alongZ ? offset : (i % 4 === 0 ? -road : road) * 0.5, 0,
+        alongZ ? (i % 4 === 0 ? -road : road) * 0.5 : offset
+      );
       vehicle.rotation.y = alongZ ? 0 : Math.PI / 2;
       vehicle.userData.motion = {
         kind: 'vehicle',
         axis: alongZ ? 'x' : 'z',
         span: spread * 1.3,
-        speed: (isBike ? 0.05 : isBus ? 0.03 : 0.04) * (i % 2 === 0 ? 1 : -1),
-        fixed: alongZ ? vehicle.position.z : vehicle.position.x
+        speed: (isBike ? 0.05 : isBus ? 0.03 : 0.04) * (i % 2 === 0 ? 1 : -1)
       };
       group.add(vehicle);
     }
 
-    /* people: adults and children, in small groups, walking the plaza */
+    /* people: one instanced torso and one instanced head, moved every frame */
     const peopleCount = Math.min(40, Math.max(6, Math.round(total / 12)));
+    const torsos = new THREE.InstancedMesh(
+      new THREE.CylinderGeometry(0.11, 0.14, 0.42, 5),
+      new THREE.MeshLambertMaterial({ color: 0x8a93a0 }),
+      peopleCount
+    );
+    const heads = new THREE.InstancedMesh(
+      new THREE.SphereGeometry(0.1, 6, 5),
+      new THREE.MeshLambertMaterial({ color: 0xdca87d }),
+      peopleCount
+    );
+    const walkers = [];
     for (let i = 0; i < peopleCount; i += 1) {
       const child = i % 4 === 3;
-      const person = new THREE.Group();
-      const scale = child ? 0.62 : 1;
-      const torso = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.11 * scale, 0.14 * scale, 0.42 * scale, 6),
-        new THREE.MeshLambertMaterial({ color: CLOTH[i % CLOTH.length] })
-      );
-      torso.position.y = 0.21 * scale;
-      const head = new THREE.Mesh(
-        new THREE.SphereGeometry(0.1 * scale, 8, 6),
-        new THREE.MeshLambertMaterial({ color: SKIN[i % SKIN.length] })
-      );
-      head.position.y = 0.5 * scale;
-      person.add(torso, head);
-      const radius = spread * (0.25 + random() * 0.6);
-      const angle = random() * Math.PI * 2;
-      person.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-      person.userData.motion = {
-        kind: 'person',
-        radius,
-        angle,
+      walkers.push({
+        radius: spread * (0.25 + random() * 0.6),
+        angle: random() * Math.PI * 2,
         speed: (0.0016 + random() * 0.0018) * (i % 2 ? 1 : -1),
+        scale: child ? 0.62 : 1,
         bob: random() * Math.PI * 2
-      };
-      group.add(person);
+      });
     }
+    group.add(torsos, heads);
+    group.userData.walkers = { torsos, heads, list: walkers };
 
-    /* a plane, crossing high and slow */
     const plane = new THREE.Group();
     const hull = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.16, 0.2, 2.2, 8),
+      new THREE.CylinderGeometry(0.16, 0.2, 2.2, 6),
       new THREE.MeshLambertMaterial({ color: 0xe8ece6 })
     );
     hull.rotation.z = Math.PI / 2;
@@ -427,8 +412,8 @@
   }
 
   /* ── clouds, for the zoomed-out view ─────────────────────────────
-     Flat billboards at altitude. They fade in as the camera pulls back, so the
-     zoom out ends in weather rather than in empty grass. */
+     Flat billboards at altitude, faded in as the camera pulls back, so the zoom
+     out ends in weather rather than in empty grass. */
   function buildClouds(THREE, spread) {
     const group = new THREE.Group();
     const canvas = document.createElement('canvas');
@@ -643,17 +628,22 @@
       pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
       raycaster.setFromCamera(pointer, camera);
       const hits = raycaster.intersectObjects(cityGroup.children[0]?.userData?.pickables || [], false);
-      return hits[0]?.object || null;
+      const hit = hits[0];
+      if (!hit) return null;
+      /* an instanced building reports which instance was hit; its userData is
+         the district record for the whole mesh */
+      return { object: hit.object, district: hit.object.userData.district, count: hit.object.userData.count };
     }
 
-    function setHover(object) {
+    function setHover(hit) {
+      const object = hit ? hit.object : null;
       if (hovered === object) return;
       if (hovered) hovered.material.emissive?.setHex(0x000000);
       hovered = object;
-      if (hovered) {
-        hovered.material.emissive?.setHex(0x2c2a1e);
+      if (hit) {
+        object.material.emissive?.setHex(0x2a281c);
         renderer.domElement.style.cursor = 'pointer';
-        renderer.domElement.title = `${labels[hovered.userData.district] || hovered.userData.district} — ${hovered.userData.count} ${hovered.userData.count === 1 ? 'moment' : 'moments'}. Click to open.`;
+        renderer.domElement.title = `${labels[hit.district] || hit.district} — ${hit.count} ${hit.count === 1 ? 'moment' : 'moments'}. Click to open.`;
       } else {
         renderer.domElement.style.cursor = 'grab';
         renderer.domElement.removeAttribute('title');
@@ -697,7 +687,7 @@
       const hit = pick(event);
       if (!hit) return;
       window.dispatchEvent(new CustomEvent('cobble-building', {
-        detail: { district: hit.userData.district, count: hit.userData.count }
+        detail: { district: hit.district, count: hit.count }
       }));
     }
 
@@ -722,7 +712,7 @@
     instance.debugPick = (clientX, clientY) => {
       const object = pick({ clientX, clientY });
       const pickables = cityGroup.children[0]?.userData?.pickables || [];
-      return { pickables: pickables.length, hit: object ? object.userData : null, zoom: instance.zoom };
+      return { pickables: pickables.length, hit: object ? { district: object.district, count: object.count } : null, zoom: instance.zoom };
     };
     window.__scene3d = instance;
     return instance;
@@ -767,16 +757,36 @@
       if (bird.position.x > 14) bird.position.x = -14;
     });
 
+    /* people are two instanced meshes; move their matrices, not their objects */
+    const walkers = life.children.find(child => child.userData && child.userData.walkers);
+    if (walkers) {
+      const { torsos, heads, list } = walkers.userData.walkers;
+      const matrix = new THREE.Matrix4();
+      const quaternion = new THREE.Quaternion();
+      const position = new THREE.Vector3();
+      const scale = new THREE.Vector3();
+      list.forEach((walker, i) => {
+        walker.angle += walker.speed;
+        const x = Math.cos(walker.angle) * walker.radius;
+        const z = Math.sin(walker.angle) * walker.radius;
+        const bob = Math.abs(Math.sin(scene3d.t * 6 + walker.bob)) * 0.05;
+        quaternion.setFromEuler(new THREE.Euler(0, -walker.angle, 0));
+        scale.setScalar(walker.scale);
+        position.set(x, (0.21 + bob) * walker.scale, z);
+        matrix.compose(position, quaternion, scale);
+        torsos.setMatrixAt(i, matrix);
+        position.set(x, (0.5 + bob) * walker.scale, z);
+        matrix.compose(position, quaternion, scale);
+        heads.setMatrixAt(i, matrix);
+      });
+      torsos.instanceMatrix.needsUpdate = true;
+      heads.instanceMatrix.needsUpdate = true;
+    }
+
     for (const child of life.children) {
       const motion = child.userData && child.userData.motion;
       if (!motion) continue;
-      if (motion.kind === 'person') {
-        motion.angle += motion.speed;
-        child.position.x = Math.cos(motion.angle) * motion.radius;
-        child.position.z = Math.sin(motion.angle) * motion.radius;
-        child.position.y = Math.abs(Math.sin(scene3d.t * 6 + motion.bob)) * 0.05;
-        child.rotation.y = -motion.angle;
-      } else if (motion.kind === 'vehicle') {
+      if (motion.kind === 'vehicle') {
         if (motion.axis === 'x') {
           child.position.x += motion.speed;
           if (child.position.x > motion.span) child.position.x = -motion.span;
@@ -797,12 +807,23 @@
 
     /* fish circle the pond; clouds drift */
     const fish = scene3d.landscape.children[0]?.userData?.fish;
-    if (fish) {
-      fish.group.children.forEach((one, i) => {
+    if (fish && fish.mesh) {
+      const matrix = new THREE.Matrix4();
+      const quaternion = new THREE.Quaternion();
+      const position = new THREE.Vector3();
+      const one = new THREE.Vector3(1, 1, 1);
+      for (let i = 0; i < 7; i += 1) {
         const angle = scene3d.t * (0.6 + i * 0.08) + i;
-        one.position.set(Math.cos(angle) * fish.radius * (0.4 + (i % 3) * 0.2), 0.12, Math.sin(angle) * fish.radius * (0.4 + (i % 3) * 0.2));
-        one.rotation.y = -angle;
-      });
+        position.set(
+          Math.cos(angle) * fish.radius * (0.4 + (i % 3) * 0.2),
+          0.12,
+          Math.sin(angle) * fish.radius * (0.4 + (i % 3) * 0.2)
+        );
+        quaternion.setFromEuler(new THREE.Euler(0, -angle, Math.PI / 2));
+        matrix.compose(position, quaternion, one);
+        fish.mesh.setMatrixAt(i, matrix);
+      }
+      fish.mesh.instanceMatrix.needsUpdate = true;
     }
     for (const puff of scene3d.cloudPuffs || []) {
       puff.position.x += puff.userData.drift;

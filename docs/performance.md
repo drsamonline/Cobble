@@ -74,6 +74,20 @@ Measured on a 205 KB archive (500 moments, 20 photos), encrypting in the page:
 
 A save is 68% cheaper. The salt stays fixed for the session and the IV changes every time, which is what AES-GCM requires.
 
+## The 3D scene: draw calls, not frame rate
+
+The first version of the town drew every building, window, tree and person as its own mesh. Measured in the live scene at three archive sizes:
+
+| Moments | Draw calls, before | Draw calls, after | Triangles |
+|---|---|---|---|
+| 19 | 170 | **54** | 3,714 |
+| 300 | 2,127 | **64** | 14,726 |
+| 1,200 | 4,089 | **75** | 26,210 |
+
+The fix is instancing: one mesh per *shape*, with a matrix per placement. Buildings, roofs, windows, mountains, trees, people and fish are all `InstancedMesh` now, and a district's buildings are one mesh each, so picking reports the district rather than the individual box.
+
+**What this measurement is not.** Frame rate on this machine is 1–4 fps before and after, because the sandbox renders WebGL in software (SwiftShader), where the cost is fill rate — every pixel of a 1440×1000 canvas shaded on the CPU — and draw calls barely register. So the honest claim is the one the numbers support: **draw calls fell by 50–60×**, which is what matters on a real GPU and especially on a phone, where a few hundred calls is already too many. The frame rate on real hardware has not been measured here and should be checked on a device before anyone quotes a number for it.
+
 ## The size budget measures the right thing
 
 For a while this project capped **source** bytes, and that was the wrong measure: it counts whitespace and comments no browser parses, and it turned "keep the source readable" into a fight with "leave room for features". The budget is now on **gzipped** size, because that is what a visitor actually downloads — GitHub Pages serves everything with gzip — with a raw ceiling kept only as a sanity check against a stray megabyte.
