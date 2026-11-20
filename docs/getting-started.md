@@ -120,7 +120,9 @@ Discoveries → **Lock this city** asks for a passphrase of at least eight chara
 
 ## The 3D city
 
-Press **3D city** in the control deck. Hover a building and it tells you which district it belongs to and how many moments are in it; click it and the timeline opens filtered to that district. Drag to pan, scroll to zoom, double-click to re-centre. The camera fits the town, so a large archive is shown as a larger city rather than a cropped one.
+Press **3D city** in the control deck. The town has bungalows, villas and towers, people walking, cars, a bus, two-wheelers, a train and a plane, a pond with fish, a river, and mountains on the horizon.
+
+Hover a building and it tells you which district it belongs to and how many moments are in it; click it and the timeline opens filtered to that district. Drag to pan, scroll to zoom, double-click to re-centre. Scroll out past about 1.4× and cloud fades in over the landscape — at the far end you are looking at a valley with a town in it. The camera fits the town, so a large archive is shown as a larger city rather than a cropped one.
 
 ## Following the clock
 

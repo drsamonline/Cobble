@@ -2,6 +2,31 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.45.0 — 2026-11-20
+
+The town got inhabitants, and the map got a world around it.
+
+### Added
+
+- **Three kinds of house.** Bungalows are wide and low with a pitched roof, villas are two volumes with a terrace, towers are the old boxes — and which one appears depends on how busy its district is, so a quiet district looks like a lane and a busy one looks like a town.
+- **People.** Adults and children, at two scales, in seven cloth colours and five skin tones, walking slow circles around the plaza with a small step-bob.
+- **Traffic.** Cars, a bus, and two-wheelers with a rider, running both directions along the two roads.
+- **A train**, five carriages with lit windows, running along a rail line behind the town.
+- **A plane**, high and slow, crossing the sky.
+- **Water.** A pond with seven fish circling under a translucent surface, and a river curving past the edge of the town.
+- **Mountains** — two ridges of clustered, squashed peaks with snow on the tall ones — and **trees** ringing the town, more of them the larger it gets.
+- **Clouds, and a zoom that leaves the table.** Scroll out past 1.4× and soft cloud billboards fade in over the landscape; at 6× you are looking at a valley with a town in it. The zoom and the pan now survive a re-render, so a repaint no longer throws your view away.
+
+### Notes on how it is built
+
+Everything is generated — no models, no image files, two canvas gradients for grass and cloud. Props are placed by a seeded generator, so the same archive always builds the same town; a street that rearranged itself on every render would read as a bug. Counts are capped (40 people, 14 vehicles, 96 buildings per district) because a thousand people on a phone is a slideshow.
+
+### Verified
+
+- Rendered and inspected at three zoom levels: town at 1×, valley at 2×, landscape with cloud at 6×. Element counts read back from the live scene: 19 pickable buildings, 93 landscape objects, cloud layer present.
+- Two bugs found by looking: the cloud fade crashed on a group that had no material (the puffs were nested), and every re-render reset the zoom to 1 because `setData` re-fitted the camera — both fixed, the second by keeping the view when the town has not changed size.
+- Shell budget raised from 75 KB to 90 KB gzip for the scene, which is now 75.6 KB.
+
 ## 1.44.0 — 2026-11-20
 
 ### Added

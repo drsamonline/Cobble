@@ -30,8 +30,8 @@ const BUDGETS = [
     label: 'app shell (html + css + js)',
     files: ['app/index.html', 'app/theme.css', 'app/styles.css', 'app/core.js', 'app/i18n.js',
             'app/scene3d.js', 'app/ambience.js', 'app/app.js'],
-    gzip: 75 * KB,
-    raw: 320 * KB
+    gzip: 90 * KB,
+    raw: 360 * KB
   },
   { label: 'Hindi landing page', files: ['hi.html'], gzip: 12 * KB, raw: 45 * KB },
   { label: 'Gujarati landing page', files: ['gu.html'], gzip: 12 * KB, raw: 45 * KB },
