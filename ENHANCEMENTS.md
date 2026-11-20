@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.40.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.41.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -65,6 +65,7 @@ What is left of the quick-win tier:
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 4.1e | **Stat cards and the welcome dialog in Hindi and Gujarati** — the interface is now fully translated; only `docs/` prose is English. | `app/i18n.js` |
 | 4.1d | **Generated sentences in Hindi and Gujarati** — 15 templates as per-language functions, district names and atmosphere words as dictionary entries, views redrawn on switch. | `app/i18n.js`, `app/app.js` |
 | 4.6 | **A plan of the city** — six district tiles with counts, shares and a click into the timeline. The map the 3D town implies, written down. | `app/app.js` |
 | 6.2 | **The 3D city is explorable** — hover to identify, click to open the district in the timeline, drag to pan, scroll to zoom, camera fits the archive. Four pointer faults fixed. | `app/scene3d.js` |

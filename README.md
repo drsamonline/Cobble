@@ -11,7 +11,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 **Status: v1.5.0 — shipped, offline, editable, searchable, and tested.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.40.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.41.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -97,7 +97,7 @@ Every capture is a real render of this repository at 1440×900, 1440×1000 and 3
 - **Day and night.** Night relights the windows, darkens the hills and quiets the palette. Day and night are a button, not a clock.
 - **Streets with traffic.** Cars pass, a person walks, a bird or a cat turns up, streetlamps come on at night, and a little theatre appears every ninth district — click it to open your photo gallery.
 - **Districts you can wander.** Drag, scroll or use the arrow keys and the city pans sideways through neighbouring districts, redrawing each one from the same seed as you arrive.
-- **Hindi and Gujarati.** The landing page ships in English, Hindi (`hi.html`) and Gujarati (`gu.html`); the app's chrome — nav, view headings, deck, primary buttons — switches inside the app with three pills in the sidebar, and so do the sentences Cobble writes about your archive: the toasts, the observations in Discoveries, the plan's footer. Templates are functions per language, so numbers land where each language wants them.
+- **Hindi and Gujarati.** The landing page ships in English, Hindi (`hi.html`) and Gujarati (`gu.html`); the app's chrome — nav, view headings, deck, primary buttons — switches inside the app with three pills in the sidebar, and so does every piece of text Cobble shows about itself: the toasts, the Discoveries stat cards and observations, the plan's footer, the welcome dialog. Templates are functions per language, so numbers land where each language wants them.
 - **The city follows the clock.** One control in the deck, *Auto*, matches the scene to the time of day — dawn, day, dusk, night — and keeps up while the tab is open.
 - **Sound, generated in the browser.** Wind, rain and the occasional bird, synthesised in WebAudio from a noise buffer — no audio files, no network, off until you ask.
 - **A 3D town you can walk around.** Hover a building to see what it is, click it to open that district in the timeline, drag to pan, scroll to zoom. The camera fits the archive, so a thousand moments is a bigger town rather than a cropped one. The illustrated city stays underneath as the fallback, and the toggle is remembered.

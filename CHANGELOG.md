@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.41.0 — 2026-11-20
+
+### Added
+
+- **The Discoveries stat cards and the welcome dialog now follow the language pills.** *moments kept*, *days remembered*, *personal landmarks*, *returning themes* and their four captions; the welcome dialog's heading, body, privacy line, source link and *Let's wander* button.
+- That closes the interface: every piece of text Cobble shows about itself is in all three languages. What is still English is the long-form prose in `docs/` and the landing pages' own translations, which are separate files by design.
+
+### Verified
+
+- Same archive read in Hindi and Gujarati: stat cards render *सहेजे पल / याद रखे दिन / निजी पड़ाव / लौटते विषय* and *સાચવેલી ક્ષણો / યાદ રહેલા દિવસો / પોતાના પડાવ / પાછા આવતા વિષયો*; the welcome dialog reads from its eyebrow to its button in both. No page errors.
+- Two strings failed to tag on the first pass because the source text had been edited since I wrote the dictionary — the substitution silently matched nothing. Found by rendering, not by the tests.
+
 ## 1.40.0 — 2026-11-20
 
 ### Fixed

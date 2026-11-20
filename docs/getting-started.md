@@ -122,7 +122,7 @@ Press **3D city** in the control deck. Hover a building and it tells you which d
 
 ## Another language
 
-Three pills at the bottom of the sidebar — **EN · हिं · ગુ** — translate the interface's chrome: the sidebar, the breadcrumb, the three view headings, the section titles, the city's control deck and the primary buttons. The choice is remembered, and the sentences Cobble writes about your archive follow it too — toasts, the Discoveries observations, the plan's footer. They are built from templates that are functions per language, so numbers land where each language wants them. The help dialog's prose is still English.
+Three pills at the bottom of the sidebar — **EN · हिं · ગુ** — translate the interface's chrome: the sidebar, the breadcrumb, the three view headings, the section titles, the city's control deck and the primary buttons. The choice is remembered, and the sentences Cobble writes about your archive follow it too — toasts, the Discoveries observations, the plan's footer. They are built from templates that are functions per language, so numbers land where each language wants them. The welcome dialog and the Discoveries stat cards are included; the long-form guides in `docs/` are English by design.
 
 ## Sound
 

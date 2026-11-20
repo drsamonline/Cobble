@@ -6,6 +6,12 @@
     return localised || (categories[key] ? categories[key].label : key);
   };
 
+  const word = (key, fallback) => {
+    const dict = window.CobbleI18n;
+    const localised = dict ? dict.t(key) : '';
+    return localised || fallback;
+  };
+
   const say = (key, values) => (window.CobbleI18n ? window.CobbleI18n.say(key, values) : '');
 
   const categories = {
@@ -942,10 +948,10 @@
     })).sort((a, b) => b.count - a.count);
     const favorite = categoryCounts[0];
     const cards = [
-      ['✧', total, 'moments kept', 'Every detail adds a little light.'],
-      ['◷', activeDays, 'days remembered', 'Different days, gathered together.'],
-      ['✦', entries.filter(entry => Number(entry.importance) >= 3).length, 'personal landmarks', 'The things you said matter.'],
-      ['↻', entries.filter(entry => Number(entry.repeatCount) > 1).length, 'returning themes', 'Familiar things finding their way back.']
+      ['✧', total, word('stat.moments', 'moments kept'), word('stat.moments.note', 'Every detail adds a little light.')],
+      ['◷', activeDays, word('stat.days', 'days remembered'), word('stat.days.note', 'Different days, gathered together.')],
+      ['✦', entries.filter(entry => Number(entry.importance) >= 3).length, word('stat.landmarks', 'personal landmarks'), word('stat.landmarks.note', 'The things you said matter.')],
+      ['↻', entries.filter(entry => Number(entry.repeatCount) > 1).length, word('stat.themes', 'returning themes'), word('stat.themes.note', 'Familiar things finding their way back.')]
     ];
     $('#stats-grid').innerHTML = cards.map(([icon, value, label, note]) => `<article class="stat-card"><span class="stat-icon">${icon}</span><strong class="stat-value">${value}</strong><span class="stat-label">${label}</span><small>${note}</small></article>`).join('');
     renderAchievements(total, activeDays, categoryCounts.filter(item => item.count > 0).length);
