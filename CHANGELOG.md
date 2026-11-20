@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.38.0 — 2026-11-20
+
+### Added
+
+- **Where your attention lives** — a plan of the city in Discoveries. Six tiles, one per district, each showing how many moments it holds, its share of the whole and a bar in the district's own colour. Click a tile and the timeline opens filtered to it; click it again to clear.
+- The footer says the useful sentence rather than a total: *"4 of 19 moments sit in outside & nature. Click a tile to read them."*
+
+### Verified
+
+- On the sample city: tiles read 4 / 3 / 3 / 3 / 3 / 3 with shares 21% and 16% each, summing to the archive. Clicking the first tile opened the timeline at *"4 found"* with the `nature` chip pressed. No page errors.
+- The plan uses the same filter path as the chips and the 3D buildings, so there is one way for a district to be selected, not three.
+
 ## 1.37.0 — 2026-11-20
 
 The 3D city became something you can use, not just look at.

@@ -70,6 +70,10 @@ Two mechanisms, for two different jobs.
 
 **Import** (`Open a city file` in the share dialog) reads a `.cobble` file, asks for its PIN, validates every field, skips moments whose ids already exist, and reports how many were added.
 
+## The plan of the city
+
+Discoveries opens with **Where your attention lives**: six tiles, one per district, each with its moment count, its share of the archive and a bar in the district's colour. Click a tile to open the timeline filtered to it; click it again to clear. It is the same filter the chips use, so a district selected here shows as a pressed chip there.
+
 ## The year, on one page
 
 Discoveries → **Your year, on one page** summarises the last twelve months: moments kept, days remembered, districts visited, months with a moment, then four sentences taken from the archive itself — where your attention went, your longest run, your fullest month, the longest quiet stretch. Three moments worth looking at again sit underneath, and **Save as a postcard** turns the skyline into a 1200×630 PNG.

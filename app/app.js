@@ -961,6 +961,7 @@
     renderTimeline();
     renderOnThisDay();
     renderHeatmap();
+    renderDistrictPlan();
     renderInsights();
   }
 
@@ -1110,6 +1111,50 @@
 
   function closeReview() {
     $('#review-modal')?.classList.add('hidden');
+  }
+
+  /* The plan of the city: six tiles, one per district, each a way into the
+     timeline. It is the same filter the 3D buildings and the chips use. */
+  function renderDistrictPlan() {
+    const grid = $('#plan-grid');
+    if (!grid) return;
+    const counts = Object.fromEntries(Object.keys(categories).map(key => [key, 0]));
+    for (const entry of entries) if (counts[entry.category] !== undefined) counts[entry.category] += 1;
+    const total = entries.length || 1;
+    const order = Object.keys(categories).sort((a, b) => counts[b] - counts[a]);
+
+    grid.innerHTML = order.map(key => {
+      const info = categories[key];
+      const n = counts[key];
+      const share = Math.round((n / total) * 100);
+      return `
+        <button class="plan-tile" type="button" data-plan="${key}" aria-pressed="${activeCategories.has(key)}" style="--tile:${info.color}">
+          <b>${n.toLocaleString()}</b>
+          <span>${escapeHTML(info.label)} · ${share}%</span>
+          <span class="plan-bar"><i style="width:${Math.max(2, share)}%"></i></span>
+        </button>`;
+    }).join('');
+
+    $$('[data-plan]', grid).forEach(tile => tile.addEventListener('click', () => {
+      const key = tile.dataset.plan;
+      const on = activeCategories.has(key);
+      activeCategories.clear();
+      if (!on) activeCategories.add(key);
+      landmarksOnly = false;
+      withPhotoOnly = false;
+      $$('[data-filter-category], [data-filter-weight], [data-filter-photo]')
+        .forEach(button => button.setAttribute('aria-pressed', String(!on && button.dataset.filterCategory === key)));
+      setView('timeline');
+      renderTimeline();
+    }));
+
+    const foot = $('#plan-foot');
+    if (foot) {
+      const busiest = order[0];
+      foot.textContent = entries.length
+        ? `${counts[busiest].toLocaleString()} of ${entries.length.toLocaleString()} moments sit in ${categories[busiest].label.toLowerCase()}. Click a tile to read them.`
+        : 'Nothing in the plan yet — save a moment and the districts will fill in.';
+    }
   }
 
   /* A building in the 3D city was clicked: open that district in the

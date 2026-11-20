@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.37.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.38.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -65,6 +65,7 @@ What is left of the quick-win tier:
 | # | What | Why it matters | Where | Effort |
 |---|---|---|---|---|
 | 2.11 | **CI: link check, HTML validation, size budget.** A GitHub Action that fails on a broken relative link, invalid HTML, or an app shell over 200 KB. | Cheap, and it catches exactly the class of mistake this project makes — a path that only works on one host. | `.github/workflows/` | M |
+| 4.6 | **A plan of the city** — six district tiles with counts, shares and a click into the timeline. The map the 3D town implies, written down. | `app/app.js` |
 | 6.2 | **The 3D city is explorable** — hover to identify, click to open the district in the timeline, drag to pan, scroll to zoom, camera fits the archive. Four pointer faults fixed. | `app/scene3d.js` |
 | 2.19 | **The size budget measures gzip** — the number a visitor actually waits for, with a raw ceiling as a sanity check. Shell 64.0 of 75 KB. | `tools/check-size.mjs` |
 | 2.18 | **Auto day** — the scene follows the clock (dawn/day/dusk/night), re-checked every five minutes; any manual press clears it. | `app/app.js` |
