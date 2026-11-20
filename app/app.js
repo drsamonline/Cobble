@@ -308,6 +308,7 @@
         entries = [];
         personalEntries = [];
         databaseReady = true;
+        markArchiveReady();
         showLockScreen();
         return;
       }

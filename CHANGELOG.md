@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.40.0 — 2026-11-20
+
+### Fixed
+
+- **A locked archive left the save queue waiting forever.** When the archive was sealed, `loadArchive()` showed the unlock screen and returned *before* resolving the readiness promise that every save waits on — so the first save after unlocking, or any save in a tab that had loaded sealed, sat in the queue and never ran. The promise is now resolved in that branch too. Found while attempting the third version of multiple cities, which is the only good thing that came out of it.
+
+### Attempted and reverted, a third time — multiple cities
+
+Third attempt, third revert. This one avoided in-memory races entirely: each city is a pair of records, switching writes the active id and **reloads the page**, so there is no in-flight save to land in the wrong archive. Creation, switching and deletion all worked, and isolation held — a moment added in one city stayed out of the other.
+
+It still failed on the way back. City A's record survived in IndexedDB but the page came up empty, and navigating to it from a sealed city hung. Three attempts have now found three different faults, which is the signal that this is a refactor and not a patch: `entries`, `personalEntries`, `lastPhotoKeys` and `activeCity` are module-level and every function reaches into them. It is not going back in until that changes, and `ENHANCEMENTS.md` says so.
+
 ## 1.39.0 — 2026-11-20
 
 ### Added
