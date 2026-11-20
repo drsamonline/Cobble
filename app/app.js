@@ -256,6 +256,31 @@
      removes every race the three attempts at live switching kept finding: there
      is only ever one archive being written. */
   const SNAPSHOT_PREFIX = 'snapshot:';
+  /* Which saved city the live archive belongs to. While this is set, every
+     save also updates that city in place, so editing a city you loaded keeps
+     it current instead of piling up "Before switching" copies. */
+  let activeSnapshot = null;
+  let activeSnapshotName = '';
+  let snapshotWriteTimer = null;
+
+  function bindCity(id, name) {
+    activeSnapshot = id || null;
+    activeSnapshotName = name || '';
+    const label = $('#city-shelf-name');
+    if (label) label.textContent = activeSnapshotName || 'Your cities';
+  }
+
+  function scheduleSnapshotWrite() {
+    if (!activeSnapshot) return;
+    clearTimeout(snapshotWriteTimer);
+    snapshotWriteTimer = setTimeout(() => {
+      if (!activeSnapshot) return;
+      const id = activeSnapshot;
+      const name = activeSnapshotName || 'Untitled';
+      const copy = entries.slice();
+      writeSnapshot(id, name, copy).catch(() => {});
+    }, 700);
+  }
 
   function listSnapshots() {
     return openDatabase().then(db => new Promise((resolve, reject) => {
@@ -351,9 +376,15 @@
     $$('[data-city-load]', grid).forEach(tile => tile.addEventListener('click', () => loadSnapshot(tile.dataset.cityLoad)));
   }
 
-  function openCityMap() {
+  async function openCityMap() {
     const modal = $('#city-map-modal');
     if (!modal) return;
+    /* flush any pending write for the city we are in, so its tile is current
+       the moment the map opens rather than 700ms later */
+    clearTimeout(snapshotWriteTimer);
+    if (activeSnapshot) {
+      try { await writeSnapshot(activeSnapshot, activeSnapshotName || 'Untitled', entries.slice()); } catch {}
+    }
     modal.classList.remove('hidden');
     renderCityMap();
     $('#close-city-map')?.focus();
@@ -368,7 +399,9 @@
     if (!name || !name.trim()) return;
     await saveQueue.catch(() => {});
     try {
-      await writeSnapshot(`s${Date.now().toString(36)}`, name.trim().slice(0, 40), entries);
+      const id = `s${Date.now().toString(36)}`;
+      await writeSnapshot(id, name.trim().slice(0, 40), entries);
+      bindCity(id, name.trim().slice(0, 40));
       await renderCityMap();
       toast(`Saved “${name.trim()}” — ${entries.length} ${entries.length === 1 ? 'moment' : 'moments'}.`);
     } catch {
@@ -390,9 +423,15 @@
         request.onsuccess = () => resolve(request.result?.value || {});
         request.onerror = () => reject(request.error);
       });
-      await writeSnapshot(`s${Date.now().toString(36)}`, 'Before switching', entries);
+      /* keep the city we are leaving current before we leave it */
+      if (activeSnapshot) {
+        await writeSnapshot(activeSnapshot, activeSnapshotName || 'Untitled', entries);
+      } else if (entries.length) {
+        await writeSnapshot(`s${Date.now().toString(36)}`, 'Before switching', entries);
+      }
       entries = Array.isArray(record.entries) ? record.entries : [];
       personalEntries = entries;
+      bindCity(id, target.name);
       save();
       render();
       await renderCityMap();
@@ -406,6 +445,7 @@
     if (!confirm('Delete this saved copy? The city you are in is not affected.')) return;
     try {
       await deleteSnapshot(id);
+      if (activeSnapshot === id) bindCity(null, '');
       await renderCityMap();
       toast('Copy deleted.');
     } catch {
@@ -528,6 +568,7 @@
    function save() {
     if (demoMode) return;
     personalEntries = entries;
+    scheduleSnapshotWrite();
     if (vaultSession) {
       /* Encrypt before anything touches the disk; the plaintext record is
          deleted in the same transaction. */

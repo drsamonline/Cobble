@@ -2,6 +2,20 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.47.0 — 2026-11-20
+
+### Changed
+
+- **A city you load stays yours to edit.** Until now every switch filed the city you left as a new *Before switching* copy, so the shelf filled with stale duplicates. Now loading a city **binds** the live archive to it: every save updates that city in place, and the sidebar button shows its name, so you always know which one you are in.
+- Opening the map flushes any pending write first, so a tile is current the moment you look at it rather than a debounce later.
+- Saving a copy adopts it — the copy you just made becomes the city you are in — and deleting the city you are in clears the binding.
+
+### What this is, and what it still is not
+
+Three cities now behave the way they should: load one, edit it, switch away, come back, and the edits are there while the others are untouched. Verified: *Kerala* bound at 1 moment, edited to 2, a second city *Goa* saved at 2, *Kerala* loaded back at 2, edited to 3 — and *Goa* stayed at 2.
+
+It is still **one live archive plus named copies**, not several archives open at once. That distinction only matters for one thing — a save landing in the wrong city — and the copy model makes it impossible by construction, which is why it survived where three attempts at live switching did not.
+
 ## 1.46.0 — 2026-11-20
 
 ### Added
@@ -15,6 +29,20 @@ All notable changes to Cobble. Dates are ISO 8601.
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.47.0 — 2026-11-20
+
+### Changed
+
+- **A city you load stays yours to edit.** Until now every switch filed the city you left as a new *Before switching* copy, so the shelf filled with stale duplicates. Now loading a city **binds** the live archive to it: every save updates that city in place, and the sidebar button shows its name, so you always know which one you are in.
+- Opening the map flushes any pending write first, so a tile is current the moment you look at it rather than a debounce later.
+- Saving a copy adopts it — the copy you just made becomes the city you are in — and deleting the city you are in clears the binding.
+
+### What this is, and what it still is not
+
+Three cities now behave the way they should: load one, edit it, switch away, come back, and the edits are there while the others are untouched. Verified: *Kerala* bound at 1 moment, edited to 2, a second city *Goa* saved at 2, *Kerala* loaded back at 2, edited to 3 — and *Goa* stayed at 2.
+
+It is still **one live archive plus named copies**, not several archives open at once. That distinction only matters for one thing — a save landing in the wrong city — and the copy model makes it impossible by construction, which is why it survived where three attempts at live switching did not.
+
 ## 1.46.0 — 2026-11-20
 
 ### Added
@@ -27,6 +55,20 @@ All notable changes to Cobble. Dates are ISO 8601.
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.47.0 — 2026-11-20
+
+### Changed
+
+- **A city you load stays yours to edit.** Until now every switch filed the city you left as a new *Before switching* copy, so the shelf filled with stale duplicates. Now loading a city **binds** the live archive to it: every save updates that city in place, and the sidebar button shows its name, so you always know which one you are in.
+- Opening the map flushes any pending write first, so a tile is current the moment you look at it rather than a debounce later.
+- Saving a copy adopts it — the copy you just made becomes the city you are in — and deleting the city you are in clears the binding.
+
+### What this is, and what it still is not
+
+Three cities now behave the way they should: load one, edit it, switch away, come back, and the edits are there while the others are untouched. Verified: *Kerala* bound at 1 moment, edited to 2, a second city *Goa* saved at 2, *Kerala* loaded back at 2, edited to 3 — and *Goa* stayed at 2.
+
+It is still **one live archive plus named copies**, not several archives open at once. That distinction only matters for one thing — a save landing in the wrong city — and the copy model makes it impossible by construction, which is why it survived where three attempts at live switching did not.
 
 ## 1.46.0 — 2026-11-20
 
