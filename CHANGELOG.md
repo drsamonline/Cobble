@@ -2,6 +2,20 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.49.0 — 2026-11-20
+
+### Fixed
+
+- **The map showed the city you are in twice.** With a saved city loaded, the grid drew a *This city* tile *and* that city's own tile — the same archive under two names, which reads as two different places and makes you doubt the counts. Now the tile you are in carries the *you are here* line, and the separate tile only appears when the archive is not bound to any saved city.
+
+### Changed
+
+- The map's own sentence now matches the behaviour since 1.47.0: *"Click one to load it — the city you are in keeps every change you have made to it."* It still said the old thing about saving first, which is what happens only when the archive is unsaved.
+
+### Verified
+
+- Built three cities through the interface and read the map back: two tiles, *Goa* marked *you are here* with `aria-current`, *Kerala* plain — no duplicate. Before any copy exists, the single *This city* tile still appears.
+
 ## 1.48.0 — 2026-11-20
 
 ### Added
@@ -41,6 +55,20 @@ It is still **one live archive plus named copies**, not several archives open at
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.49.0 — 2026-11-20
+
+### Fixed
+
+- **The map showed the city you are in twice.** With a saved city loaded, the grid drew a *This city* tile *and* that city's own tile — the same archive under two names, which reads as two different places and makes you doubt the counts. Now the tile you are in carries the *you are here* line, and the separate tile only appears when the archive is not bound to any saved city.
+
+### Changed
+
+- The map's own sentence now matches the behaviour since 1.47.0: *"Click one to load it — the city you are in keeps every change you have made to it."* It still said the old thing about saving first, which is what happens only when the archive is unsaved.
+
+### Verified
+
+- Built three cities through the interface and read the map back: two tiles, *Goa* marked *you are here* with `aria-current`, *Kerala* plain — no duplicate. Before any copy exists, the single *This city* tile still appears.
+
 ## 1.48.0 — 2026-11-20
 
 ### Added
@@ -79,6 +107,20 @@ It is still **one live archive plus named copies**, not several archives open at
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.49.0 — 2026-11-20
+
+### Fixed
+
+- **The map showed the city you are in twice.** With a saved city loaded, the grid drew a *This city* tile *and* that city's own tile — the same archive under two names, which reads as two different places and makes you doubt the counts. Now the tile you are in carries the *you are here* line, and the separate tile only appears when the archive is not bound to any saved city.
+
+### Changed
+
+- The map's own sentence now matches the behaviour since 1.47.0: *"Click one to load it — the city you are in keeps every change you have made to it."* It still said the old thing about saving first, which is what happens only when the archive is unsaved.
+
+### Verified
+
+- Built three cities through the interface and read the map back: two tiles, *Goa* marked *you are here* with `aria-current`, *Kerala* plain — no duplicate. Before any copy exists, the single *This city* tile still appears.
 
 ## 1.48.0 — 2026-11-20
 

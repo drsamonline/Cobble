@@ -366,21 +366,26 @@
     let snapshots = [];
     try { snapshots = await listSnapshots(); } catch {}
 
-    const here = `
+    /* When the live archive belongs to a saved city, that city's tile is the
+       one you are in — a separate "This city" tile beside it would show the
+       same archive twice and read as two different places. */
+    const bound = snapshots.some(snap => snap.id === activeSnapshot);
+    const here = bound ? '' : `
       <button class="city-tile" type="button" aria-current="true" data-city-here="1">
         <div class="city-tile-sky">${skylineBars(countByCategory(entries))}</div>
         <div class="city-tile-body">
           <span class="city-tile-here">YOU ARE HERE</span>
-          <span class="city-tile-name">This city</span>
+          <span class="city-tile-name">${escapeHTML(activeSnapshotName || 'This city')}</span>
           <span class="city-tile-meta">${entries.length} ${entries.length === 1 ? 'moment' : 'moments'}</span>
         </div>
       </button>`;
 
     const tiles = snapshots.map(snap => `
       <div class="city-tile-wrap">
-        <button class="city-tile" type="button" data-city-load="${escapeHTML(snap.id)}">
+        <button class="city-tile" type="button" data-city-load="${escapeHTML(snap.id)}"${snap.id === activeSnapshot ? ' aria-current="true"' : ''}>
           <div class="city-tile-sky">${skylineBars(snap.counts || {})}</div>
           <div class="city-tile-body">
+            ${snap.id === activeSnapshot ? '<span class="city-tile-here">YOU ARE HERE</span>' : ''}
             <span class="city-tile-name">${escapeHTML(snap.name)}</span>
             <span class="city-tile-meta">${snap.count} ${snap.count === 1 ? 'moment' : 'moments'} · saved ${escapeHTML((snap.savedAt || '').slice(0, 10))}</span>
           </div>
