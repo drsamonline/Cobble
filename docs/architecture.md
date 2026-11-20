@@ -22,19 +22,23 @@ cobble/
 │   ├── landing.js        the skyline, the grow demo, day/night, copy button
 │   └── upi-qr.svg
 ├── app/
-│   ├── index.html        the whole app: sidebar, three views, four overlays
-│   ├── theme.css         the design tokens (17 variables)
-│   ├── styles.css        ~2,600 lines: layout, the city, the panels
-│   ├── core.js           the share format, key derivation and import validator — no DOM
-│   ├── app.js            ~950 lines: state, storage, render, wiring
-│   └── vendor/           jszip 3.10.1, unmodified
+│   ├── index.html        the whole app: sidebar, three views, eight overlays
+│   ├── theme.css         the design tokens
+│   ├── styles.css        layout, the illustrated city, the panels
+│   ├── core.js           no DOM: share format, vault crypto, merge rule, foreign-journal parser
+│   ├── app.js            state, storage, render, wiring
+│   ├── scene3d.js        the 3D town — loaded only when WebGL is present
+│   ├── ambience.js       wind, rain and birds, synthesised on request
+│   ├── i18n.js           the three dictionaries and the sentence templates
+│   └── vendor/           jszip 3.10.1 and three r128, unmodified
 ├── fonts/                Manrope, DM Sans, IBM Plex Mono — woff2, latin subset
 ├── icons/               192, 512, maskable, apple-touch
 ├── docs/                 these guides
-├── screenshots/          real renders of this repository — WebP, 502 KB for all fourteen
-├── tests/                core.test.mjs — 24 tests, node --test
-├── tools/                check-links.mjs, check-size.mjs
-├── .github/workflows/    check.yml — links, size budget, script syntax
+├── packaging/            Tauri desktop and Capacitor Android wrappers (authored, not built)
+├── screenshots/          real renders of this repository — WebP
+├── tests/                core.test.mjs — 37 tests, node --test
+├── tools/                check-links.mjs, check-size.mjs, check-version.mjs, browser-check.mjs
+├── .github/workflows/    check.yml (links, size, version, unit, browser), package.yml (dispatch only)
 ├── README.md
 ├── ENHANCEMENTS.md
 ├── CHANGELOG.md
@@ -98,13 +102,21 @@ init()
 
 `render()` is synchronous and idempotent. Panning calls `renderCityScenes()` directly rather than `render()`, so moving through districts does not rebuild the timeline or the achievements.
 
-## The optional 3D layer
+## The three modules beside `app.js`
 
-- if the script fails, or WebGL is missing, it returns silently and the CSS city stays;
-- if it succeeds, it appends a canvas over the illustrated city and draws a low-poly neighbourhood from the same category counts;
-- it exposes `window.cobbleCity3D.setPan()` and `.setAtmosphere()`, which `app.js` calls only if the object exists.
+Each is loaded with `defer` and each can fail without taking the app down with it.
 
-Nothing else in the app depends on it. Deleting the file and its `<script>` tag leaves a complete, working app.
+- **`scene3d.js` — the 3D town.** Three.js is fetched only when the browser has WebGL and the visitor has not turned the 3D view off. Every building, roof, window, tree, person, fish and mountain is an `InstancedMesh`, so the whole town costs a few dozen draw calls instead of a few thousand. It owns its own camera (an orthographic frustum fitted to the town), its own pointer handling (drag to pan, wheel to zoom, click to open a district) and its own quality dial (pixel ratio stepped by frame time). If anything in it throws, the illustrated city underneath is what the visitor sees.
+- **`ambience.js` — wind, rain and birds** from one brown-noise buffer and two oscillators. Off until asked, because a page that makes noise on arrival is a page people close. It listens for `cobble-night` and lowers itself after dark.
+- **`i18n.js` — three dictionaries**, a `t()` for words, a `say()` for sentences with numbers in them, and the `cobble-lang` event other modules repaint on. Elements opt in with `data-i18n`; a missing key leaves the English in place rather than blanking the element.
+
+Nothing else in the app depends on any of them. Deleting a file and its `<script>` tag leaves a complete, working app.
+
+## Saved cities
+
+There is one live archive at a time. *Your cities* is a shelf of named snapshots in the same object store (`snapshot:<id>`), each holding entries plus the district counts its tile's skyline is drawn from. Loading one writes the current archive back to its own snapshot, swaps the entries in, and binds the live archive to the city you loaded — the binding is a localStorage record, so a reload keeps you there and the next save updates that city rather than filing another copy.
+
+Three earlier attempts at running several live archives side by side are written up in `ENHANCEMENTS.md`. This is the shape that does not mix them.
 
 ## The landing page
 
@@ -129,7 +141,7 @@ Both pages share the same palette values, copied deliberately rather than import
 
 ## The core, and why it is separate
 
-`app/core.js` is the only file with a boundary drawn around it: `deriveKey`, `encryptEntries`, `decryptBundle` and `normaliseEntry`. Everything else in the app is a render function with a DOM dependency. Keeping the data-touching code DOM-free means `tests/core.test.mjs` can run the real functions under `node --test` — Node 20 exposes the same Web Crypto — instead of a reimplementation that could drift.
+`app/core.js` is the only file with a boundary drawn around it: `deriveKey`, `encryptEntries`, `decryptBundle`, `normaliseEntry`, `mergeEntries`, `parseForeignJournal`, `encryptVault`, `decryptVault` and the two `…WithKey` variants that reuse a derived key across saves. Everything else in the app is a render function with a DOM dependency. Keeping the data-touching code DOM-free means `tests/core.test.mjs` can run the real functions under `node --test` — Node 20 exposes the same Web Crypto — instead of a reimplementation that could drift.
 
 `core.js` assigns `globalThis.CobbleCore` and also `module.exports` when it is loaded as CommonJS, which is how the tests reach it. It is loaded before `app.js` in `index.html` and is in the service worker's precache list.
 

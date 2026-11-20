@@ -69,3 +69,9 @@ Personal, academic, hobby, charitable and government use are free under the [Pol
 **Who made this?**
 
 Dr Sohil Momin, a homeopathic physician in India who writes offline-first software in the gaps between clinics. More at [drsamonline.github.io](https://drsamonline.github.io/).
+
+## Can I keep more than one city?
+
+Yes — *Your cities* in the sidebar. Save a copy, give it a name, and it appears as a tile with its own skyline. Clicking a tile loads that city and it stays yours to edit: every save updates it in place, and the sidebar shows which one you are in, including after a reload.
+
+What it is not is several archives running side by side. There is always one live archive and a shelf of named copies, which is why loading one can never mix two cities together.

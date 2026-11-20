@@ -6,7 +6,7 @@ Each entry says **what**, **why it matters**, **where** it lands, and **how long
 
 - **Repo:** <https://github.com/drsamonline/Cobble>
 - **App:** <https://drsamonline.github.io/Cobble/app/>
-- **Baseline:** v1.53.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
+- **Baseline:** v1.54.0 — offline, installable, editable, searchable, keyboard-first, 24 tests, three CI checks, and a privacy notice that names its evidence.
 
 ---
 
@@ -77,6 +77,7 @@ What is left of the quick-win tier:
 | 4.1a | **The landing page in Hindi** — `hi.html`, hand-written, switcher in both headers, `hreflang` alternates, precached. Awaiting native review. | `hi.html`, `index.html` |
 | 2.20 | **axe and a language assertion on the translated pages** — three documents, three passes; found the logo's English accessible name on the Hindi and Gujarati pages. | `tools/browser-check.mjs` |
 | 4.4 | **Desktop and Android wrappers** — Tauri 2 and Capacitor 6 pointing at the same `app/`, a workflow on dispatch, an icon, and a CSP with no `connect-src` beyond self. **Authored, not built**: no Rust, SDK or Windows runner here. | `packaging/` |
+| 5.2 | **The guides caught up** — architecture (three modules, saved cities, current tree), data model (snapshots, binding), FAQ (more than one city). | `docs/` |
 | 5.1 | **The landing page caught up** — two new screenshots and a section for the vault, journal import, clock, sound and the three languages, in all three languages. | `index.html`, `hi.html`, `gu.html` |
 | 6.5 | **The scene sets its own quality** — pixel ratio steps down under load and back up when frames are fast; the down direction is verified, the up direction is not, because this machine never renders fast enough. | `app/scene3d.js` |
 | 6.4 | **The scene is instanced** — 4,089 draw calls at 1,200 moments became 75; frame rate unchanged on software rendering, which is stated rather than glossed. | `app/scene3d.js` |
@@ -85,6 +86,7 @@ What is left of the quick-win tier:
 | 3.7d | **Rename, delete, and a binding that survives a reload — shipped in 1.48.0.** | `app/app.js` |
 | 3.7c | **A loaded city stays live — shipped in 1.47.0.** The live archive binds to the city you loaded; saves update it in place, the sidebar names it, and the map flushes pending writes before opening. | `app/app.js` |
 | 3.7b | **A map of your cities — shipped in 1.46.0.** Tiles with a miniature skyline drawn from each city's district counts, *you are here* on the current one, click to load. | `app/app.js` |
+| 5.2 | **The guides caught up** — architecture (three modules, saved cities, current tree), data model (snapshots, binding), FAQ (more than one city). | `docs/` |
 | 5.1 | **The landing page caught up** — two new screenshots and a section for the vault, journal import, clock, sound and the three languages, in all three languages. | `index.html`, `hi.html`, `gu.html` |
 | 6.5 | **The scene sets its own quality** — pixel ratio steps down under load and back up when frames are fast; the down direction is verified, the up direction is not, because this machine never renders fast enough. | `app/scene3d.js` |
 | 6.4 | **The scene is instanced** — 4,089 draw calls at 1,200 moments became 75; frame rate unchanged on software rendering, which is stated rather than glossed. | `app/scene3d.js` |
@@ -93,6 +95,7 @@ What is left of the quick-win tier:
 | 3.7d | **Rename, delete, and a binding that survives a reload — shipped in 1.48.0.** | `app/app.js` |
 | 3.7c | **A loaded city stays live — shipped in 1.47.0.** The live archive binds to the city you loaded; saves update it in place, the sidebar names it, and the map flushes pending writes before opening. | `app/app.js` |
 | 3.7b | **A map of your cities — shipped in 1.46.0.** Tiles with a miniature skyline drawn from each city's district counts, *you are here* on the current one, click to load. | `app/app.js` |
+| 5.2 | **The guides caught up** — architecture (three modules, saved cities, current tree), data model (snapshots, binding), FAQ (more than one city). | `docs/` |
 | 5.1 | **The landing page caught up** — two new screenshots and a section for the vault, journal import, clock, sound and the three languages, in all three languages. | `index.html`, `hi.html`, `gu.html` |
 | 6.5 | **The scene sets its own quality** — pixel ratio steps down under load and back up when frames are fast; the down direction is verified, the up direction is not, because this machine never renders fast enough. | `app/scene3d.js` |
 | 6.4 | **The scene is instanced** — 4,089 draw calls at 1,200 moments became 75; frame rate unchanged on software rendering, which is stated rather than glossed. | `app/scene3d.js` |

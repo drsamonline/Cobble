@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.54.0 — 2026-11-21
+
+### Changed
+
+- **The guides caught up too.** `docs/architecture.md` still described a `core.js` with four functions, an app with "four overlays", a `tools/` folder with two checks, 24 tests, and a 3D layer that appended a canvas and exposed `cobbleCity3D`. All of that stopped being true somewhere around v1.20–v1.45. It now documents the file tree as it is, the three modules beside `app.js` (`scene3d`, `ambience`, `i18n`) with what each owns and how each fails, and **saved cities** — one live archive plus a shelf of snapshots, and why that shape exists.
+- `docs/data-model.md` gains the `snapshot:<id>` record and the `cobble-active-snapshot` binding.
+- `docs/faq.md` gains *"Can I keep more than one city?"* — the question the feature exists to answer, including what it is not.
+
+### Why this matters more than it sounds
+
+Documentation that describes an older program is worse than no documentation: it teaches a reader to look for functions that no longer exist and to trust an architecture that has moved. The repository's own `AGENTS.md` says the docs are part of the contract, so leaving them a year behind is a bug of the same kind as a broken link — which the link checker would have caught, and this it could not.
+
 ## 1.53.0 — 2026-11-21
 
 ### Changed
@@ -121,6 +133,18 @@ It is still **one live archive plus named copies**, not several archives open at
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.54.0 — 2026-11-21
+
+### Changed
+
+- **The guides caught up too.** `docs/architecture.md` still described a `core.js` with four functions, an app with "four overlays", a `tools/` folder with two checks, 24 tests, and a 3D layer that appended a canvas and exposed `cobbleCity3D`. All of that stopped being true somewhere around v1.20–v1.45. It now documents the file tree as it is, the three modules beside `app.js` (`scene3d`, `ambience`, `i18n`) with what each owns and how each fails, and **saved cities** — one live archive plus a shelf of snapshots, and why that shape exists.
+- `docs/data-model.md` gains the `snapshot:<id>` record and the `cobble-active-snapshot` binding.
+- `docs/faq.md` gains *"Can I keep more than one city?"* — the question the feature exists to answer, including what it is not.
+
+### Why this matters more than it sounds
+
+Documentation that describes an older program is worse than no documentation: it teaches a reader to look for functions that no longer exist and to trust an architecture that has moved. The repository's own `AGENTS.md` says the docs are part of the contract, so leaving them a year behind is a bug of the same kind as a broken link — which the link checker would have caught, and this it could not.
+
 ## 1.53.0 — 2026-11-21
 
 ### Changed
@@ -239,6 +263,18 @@ It is still **one live archive plus named copies**, not several archives open at
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.54.0 — 2026-11-21
+
+### Changed
+
+- **The guides caught up too.** `docs/architecture.md` still described a `core.js` with four functions, an app with "four overlays", a `tools/` folder with two checks, 24 tests, and a 3D layer that appended a canvas and exposed `cobbleCity3D`. All of that stopped being true somewhere around v1.20–v1.45. It now documents the file tree as it is, the three modules beside `app.js` (`scene3d`, `ambience`, `i18n`) with what each owns and how each fails, and **saved cities** — one live archive plus a shelf of snapshots, and why that shape exists.
+- `docs/data-model.md` gains the `snapshot:<id>` record and the `cobble-active-snapshot` binding.
+- `docs/faq.md` gains *"Can I keep more than one city?"* — the question the feature exists to answer, including what it is not.
+
+### Why this matters more than it sounds
+
+Documentation that describes an older program is worse than no documentation: it teaches a reader to look for functions that no longer exist and to trust an architecture that has moved. The repository's own `AGENTS.md` says the docs are part of the contract, so leaving them a year behind is a bug of the same kind as a broken link — which the link checker would have caught, and this it could not.
 
 ## 1.53.0 — 2026-11-21
 

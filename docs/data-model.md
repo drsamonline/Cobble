@@ -32,6 +32,24 @@ Import never overwrites. A moment is skipped when the incoming id **and** its co
 
 In memory, a photo is a `photo` field on the moment. On disk it is not: the `moments` record holds the text with `photo: ''`, and a second record, `photos`, maps moment id to data URL. The two are re-joined when the archive loads, and the `photos` record is only rewritten when the set of photos changes. Exports and imports still carry photos inside each moment, because a file has to be self-contained.
 
+## Saved cities
+
+A named copy of the whole archive is a record of its own in the same object store:
+
+```js
+{
+  id: 'snapshot:<id>',
+  value: {
+    name: 'Kerala',
+    savedAt: '2026-11-20T18:12:00.000Z',
+    entries: [...],       // the same moment shape as the live archive
+    counts: { everyday: 12, people: 3, ... }   // what the map tile's skyline is drawn from
+  }
+}
+```
+
+Which city the live archive belongs to is a separate localStorage record, `cobble-active-snapshot`, holding `{ id, name }`. It is the only thing that has to survive a reload for the shelf to behave like a set of cities rather than a pile of copies.
+
 ## The vault
 
 When the archive is locked, the `moments` record is deleted and one `vault` record takes its place:
