@@ -2,6 +2,17 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.50.0 — 2026-11-20
+
+### Added
+
+- **The browser check now guards saved cities**, because the map once drew the current city twice and every test passed while it did. Four new assertions: a saved copy becomes the city you are in, the map shows **one** current tile rather than two, adding a moment updates that city (read as a count before and after, not a fixed number), and the binding is written down for the next visit.
+
+### Notes on the check
+
+- The reload itself is not asserted here: at this point in the run the service worker is mid-install and the navigation hangs the harness — a check that hangs is worse than one that tests the mechanism. The reload path is covered by `test-cities3.js`, which drives it directly and passes.
+- The count assertion compares before and after rather than expecting a number: the smoke test's own moments are in the archive by then, so a hard-coded count is a test that breaks when an earlier step changes.
+
 ## 1.49.0 — 2026-11-20
 
 ### Fixed
@@ -55,6 +66,17 @@ It is still **one live archive plus named copies**, not several archives open at
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.50.0 — 2026-11-20
+
+### Added
+
+- **The browser check now guards saved cities**, because the map once drew the current city twice and every test passed while it did. Four new assertions: a saved copy becomes the city you are in, the map shows **one** current tile rather than two, adding a moment updates that city (read as a count before and after, not a fixed number), and the binding is written down for the next visit.
+
+### Notes on the check
+
+- The reload itself is not asserted here: at this point in the run the service worker is mid-install and the navigation hangs the harness — a check that hangs is worse than one that tests the mechanism. The reload path is covered by `test-cities3.js`, which drives it directly and passes.
+- The count assertion compares before and after rather than expecting a number: the smoke test's own moments are in the archive by then, so a hard-coded count is a test that breaks when an earlier step changes.
+
 ## 1.49.0 — 2026-11-20
 
 ### Fixed
@@ -107,6 +129,17 @@ It is still **one live archive plus named copies**, not several archives open at
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.50.0 — 2026-11-20
+
+### Added
+
+- **The browser check now guards saved cities**, because the map once drew the current city twice and every test passed while it did. Four new assertions: a saved copy becomes the city you are in, the map shows **one** current tile rather than two, adding a moment updates that city (read as a count before and after, not a fixed number), and the binding is written down for the next visit.
+
+### Notes on the check
+
+- The reload itself is not asserted here: at this point in the run the service worker is mid-install and the navigation hangs the harness — a check that hangs is worse than one that tests the mechanism. The reload path is covered by `test-cities3.js`, which drives it directly and passes.
+- The count assertion compares before and after rather than expecting a number: the smoke test's own moments are in the archive by then, so a hard-coded count is a test that breaks when an earlier step changes.
 
 ## 1.49.0 — 2026-11-20
 

@@ -239,6 +239,67 @@ const main = async () => {
   await page.click('#filter-reset');
   await wait(400);
 
+  /* ── saved cities ─────────────────────────────────────────────────
+     Save a copy, check the map marks it as the one you are in, add a moment
+     and check the copy followed, then reload and check the binding survived.
+     This exists because the map once drew the current city twice and no test
+     noticed — the screenshot did. */
+  page.on('dialog', async dialog => {
+    try { await dialog.accept(dialog.type() === 'prompt' ? 'Test city' : undefined); } catch {}
+  });
+  const openMap = async () => {
+    await page.evaluate(() => document.getElementById('open-city-menu')?.click());
+    await wait(900);
+  };
+  const tiles = () => page.evaluate(() => Array.from(document.querySelectorAll('.city-tile')).map(tile => ({
+    name: tile.querySelector('.city-tile-name')?.textContent?.trim(),
+    here: tile.getAttribute('aria-current') === 'true',
+    meta: tile.querySelector('.city-tile-meta')?.textContent?.trim()
+  })));
+
+  await openMap();
+  await page.evaluate(() => document.getElementById('save-city')?.click());
+  await wait(1800);
+  await page.evaluate(() => document.getElementById('close-city-map-button')?.click());
+  await wait(500);
+
+  const boundLabel = await page.evaluate(() => document.getElementById('city-shelf-name')?.textContent?.trim());
+  note(boundLabel === 'Test city', `a saved copy becomes the city you are in (${boundLabel})`);
+
+  await openMap();
+  const afterSave = await tiles();
+  note(afterSave.length === 1 && afterSave[0].here,
+    `the map shows one current tile, not two (${afterSave.map(t => t.name + (t.here ? '*' : '')).join(', ')})`);
+
+  await page.evaluate(() => document.getElementById('close-city-map-button')?.click());
+  await wait(400);
+  const countOf = meta => Number((String(meta || '').match(/([\d,]+) moment/) || [])[1]?.replace(/,/g, '') || 0);
+  const before = countOf(afterSave[0]?.meta);
+  await page.evaluate(() => {
+    document.getElementById('add-entry')?.click();
+    document.getElementById('entry-text').value = 'A moment added while bound.';
+    document.querySelector('#entry-form .save-button')?.click();
+  });
+  await wait(2000);
+  await openMap();
+  const afterEdit = await tiles();
+  const after = countOf(afterEdit[0]?.meta);
+  note(after === before + 1,
+    `the bound city keeps the new moment (${before} → ${after})`);
+  await page.evaluate(() => document.getElementById('close-city-map-button')?.click());
+  await wait(400);
+
+  /* The binding is what survives a reload, and it is a localStorage record, so
+     assert the record rather than navigating: a reload at this point hangs the
+     harness (the worker is mid-install), and a check that hangs is worse than a
+     check that tests the mechanism. The full reload path is covered by
+     test-cities3.js, which drives it directly. */
+  const storedBind = await page.evaluate(() => {
+    try { return JSON.parse(localStorage.getItem('cobble-active-snapshot') || 'null'); } catch { return null; }
+  });
+  note(storedBind && storedBind.name === 'Test city',
+    `the binding is written down for the next visit (${storedBind && storedBind.name})`);
+
   /* offline: the worker should serve the shell with the network off.
      A freshly installed worker does not control the page that installed it, so
      load once more and wait to be controlled before pulling the plug — the
