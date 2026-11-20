@@ -249,6 +249,118 @@
     }));
   }
 
+  /* ── saved cities ──────────────────────────────────────────────────
+     Not a live switch between archives — a shelf of named copies. The city you
+     are in stays the only live one; a copy is written beside it and loading a
+     copy replaces the live archive after saving the current one first. That
+     removes every race the three attempts at live switching kept finding: there
+     is only ever one archive being written. */
+  const SNAPSHOT_PREFIX = 'snapshot:';
+
+  function listSnapshots() {
+    return openDatabase().then(db => new Promise((resolve, reject) => {
+      const request = db.transaction('archive', 'readonly').objectStore('archive').getAllKeys();
+      request.onsuccess = () => resolve(request.result.filter(key => String(key).startsWith(SNAPSHOT_PREFIX)));
+      request.onerror = () => reject(request.error);
+    })).then(keys => Promise.all(keys.map(key => new Promise((resolve, reject) => {
+      const db = databasePromise;
+      db.then(database => {
+        const request = database.transaction('archive', 'readonly').objectStore('archive').get(key);
+        request.onsuccess = () => {
+          const value = request.result?.value || {};
+          resolve({ id: String(key).slice(SNAPSHOT_PREFIX.length), name: value.name || 'Untitled', savedAt: value.savedAt || '', count: (value.entries || []).length });
+        };
+        request.onerror = () => reject(request.error);
+      }).catch(reject);
+    }))));
+  }
+
+  function writeSnapshot(id, name, list) {
+    return openDatabase().then(db => new Promise((resolve, reject) => {
+      const transaction = db.transaction('archive', 'readwrite');
+      transaction.objectStore('archive').put({
+        id: `${SNAPSHOT_PREFIX}${id}`,
+        value: { name, savedAt: new Date().toISOString(), entries: list }
+      });
+      transaction.oncomplete = resolve;
+      transaction.onerror = () => reject(transaction.error);
+    }));
+  }
+
+  function deleteSnapshot(id) {
+    return openDatabase().then(db => new Promise((resolve, reject) => {
+      const transaction = db.transaction('archive', 'readwrite');
+      transaction.objectStore('archive').delete(`${SNAPSHOT_PREFIX}${id}`);
+      transaction.oncomplete = resolve;
+      transaction.onerror = () => reject(transaction.error);
+    }));
+  }
+
+  async function renderSnapshotMenu() {
+    const list = $('#city-list');
+    if (!list) return;
+    let snapshots = [];
+    try { snapshots = await listSnapshots(); } catch {}
+    list.innerHTML = snapshots.length ? snapshots.map(snap => `
+      <div class="city-row">
+        <button class="city-load" type="button" data-snap-load="${escapeHTML(snap.id)}">
+          <span>${escapeHTML(snap.name)}</span><small>${snap.count} ${snap.count === 1 ? 'moment' : 'moments'}</small>
+        </button>
+        <button class="city-remove" type="button" data-snap-delete="${escapeHTML(snap.id)}" aria-label="Delete ${escapeHTML(snap.name)}">×</button>
+      </div>`).join('') : '<p class="city-empty">No saved cities yet. “Save a copy” puts this one on the shelf.</p>';
+    $$('[data-snap-load]', list).forEach(button => button.addEventListener('click', () => loadSnapshot(button.dataset.snapLoad)));
+    $$('[data-snap-delete]', list).forEach(button => button.addEventListener('click', () => removeSnapshot(button.dataset.snapDelete)));
+  }
+
+  async function saveSnapshot() {
+    const name = prompt('Name this copy. The city you are in stays where it is — this puts a copy on the shelf.');
+    if (!name || !name.trim()) return;
+    await saveQueue.catch(() => {});
+    try {
+      await writeSnapshot(`s${Date.now().toString(36)}`, name.trim().slice(0, 40), entries);
+      await renderSnapshotMenu();
+      toast(`Saved “${name.trim()}” — ${entries.length} ${entries.length === 1 ? 'moment' : 'moments'}.`);
+    } catch {
+      toast('Could not save that copy.');
+    }
+  }
+
+  async function loadSnapshot(id) {
+    if (!confirm('Load this city? The one you are in is saved to the shelf first, so nothing is lost.')) return;
+    try {
+      const snapshots = await listSnapshots();
+      const target = snapshots.find(snap => snap.id === id);
+      if (!target) return;
+      await saveQueue.catch(() => {});
+      const db = await openDatabase();
+      const record = await new Promise((resolve, reject) => {
+        const request = db.transaction('archive', 'readonly').objectStore('archive').get(`${SNAPSHOT_PREFIX}${id}`);
+        request.onsuccess = () => resolve(request.result?.value || {});
+        request.onerror = () => reject(request.error);
+      });
+      await writeSnapshot(`s${Date.now().toString(36)}`, 'Before switching', entries);
+      entries = Array.isArray(record.entries) ? record.entries : [];
+      personalEntries = entries;
+      save();
+      render();
+      await renderSnapshotMenu();
+      toast(`Now showing “${target.name}”.`);
+    } catch {
+      toast('Could not load that city.');
+    }
+  }
+
+  async function removeSnapshot(id) {
+    if (!confirm('Delete this saved copy? The city you are in is not affected.')) return;
+    try {
+      await deleteSnapshot(id);
+      await renderSnapshotMenu();
+      toast('Copy deleted.');
+    } catch {
+      toast('Could not delete that copy.');
+    }
+  }
+
   /* Photos live in their own record so the moments record stays small. Every
      save used to rewrite every photo's bytes inside one JSON string; now the
      entries are written as text and the photo map is only rewritten when the
@@ -1691,6 +1803,15 @@
     });
     $$('.nav-item[data-view]').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
     $$('[data-view-link]').forEach(button => button.addEventListener('click', () => setView(button.dataset.viewLink)));
+    $('#save-city')?.addEventListener('click', saveSnapshot);
+    $('#open-city-menu')?.addEventListener('click', () => {
+      const panel = $('#city-shelf');
+      if (!panel) return;
+      const open = panel.classList.contains('hidden');
+      panel.classList.toggle('hidden', !open);
+      $('#open-city-menu')?.setAttribute('aria-expanded', String(open));
+      if (open) renderSnapshotMenu();
+    });
     $('#add-entry').addEventListener('click', openEntry);
     $('#add-entry-timeline').addEventListener('click', openEntry);
     const queryInput = $('#timeline-query');

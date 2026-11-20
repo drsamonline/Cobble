@@ -2,6 +2,22 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.42.0 — 2026-11-20
+
+### Added
+
+- **Saved cities — a shelf of named copies.** *Saved cities* in the sidebar keeps named snapshots of the whole archive beside the live one. *Save a copy of this city* names the current archive; the shelf lists every copy with its moment count; loading one replaces the live city **after saving the current one as "Before switching"**, so a load can never lose anything. Copies can be deleted individually.
+
+### Why copies, not a live switch
+
+Three attempts at switching between live archives (1.30.0, 1.34.0, 1.40.0) each found a different way to mix two cities' moments. The common cause is that `entries`, `personalEntries`, `lastPhotoKeys` and `activeCity` are module-level and every function reaches into them, so a switch has to win a race against whatever is already in flight. Copies have no such race: there is only ever one live archive being written, and a copy is written beside it.
+
+This gives the thing people actually asked for — more than one city — without the failure mode. A true live switch still needs the refactor, and `ENHANCEMENTS.md` says so.
+
+### Verified
+
+- One moment saved, a copy named *Kerala*, a second moment added, then *Kerala* loaded: the live city returned to one moment with the first text and not the second, and the shelf had grown a *Before switching* copy holding both. Nothing lost, nothing mixed.
+
 ## 1.41.0 — 2026-11-20
 
 ### Added

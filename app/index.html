@@ -22,6 +22,15 @@
     <aside class="sidebar" aria-label="Your world">
       <a class="brand" href="../" aria-label="Cobble home"><span class="brand-mark"><span></span><span></span><span></span></span><span>cobble<span class="brand-period">.</span></span></a>
       <div class="side-label" data-i18n="nav.world">YOUR WORLD</div>
+      <div class="city-shelf-wrap">
+        <button class="city-shelf-button" id="open-city-menu" type="button" aria-expanded="false" aria-controls="city-shelf">
+          <span aria-hidden="true">◫</span> <span>Saved cities</span>
+        </button>
+        <div class="city-shelf hidden" id="city-shelf">
+          <div class="city-list" id="city-list"></div>
+          <button class="city-save" id="save-city" type="button">Save a copy of this city</button>
+        </div>
+      </div>
       <button class="nav-item active" data-view="city"><span class="nav-icon">⌂</span> <span data-i18n="nav.city">My city</span> <span class="nav-dot"></span></button>
       <button class="nav-item" data-view="timeline"><span class="nav-icon">◷</span> <span data-i18n="nav.timeline">Timeline</span></button>
       <button class="nav-item" data-view="insights"><span class="nav-icon">✳</span> <span data-i18n="nav.insights">Discoveries</span></button>

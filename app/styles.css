@@ -3366,3 +3366,44 @@ html[data-shell="dark"] .lang-pill[aria-pressed="true"] { background: #e8efe9; b
 html[data-shell="dark"] .plan-tile { background: #1a2429; border-color: #26333a; }
 html[data-shell="dark"] .plan-tile b { color: #eef2ec; }
 html[data-shell="dark"] .plan-tile .plan-bar { background: #22303a; }
+
+/* ── Saved cities ─────────────────────────────────────────────────
+   A shelf of named copies, not a live switch: the city you are in stays the
+   only live archive, so there is nothing in flight to get wrong. */
+.city-shelf-wrap { position: relative; margin: 2px 0 8px; }
+.city-shelf-button {
+  display: flex; align-items: center; gap: 7px; width: 100%;
+  padding: 7px 10px; border: 1px solid #e6e4d9; border-radius: 10px;
+  background: #fbfaf4; font: 600 12px var(--font-body); color: #3a4740;
+  cursor: pointer; text-align: left;
+}
+.city-shelf-button:hover { border-color: #cfdcc4; background: #f4f8ef; }
+.city-shelf {
+  position: absolute; z-index: 30; left: 0; right: 0; margin-top: 4px; padding: 7px;
+  border: 1px solid #e6e4d9; border-radius: 12px; background: #fffefa;
+  box-shadow: 0 14px 34px #1b2a2426; display: grid; gap: 5px;
+}
+.city-list { display: grid; gap: 4px; max-height: 240px; overflow: auto; }
+.city-row { display: flex; gap: 4px; }
+.city-load {
+  flex: 1; display: grid; gap: 1px; padding: 6px 8px; border: 0; border-radius: 8px;
+  background: transparent; text-align: left; cursor: pointer; font: 600 12px var(--font-body); color: #3a4740;
+}
+.city-load small { font: 400 10.5px var(--font-body); color: var(--text-muted); }
+.city-load:hover { background: #f1f6ec; }
+.city-remove {
+  width: 26px; border: 0; border-radius: 8px; background: transparent;
+  color: var(--text-muted); cursor: pointer; font-size: 15px; line-height: 1;
+}
+.city-remove:hover { background: #f7ece8; color: #9c5a4e; }
+.city-empty { margin: 2px 4px 6px; font: 400 11.5px/1.45 var(--font-body); color: var(--text-muted); }
+.city-save {
+  padding: 7px 9px; border: 1px dashed #cfdcc4; border-radius: 9px; background: #f4f8ef;
+  font: 600 11.5px var(--font-body); color: #477d70; cursor: pointer;
+}
+.city-save:hover { background: #eaf3e4; }
+html[data-shell="dark"] .city-shelf-button,
+html[data-shell="dark"] .city-shelf { background: #162024; border-color: #26333a; color: #eef2ec; }
+html[data-shell="dark"] .city-load { color: #dfe7e2; }
+html[data-shell="dark"] .city-load:hover { background: #1d2a2f; }
+html[data-shell="dark"] .city-save { background: #1d2a2f; border-color: #2b3a41; color: #a8d3c6; }

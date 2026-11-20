@@ -104,6 +104,12 @@ The photographs in the sample come from Unsplash and are loaded from Unsplash's 
 
 Open `/selftest.html`. It loads every file the service worker is supposed to keep and reports, per file, whether it came from the cache or the network. Run it once online — everything should say `cached` — then turn the network off and run it again. A row that fails with the network off is a file the worker is not keeping, which is a bug worth reporting.
 
+## More than one city
+
+**Saved cities** in the sidebar keeps named copies of the whole archive. *Save a copy of this city* names what you have now; the shelf lists every copy with its moment count, and loading one swaps it in — after the city you were in is saved as *Before switching*, so a load can never lose anything. Delete a copy with the × beside it.
+
+Copies are independent snapshots, not live archives: editing one does not touch another.
+
 ## Bringing a journal with you
 
 *Share city → Import another journal* reads **Day One's JSON export** and **markdown or text with a `YYYY-MM-DD` line above each entry**. Everything is read in the page — nothing is uploaded. Dates become moments, long entries are cut to 500 characters, and the same merge rule applies, so importing the same file twice adds nothing. The import can be undone from the strip that appears afterwards.
