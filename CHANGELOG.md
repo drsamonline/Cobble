@@ -2,6 +2,17 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.58.0 — 2026-11-21
+
+### Added
+
+- **`docs/deploying.md` now explains how to check a deployment is actually live**, because CI green is not the same claim. Three checks that fail independently: the commit Pages built, the size of the file the build used, and what a visitor actually receives.
+- It also writes down the trap that caught me today: GitHub Pages serves through a CDN, so a page that existed before your change can keep being served after a successful build while a page you *added* is fresh immediately. Fetching three pages and finding two new and one old is a statement about the cache, not the build — re-fetch with a query string and the new sentence appears.
+
+### Verified against the live site
+
+- The build is on the commit I pushed, the repository's `index.html` matches the local file byte for byte, and all three landing pages serve the new section. The English root returned an older copy on the first fetch and the current one on the second; the Hindi and Gujarati pages were fresh first time, being new files with no older copy to serve. That difference is what pointed at the cache rather than at a failed deploy.
+
 ## 1.57.0 — 2026-11-21
 
 ### Fixed
@@ -161,6 +172,17 @@ It is still **one live archive plus named copies**, not several archives open at
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.58.0 — 2026-11-21
+
+### Added
+
+- **`docs/deploying.md` now explains how to check a deployment is actually live**, because CI green is not the same claim. Three checks that fail independently: the commit Pages built, the size of the file the build used, and what a visitor actually receives.
+- It also writes down the trap that caught me today: GitHub Pages serves through a CDN, so a page that existed before your change can keep being served after a successful build while a page you *added* is fresh immediately. Fetching three pages and finding two new and one old is a statement about the cache, not the build — re-fetch with a query string and the new sentence appears.
+
+### Verified against the live site
+
+- The build is on the commit I pushed, the repository's `index.html` matches the local file byte for byte, and all three landing pages serve the new section. The English root returned an older copy on the first fetch and the current one on the second; the Hindi and Gujarati pages were fresh first time, being new files with no older copy to serve. That difference is what pointed at the cache rather than at a failed deploy.
+
 ## 1.57.0 — 2026-11-21
 
 ### Fixed
@@ -319,6 +341,17 @@ It is still **one live archive plus named copies**, not several archives open at
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.58.0 — 2026-11-21
+
+### Added
+
+- **`docs/deploying.md` now explains how to check a deployment is actually live**, because CI green is not the same claim. Three checks that fail independently: the commit Pages built, the size of the file the build used, and what a visitor actually receives.
+- It also writes down the trap that caught me today: GitHub Pages serves through a CDN, so a page that existed before your change can keep being served after a successful build while a page you *added* is fresh immediately. Fetching three pages and finding two new and one old is a statement about the cache, not the build — re-fetch with a query string and the new sentence appears.
+
+### Verified against the live site
+
+- The build is on the commit I pushed, the repository's `index.html` matches the local file byte for byte, and all three landing pages serve the new section. The English root returned an older copy on the first fetch and the current one on the second; the Hindi and Gujarati pages were fresh first time, being new files with no older copy to serve. That difference is what pointed at the cache rather than at a failed deploy.
 
 ## 1.57.0 — 2026-11-21
 

@@ -51,6 +51,18 @@ If you do this yourself, in Electron or Tauri or a WebView:
 - keep `nodeIntegration` off in Electron, and turn the context isolation on;
 - point the wrapper at `app/index.html`, not the landing page.
 
+## Checking a deployment is actually live
+
+CI going green does not mean the site changed. Three things have to agree, and they fail independently:
+
+1. **The commit that built.** `gh api repos/<owner>/<repo>/pages/builds/latest --jq .commit` should be the commit you just pushed. If it is older, the Pages build has not run yet — wait, then look again.
+2. **The file the build used.** Compare `gh api repos/<owner>/<repo>/contents/index.html --jq .size` with `wc -c index.html` locally. A difference means the push did not land, which is a different problem from a stale cache.
+3. **What a visitor actually receives.** Fetch the page and look for a sentence you added in that commit. This is the only step that tests the thing a person sees, and it is the one that catches a stale edge copy.
+
+On that third step: **a stale copy is not a broken deploy.** GitHub Pages serves through a CDN, and a page that existed before your change can keep being served for a while after a successful build — while a page you *added* (a new language, say) is fresh immediately, because there is no older copy to serve. So a check that fetches three pages and finds two new and one old is telling you about the cache, not about the build. Re-fetch the old one with a query string; if the new sentence appears, the deploy was fine all along.
+
+The same trap sits inside the app: the service worker keeps its own cache. If a change does not appear for *you*, reload twice — the first load installs the new worker, the second is served by it.
+
 ## Subresource Integrity and CSP
 
 Nothing is loaded from a third party any more, which makes a policy short and strict. The pieces are in place — no inline `onclick`, no inline `<script>` body in the app — with one exception: the landing page registers the service worker from a three-line inline script, so either allow `'unsafe-inline'` for scripts or move that line into `assets/landing.js`.
