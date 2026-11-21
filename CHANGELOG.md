@@ -2,6 +2,14 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.56.0 — 2026-11-21
+
+### Changed
+
+- **`AGENTS.md` was describing a repository that no longer exists**, and it is the file future work reads first. It listed a deleted `app/city3d.js` as if it were current, counted "five files in `app/`" (eight), "24 tests" (37), "four size budgets" (six), and knew nothing of the browser check, the version check, the vault, the three languages or saved cities. Rewritten against the tree as it is.
+- **Four invariants added, each one a bug this project has actually shipped**: one live archive and a shelf of snapshots (three attempts mixed two cities); the 3D view is never the only route to anything; a new interface string goes into all three dictionaries and its accessible name must contain its visible text (broken and fixed five times); new landing-page prose needs a home in `hi.html` and `gu.html` or the page quietly becomes English-only again.
+- A convention added: **measure before claiming a speed-up**, with the draw-call-versus-frame-rate example spelled out.
+
 ## 1.55.0 — 2026-11-21
 
 ### Added
@@ -141,6 +149,14 @@ It is still **one live archive plus named copies**, not several archives open at
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.56.0 — 2026-11-21
+
+### Changed
+
+- **`AGENTS.md` was describing a repository that no longer exists**, and it is the file future work reads first. It listed a deleted `app/city3d.js` as if it were current, counted "five files in `app/`" (eight), "24 tests" (37), "four size budgets" (six), and knew nothing of the browser check, the version check, the vault, the three languages or saved cities. Rewritten against the tree as it is.
+- **Four invariants added, each one a bug this project has actually shipped**: one live archive and a shelf of snapshots (three attempts mixed two cities); the 3D view is never the only route to anything; a new interface string goes into all three dictionaries and its accessible name must contain its visible text (broken and fixed five times); new landing-page prose needs a home in `hi.html` and `gu.html` or the page quietly becomes English-only again.
+- A convention added: **measure before claiming a speed-up**, with the draw-call-versus-frame-rate example spelled out.
+
 ## 1.55.0 — 2026-11-21
 
 ### Added
@@ -279,6 +295,14 @@ It is still **one live archive plus named copies**, not several archives open at
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.56.0 — 2026-11-21
+
+### Changed
+
+- **`AGENTS.md` was describing a repository that no longer exists**, and it is the file future work reads first. It listed a deleted `app/city3d.js` as if it were current, counted "five files in `app/`" (eight), "24 tests" (37), "four size budgets" (six), and knew nothing of the browser check, the version check, the vault, the three languages or saved cities. Rewritten against the tree as it is.
+- **Four invariants added, each one a bug this project has actually shipped**: one live archive and a shelf of snapshots (three attempts mixed two cities); the 3D view is never the only route to anything; a new interface string goes into all three dictionaries and its accessible name must contain its visible text (broken and fixed five times); new landing-page prose needs a home in `hi.html` and `gu.html` or the page quietly becomes English-only again.
+- A convention added: **measure before claiming a speed-up**, with the draw-call-versus-frame-rate example spelled out.
 
 ## 1.55.0 — 2026-11-21
 
