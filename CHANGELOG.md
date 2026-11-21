@@ -2,6 +2,14 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.55.0 — 2026-11-21
+
+### Added
+
+- **`docs/how-the-city-works.md` now explains the 3D town**, which is what most people actually look at. The five rules it already had describe the *illustrated* city — the fallback. The new section covers the town's own numbers: one building per moment up to 48 (96 past 150 in a district), house kind chosen by how busy the district is, and the scaling for people (`min(40, max(6, total/12))`), vehicles, the train, the plane, seven fish and the tree ring. Plus the camera fit (`max(10, radius × 1.2 + 3)`), the zoom range and where the cloud starts, and a plain paragraph on instancing and the quality dial with a link to the measurements.
+
+Every number in it was read out of `scene3d.js` before it was written down, not from memory.
+
 ## 1.54.0 — 2026-11-21
 
 ### Changed
@@ -133,6 +141,14 @@ It is still **one live archive plus named copies**, not several archives open at
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.55.0 — 2026-11-21
+
+### Added
+
+- **`docs/how-the-city-works.md` now explains the 3D town**, which is what most people actually look at. The five rules it already had describe the *illustrated* city — the fallback. The new section covers the town's own numbers: one building per moment up to 48 (96 past 150 in a district), house kind chosen by how busy the district is, and the scaling for people (`min(40, max(6, total/12))`), vehicles, the train, the plane, seven fish and the tree ring. Plus the camera fit (`max(10, radius × 1.2 + 3)`), the zoom range and where the cloud starts, and a plain paragraph on instancing and the quality dial with a link to the measurements.
+
+Every number in it was read out of `scene3d.js` before it was written down, not from memory.
+
 ## 1.54.0 — 2026-11-21
 
 ### Changed
@@ -263,6 +279,14 @@ It is still **one live archive plus named copies**, not several archives open at
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.55.0 — 2026-11-21
+
+### Added
+
+- **`docs/how-the-city-works.md` now explains the 3D town**, which is what most people actually look at. The five rules it already had describe the *illustrated* city — the fallback. The new section covers the town's own numbers: one building per moment up to 48 (96 past 150 in a district), house kind chosen by how busy the district is, and the scaling for people (`min(40, max(6, total/12))`), vehicles, the train, the plane, seven fish and the tree ring. Plus the camera fit (`max(10, radius × 1.2 + 3)`), the zoom range and where the cloud starts, and a plain paragraph on instancing and the quality dial with a link to the measurements.
+
+Every number in it was read out of `scene3d.js` before it was written down, not from memory.
 
 ## 1.54.0 — 2026-11-21
 

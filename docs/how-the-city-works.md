@@ -42,6 +42,34 @@ Because the seed includes the total count and the category totals, the city chan
 
 **5. Every ninth district gets a theatre.** When `districtIndex % 9 === 3` and the city is not empty, a small theatre appears in that district. Click it to open the photo gallery — every moment you have saved with a photograph, in one place.
 
+
+## The 3D town, and what its numbers mean
+
+The illustrated city above is what you get without WebGL, or when the 3D view is switched off. The 3D town is the default everywhere else, and it follows the same six district colours — but its rules are its own, and they are worth knowing because they are what most people actually look at.
+
+**Placement is seeded, not random.** The town is laid out by a small generator seeded from the total moment count, so the same archive always builds the same town. A street that rearranged itself on every repaint would read as a bug.
+
+**A district grows up to a cap.** Each district draws one building per moment up to **48**, or **96** once it holds more than 150 — past that a bigger archive makes a denser town, not an endless one.
+
+**House kind follows busyness.** A quiet district is mostly bungalows: wide, low, with a pitched roof. A middling one mixes villas — two volumes and a terrace — with bungalows. A busy one is mostly towers. Heights come from the same number, so the busiest district stands tallest.
+
+**People, traffic and the rest scale with the archive:**
+
+| What | How many | Where |
+|---|---|---|
+| People | `min(40, max(6, total / 12))`, every fourth a child | walking slow circles around the plaza |
+| Vehicles | `min(14, max(3, total / 40))` — a bus every fifth, a two-wheeler every fourth | both directions on both roads |
+| Train | five carriages | its own line behind the town |
+| Plane | one | crossing high and slow |
+| Fish | seven | circling under the pond's surface |
+| Trees | `min(90, max(20, spread × 2.2))` | ringing the town |
+
+**The camera fits the town it is given.** The orthographic frustum is derived from the town's radius — `max(10, radius × 1.2 + 3)` — so a large archive is a larger city rather than a cropped one. Zoom runs from 0.35× to 6×, and past 1.4× cloud fades in over the landscape, so scrolling out ends in weather rather than in empty grass.
+
+**Hover, click, drag, scroll.** Hovering a building names its district and how many moments are in it; clicking opens the timeline filtered to that district. Dragging pans, scrolling zooms, double-clicking re-centres and re-fits.
+
+**It draws itself cheaply, and slows itself down politely.** Every building, roof, window, tree, person, fish and mountain is an `InstancedMesh` — one mesh per shape, a matrix per placement — which took the scene from 4,089 draw calls at 1,200 moments to 75. The pixel ratio is a dial rather than a constant: the frame timer steps it between 1.75 and 0.5, down when frames run slower than 40 ms and back up when they run faster than 18 ms. The numbers behind both are in [performance](performance.md).
+
 ## Districts, panning and the middle
 
 The viewport shows five district scenes side by side, with the centre one at `cityCenterIndex`. Dragging, scrolling, or pressing ← / → moves an offset; when the offset passes a full tile width the centre index shifts and the five scenes are re-rendered from their new seeds. So panning is not scrolling a picture — it is walking to the next block of a city that is being redrawn as you arrive.
