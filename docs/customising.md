@@ -1,6 +1,6 @@
 # Customising
 
-Everything visual in Cobble is a token, a table or a string in one of five files. This guide lists the ones worth touching, in the order people usually want them.
+Everything visual in Cobble is a token, a table or a string in one of a handful of files — eight in `app/`, plus the landing page's own stylesheet. This guide lists the ones worth touching, in the order people usually want them.
 
 ## Palette
 

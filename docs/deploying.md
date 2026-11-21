@@ -31,7 +31,7 @@ The only server requirement is correct MIME types for `.html`, `.css`, `.js`, `.
 
 ## Your own LAN
 
-The app is a good fit for a home server, because the archive lives in the browser anyway — the server only ever hands over five files.
+The app is a good fit for a home server, because the archive lives in the browser anyway — the server only ever hands over static files.
 
 ```bash
 cd cobble

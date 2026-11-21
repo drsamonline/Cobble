@@ -18,7 +18,7 @@ Two documents live at the repository root rather than here, because they are abo
 
 ## The short version
 
-- **Five files.** `app/index.html`, `app/theme.css`, `app/styles.css`, `app/app.js`. No build step, no framework, no dependencies to install. Fonts and two libraries sit beside them in `fonts/` and `app/vendor/` so nothing is fetched from a CDN.
+- **Eight files, no build step.** `app/index.html`, `app/theme.css`, `app/styles.css`, `app/core.js`, `app/app.js`, `app/scene3d.js`, `app/ambience.js`, `app/i18n.js`. No framework, no dependencies to install. Fonts and two libraries sit beside them in `fonts/` and `app/vendor/` so nothing is fetched from a CDN.
 - **One worker, one cache.** `sw.js` at the root keeps the whole site, so the app opens with the network off. `selftest.html` proves it, file by file.
 - **One storage layer.** IndexedDB (`cobble-archive` → `archive` → `moments`), with a localStorage fallback under the key `cobble-moments-v1`.
 - **No backend.** Nothing is uploaded, ever. The only thing that leaves the device is a `.cobble` file you encrypt yourself.

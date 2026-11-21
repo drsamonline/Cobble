@@ -11,7 +11,7 @@ Your life, taking shape. A private city built from the small things you notice. 
 **Status: v1.5.0 — shipped, offline, editable, searchable, and tested.** The city, the timeline, the discoveries, the sample city, the encrypted share and the export all work today. Nothing below is marked "planned"; the ideas that are not built yet live in [ENHANCEMENTS.md](ENHANCEMENTS.md), in order of effort.
 
 [![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-477d70.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.56.0-e2a66f.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.57.0-e2a66f.svg)](CHANGELOG.md)
 [![Works offline](https://img.shields.io/badge/offline-works-2ea44f.svg)](sw.js)
 [![Installable](https://img.shields.io/badge/installable-PWA-7ec8e3.svg)](manifest.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-zero%20CDNs-2ea44f.svg)](app/vendor/)
@@ -205,7 +205,7 @@ likely need, and what a device test should look at.
 |---|---|
 | [Getting started](docs/getting-started.md) | First moment, the sample city, where your data lives, how to keep it |
 | [How the city works](docs/how-the-city-works.md) | Districts, weights, repetition, atmospheres, weather and the seed that draws your skyline |
-| [Architecture](docs/architecture.md) | The five files, the render loop, the storage layer, and why there is no build step — plus [the diagram](docs/cobble-architecture.excalidraw) |
+| [Architecture](docs/architecture.md) | The files, the render loop, the storage layer, and why there is no build step — plus [the diagram](docs/cobble-architecture.excalidraw) |
 | [Data model](docs/data-model.md) | The moment schema, IndexedDB layout, the localStorage fallback, the `.cobble` file format |
 | [Privacy and security](docs/privacy-and-security.md) | What is stored, what leaves the device, the exact cryptography, and its limits |
 | [Customising](docs/customising.md) | Palettes, districts, atmospheres, copy and layout — with the token names |
@@ -218,7 +218,9 @@ likely need, and what a device test should look at.
 
 ## Privacy, in one paragraph
 
-Your moments live in your browser's IndexedDB on your device. There is no Cobble account and no Cobble backend, so there is nothing to leak, subpoena or sell. The app makes no analytics calls. The only data that ever leaves is a `.cobble` file you create yourself, encrypted with a PIN that never travels with it. The honest caveats: the page pulls fonts and two libraries from public CDNs, clearing site data clears the city, and a PIN of six digits protects against a person, not a cluster. All three are written up in [privacy and security](docs/privacy-and-security.md).
+Your moments live in your browser's IndexedDB on your device. There is no Cobble account and no Cobble backend, so there is nothing to leak, subpoena or sell. The app makes no analytics calls, and the fonts and both libraries are served from this repository — a page load makes no request to anyone else. The only data that ever leaves is a `.cobble` file you create yourself, encrypted with a PIN that never travels with it.
+
+The honest caveats: the sample city's photographs come from `images.unsplash.com`, which is the one external request the site makes and only for the demo; clearing site data clears the city; a six-digit PIN protects against a person, not a cluster; and a locked city has no recovery if the passphrase is forgotten. All four are written up in [privacy and security](docs/privacy-and-security.md).
 
 ## Enhancements
 

@@ -2,6 +2,18 @@
 
 All notable changes to Cobble. Dates are ISO 8601.
 
+## 1.57.0 — 2026-11-21
+
+### Fixed
+
+- **The README said the app pulls fonts and libraries from public CDNs.** It does not — they have been self-hosted since v1.1.0, and the sentence sat six lines above another one saying the opposite. It now states what is true, including the one external request the site really makes: the sample city's photographs from `images.unsplash.com`, and only in the demo.
+- **Three documents still said "five files"** for an `app/` folder that holds eight, and the docs hub's list was missing four of them. Counted against `ls app/` rather than memory.
+- The privacy guide's list of self-hosted assets omitted Three.js, and repeated its "no telemetry" sentence twice in one paragraph.
+
+### Why the CDN line mattered
+
+Of every stale sentence in this repository, that one was the worst: it understated the app's actual privacy position in the one place a reader checks it, and it contradicted the sentence beneath it. A wrong number in a docs table wastes a minute; a wrong claim about what leaves the device is the sort of thing a reader is entitled to rely on.
+
 ## 1.56.0 — 2026-11-21
 
 ### Changed
@@ -149,6 +161,18 @@ It is still **one live archive plus named copies**, not several archives open at
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
 
+## 1.57.0 — 2026-11-21
+
+### Fixed
+
+- **The README said the app pulls fonts and libraries from public CDNs.** It does not — they have been self-hosted since v1.1.0, and the sentence sat six lines above another one saying the opposite. It now states what is true, including the one external request the site really makes: the sample city's photographs from `images.unsplash.com`, and only in the demo.
+- **Three documents still said "five files"** for an `app/` folder that holds eight, and the docs hub's list was missing four of them. Counted against `ls app/` rather than memory.
+- The privacy guide's list of self-hosted assets omitted Three.js, and repeated its "no telemetry" sentence twice in one paragraph.
+
+### Why the CDN line mattered
+
+Of every stale sentence in this repository, that one was the worst: it understated the app's actual privacy position in the one place a reader checks it, and it contradicted the sentence beneath it. A wrong number in a docs table wastes a minute; a wrong claim about what leaves the device is the sort of thing a reader is entitled to rely on.
+
 ## 1.56.0 — 2026-11-21
 
 ### Changed
@@ -295,6 +319,18 @@ It is still **one live archive plus named copies**, not several archives open at
 
 - Two moments saved as *Kerala*, then the map read: two tiles, both with six skyline bars, the current one carrying `aria-current` and the *you are here* line; clicking *Kerala* closed the map and the archive came back with its two moments. No page errors.
 - First pass drew empty districts at 4% height, which made a small archive look like one bar on an empty card; the floor is now 8% with 22% for a populated district, so a thin city still reads as a skyline.
+
+## 1.57.0 — 2026-11-21
+
+### Fixed
+
+- **The README said the app pulls fonts and libraries from public CDNs.** It does not — they have been self-hosted since v1.1.0, and the sentence sat six lines above another one saying the opposite. It now states what is true, including the one external request the site really makes: the sample city's photographs from `images.unsplash.com`, and only in the demo.
+- **Three documents still said "five files"** for an `app/` folder that holds eight, and the docs hub's list was missing four of them. Counted against `ls app/` rather than memory.
+- The privacy guide's list of self-hosted assets omitted Three.js, and repeated its "no telemetry" sentence twice in one paragraph.
+
+### Why the CDN line mattered
+
+Of every stale sentence in this repository, that one was the worst: it understated the app's actual privacy position in the one place a reader checks it, and it contradicted the sentence beneath it. A wrong number in a docs table wastes a minute; a wrong claim about what leaves the device is the sort of thing a reader is entitled to rely on.
 
 ## 1.56.0 — 2026-11-21
 

@@ -16,7 +16,7 @@ Three things, and you should know all three:
 
 **2. Unsplash images, in the sample city only.** The eighteen sample moments use photographs hosted by Unsplash, and those images are fetched from `images.unsplash.com` when the sample is on. Your own moments never load anything from anywhere.
 
-That is the complete list. Everything else the app needs — the three typefaces, JSZip, the icons — is served from this repository's own folder. There is no font CDN, no script CDN, no analytics endpoint, no error reporting, no telemetry, no A/B assignment, and no server of ours to receive any of it. There is no analytics endpoint, no error reporting, no telemetry, no A/B assignment, no "anonymous usage statistics" — and no server of ours to receive any of it.
+That is the complete list. Everything else the app needs — the three typefaces, JSZip, Three.js, the icons — is served from this repository's own folder. There is no font CDN, no script CDN, no analytics endpoint, no error reporting, no telemetry, no A/B assignment, and no server of ours to receive any of it.
 
 ## The cryptography
 
